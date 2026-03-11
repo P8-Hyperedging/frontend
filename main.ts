@@ -3,7 +3,9 @@ import { render_table } from "./templates/table_template.ts";
 import { render_default_page } from "./templates/default_templates.ts";
 import { serveFile } from "https://deno.land/std@0.211.0/http/file_server.ts";
 import { exists } from "https://deno.land/std@0.211.0/fs/mod.ts";
+import {runTrainPy} from "./services/python_service.ts";
 
+runTrainPy()
 Deno.serve(async (req) => {
     const url = new URL(req.url);
     const pathname = url.pathname;
