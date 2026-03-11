@@ -4,7 +4,7 @@
  * @param content content of the page
  */
 export function render_default_page(title: string, content: string): string {
-    return `
+  return `
   <!DOCTYPE html>
   <html data-theme="cupcake">
   <head>
@@ -19,11 +19,9 @@ export function render_default_page(title: string, content: string): string {
   `;
 }
 
-/**
- * 
- */
+/** */
 function render_toolbar() {
-    return `
+  return `
     <div class="navbar bg-base-200 shadow-sm">
       <div class="navbar-start">
         <a class="btn btn-ghost text-xl" href="/">Hyperedging</a>
@@ -54,10 +52,11 @@ function render_toolbar() {
 }
 
 function render_theme() {
-    let themes = ["light", "dark", "cupcake"];
+  const themes = ["light", "dark", "cupcake"];
 
-    return themes
-        .map((theme) => `
+  return themes
+    .map(
+      (theme) => `
                 <li>
                     <input
                         type="radio"
@@ -67,10 +66,11 @@ function render_theme() {
                         value="${theme}"
                         data-set-theme="${theme}" data-act-class="ACTIVECLASS"/>
                 </li>
-        `)
-        .join("")
+        `,
+    )
+    .join("");
 }
 
 export function render_heading(heading: string) {
-    return `<h1 class="text-xl text-base-content p-8">${heading}</h1>`;
+  return `<h1 class="text-xl text-base-content p-8">${heading}</h1>`;
 }

@@ -4,9 +4,12 @@ import {
   TableRow,
 } from "./services/schema_service.ts";
 import { render_table } from "./templates/table_template.ts";
-import { render_default_page, render_heading } from "./templates/default_templates.ts";
-import { serveFile } from "https://deno.land/std@0.211.0/http/file_server.ts";
-import { exists } from "https://deno.land/std@0.211.0/fs/mod.ts";
+import {
+  render_default_page,
+  render_heading,
+} from "./templates/default_templates.ts";
+import { serveFile } from "@std/http/file-server";
+import { exists } from "@std/fs";
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
@@ -25,17 +28,24 @@ Deno.serve(async (req) => {
       } else {
         const tables = (await get_database_schema(null)) as TableInfo[];
         const linksHtml = tables
-          .map((t) =>
-            `<li class="list-row"><a class="link link-hover" href="/schema?table=${
-              encodeURIComponent(t.table_name)
-            }">${t.table_name}</a></li>`
+          .map(
+            (t) =>
+              `<li class="list-row"><a class="link link-hover" href="/schema?table=${
+                encodeURIComponent(
+                  t.table_name,
+                )
+              }">${t.table_name}</a></li>`,
           )
           .join("");
 
         return new Response(
           render_default_page(
             "All Tables",
-            `${render_heading("Available Tables")}<ul class="list w-1/2">${linksHtml}</ul>`,
+            `${
+              render_heading(
+                "Available Tables",
+              )
+            }<ul class="list w-1/2">${linksHtml}</ul>`,
           ),
           { headers: { "content-type": "text/html" } },
         );
@@ -59,6 +69,7 @@ Deno.serve(async (req) => {
       { headers: { "content-type": "text/html" } },
     );
   } catch (err) {
+    // deno-lint-ignore no-console
     console.error(err);
     return new Response("Server error: " + err, { status: 500 });
   }
