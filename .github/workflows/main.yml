@@ -20,6 +20,9 @@ jobs:
       - name: Run Deno lint
         run: deno lint
 
+      - name: Run Deno fmt
+        run: deno fmt
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -41,3 +44,4 @@ jobs:
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u cgamel --password-stdin
 
           docker push cgamel/p8-frontend:${{ github.sha }}
+
