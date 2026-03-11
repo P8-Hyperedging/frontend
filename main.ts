@@ -4,7 +4,7 @@ import {
   TableRow,
 } from "./services/schema_service.ts";
 import { render_table } from "./templates/table_template.ts";
-import { render_default_page } from "./templates/default_templates.ts";
+import { render_default_page, render_heading } from "./templates/default_templates.ts";
 import { serveFile } from "https://deno.land/std@0.211.0/http/file_server.ts";
 import { exists } from "https://deno.land/std@0.211.0/fs/mod.ts";
 
@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
         const tables = (await get_database_schema(null)) as TableInfo[];
         const linksHtml = tables
           .map((t) =>
-            `<li><a href="/schema?table=${
+            `<li class="list-row"><a class="link link-hover" href="/schema?table=${
               encodeURIComponent(t.table_name)
             }">${t.table_name}</a></li>`
           )
@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
         return new Response(
           render_default_page(
             "All Tables",
-            `<h1 class="text-xl text-primary-content">Available Tables</h1><ul>${linksHtml}</ul>`,
+            `${render_heading("Available Tables")}<ul class="list w-1/2">${linksHtml}</ul>`,
           ),
           { headers: { "content-type": "text/html" } },
         );
@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
     return new Response(
       render_default_page(
         "Welcome",
-        `<h1 class="text-xl text-primary-content">Halloej og velkommen til vores projekt!</h1>`,
+        `${render_heading("Halloej og velkommen til vores projekt!")}`,
       ),
       { headers: { "content-type": "text/html" } },
     );
