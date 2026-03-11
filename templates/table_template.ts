@@ -10,7 +10,7 @@ export type TableRow = {
 
 function render_table<T extends TableRow>(rows: T[]): string {
     return `
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Column</th>
