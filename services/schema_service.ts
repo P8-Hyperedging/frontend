@@ -16,7 +16,7 @@ export interface TableInfo {
 export async function get_database_schema(
   tableName: string | null,
 ): Promise<TableRow[] | TableInfo[]> {
-  const client = get_client();
+  const client = await get_client();
 
   if (tableName) {
     // Get column info plus table row count
