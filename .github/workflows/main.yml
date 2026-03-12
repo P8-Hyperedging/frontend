@@ -1,9 +1,9 @@
 name: Build and push frontend image
 
 on:
-    push:
-        branches:
-            - "*"
+  push:
+    branches:
+      - "*"
 
 jobs:
   build-and-push:
@@ -16,7 +16,7 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-          
+
       - name: Run Deno lint
         run: deno lint
 
@@ -38,11 +38,8 @@ jobs:
         run: |
           docker build -t cgamel/p8-frontend:${{ github.sha }} .
 
-
       - name: Push Docker image
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u cgamel --password-stdin
 
           docker push cgamel/p8-frontend:${{ github.sha }}
-
-
