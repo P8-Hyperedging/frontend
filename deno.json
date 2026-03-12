@@ -7,7 +7,7 @@
     "exclude": [],
     "rules": {
       "tags": ["recommended"],
-      "include": ["no-console"],
+      "include": ["no-console", "no-commented-code"],
       "exclude": [""]
     }
   },
