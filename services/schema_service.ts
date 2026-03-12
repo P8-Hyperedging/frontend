@@ -50,4 +50,3 @@ export async function get_database_schema(
     return result.rows;
   }
 }
-

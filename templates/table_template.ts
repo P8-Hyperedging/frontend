@@ -1,15 +1,14 @@
-
-export {render_table}
+export { render_table };
 
 export type TableRow = {
-    column_name: string;
-    data_type: string;
-    is_nullable: boolean | string;
-    column_default?: string | null;
+  column_name: string;
+  data_type: string;
+  is_nullable: boolean | string;
+  column_default?: string | null;
 };
 
 function render_table<T extends TableRow>(rows: T[]): string {
-    return `
+  return `
     <table class="table">
       <thead>
         <tr>
@@ -20,18 +19,20 @@ function render_table<T extends TableRow>(rows: T[]): string {
         </tr>
       </thead>
       <tbody>
-        ${rows
-        .map(
-            (r) => `
+        ${
+    rows
+      .map(
+        (r) => `
             <tr>
               <td>${r.column_name}</td>
               <td>${r.data_type}</td>
               <td>${r.is_nullable}</td>
               <td>${r.column_default ?? ""}</td>
             </tr>
-          `
-        )
-        .join("")}
+          `,
+      )
+      .join("")
+  }
       </tbody>
     </table>
   `;
