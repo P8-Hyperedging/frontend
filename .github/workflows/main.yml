@@ -3,7 +3,7 @@ name: Build and push frontend image
 on:
     push:
         branches:
-            - main
+            - "*"
 
 jobs:
   build-and-push:
@@ -44,4 +44,5 @@ jobs:
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u cgamel --password-stdin
 
           docker push cgamel/p8-frontend:${{ github.sha }}
+
 
