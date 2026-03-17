@@ -10,6 +10,8 @@ import {
 } from "./templates/default_templates.ts";
 import { serveFile } from "@std/http/file-server";
 import { exists } from "@std/fs";
+import { render_parameter_form } from "./templates/parameter_template.ts";
+import { get_parameters } from "./services/hgnn_service.ts";
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
@@ -64,7 +66,9 @@ Deno.serve(async (req) => {
     return new Response(
       render_default_page(
         "Welcome",
-        `${render_heading("Halloej og velkommen til vores projekt!")}`,
+        `${render_heading("Halloej og velkommen til vores projekt!")} ${
+          render_parameter_form(get_parameters())
+        }`,
       ),
       { headers: { "content-type": "text/html" } },
     );
