@@ -41,18 +41,18 @@ export type Parameter =
   | ToggleParameter
   | SelectParameter;
 
-export async function get_parameters(): Promise<Parameter[]> {
-  const response = await fetch("http://127.0.0.1:5000/params/allset");
+export async function get_parameters(model_name: string): Promise<Parameter[]> {
+  const response = await fetch(`http://127.0.0.1:5000/params/${model_name}`);
   const responseText = await response.text();
   const body = JSON.parse(responseText) as Parameter[];
 
   return body;
 }
 
-export async function get_model_names(): Promise<Parameter> {
+export async function get_model_names(): Promise<SelectParameter> {
   const response = await fetch("http://127.0.0.1:5000/models");
   const responseText = await response.text();
-  const model_names = JSON.parse(responseText) as Parameter;
+  const model_names = JSON.parse(responseText) as SelectParameter;
 
   return model_names;
 }
