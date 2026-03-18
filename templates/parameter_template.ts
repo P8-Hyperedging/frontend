@@ -5,6 +5,9 @@ export function render_parameter_form(parameters: Parameter[]): string {
     <div class="flex justify-center">
       <form class="fieldset w-1/2 bg-base-200 border-base-300 rounded-box border p-4">
         ${parameters.map((parameter) => generate_fieldset(parameter)).join("")}
+
+        <button class="btn btn-neutral mt-4" type="submit">Submit</button>
+        <button class="btn btn-ghost mt-1" type="reset">Reset</button>
       </form>
     </div>
   `;

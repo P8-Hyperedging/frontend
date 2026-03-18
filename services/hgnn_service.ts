@@ -1,7 +1,7 @@
 export enum InputType {
-  Range,
-  Input,
-  Toggle,
+  Range = "range",
+  Input = "input",
+  Toggle = "toggle",
 }
 
 interface BaseParameter {
@@ -30,11 +30,10 @@ export interface ToggleParameter extends BaseParameter {
 
 export type Parameter = RangeParameter | InputParameter | ToggleParameter;
 
-export function get_parameters(): Parameter[] {
-  return [
-    { name: "param1", min: 1, max: 5, default: 2, type: InputType.Range },
-    { name: "param2", min: 1, max: 5, default: 3, type: InputType.Range },
-    { name: "param3", min: 1, max: 500, default: 200, type: InputType.Input },
-    { name: "param3", default: true, type: InputType.Toggle },
-  ];
+export async function get_parameters(): Promise<Parameter[]> {
+  const response = await fetch("http://127.0.0.1:5000/params");
+  const responseText = await response.text();
+  const body = JSON.parse(responseText) as Parameter[];
+
+  return body;
 }

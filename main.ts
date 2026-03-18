@@ -62,12 +62,15 @@ Deno.serve(async (req) => {
       return await serveFile(req, fullPath);
     }
 
+    const parameters = await get_parameters();
     // File doesn't exist, return default page
     return new Response(
       render_default_page(
         "Welcome",
         `${render_heading("Halloej og velkommen til vores projekt!")} ${
-          render_parameter_form(get_parameters())
+          render_parameter_form(
+            parameters,
+          )
         }`,
       ),
       { headers: { "content-type": "text/html" } },
