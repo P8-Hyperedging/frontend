@@ -2,6 +2,7 @@ export enum InputType {
   Range = "range",
   Input = "input",
   Toggle = "toggle",
+  Select = "select",
 }
 
 interface BaseParameter {
@@ -13,6 +14,7 @@ export interface RangeParameter extends BaseParameter {
   type: InputType.Range;
   min: number;
   max: number;
+  step: number;
   default: number;
 }
 
@@ -28,12 +30,29 @@ export interface ToggleParameter extends BaseParameter {
   default: boolean;
 }
 
-export type Parameter = RangeParameter | InputParameter | ToggleParameter;
+export interface SelectParameter extends BaseParameter {
+  type: InputType.Select;
+  options: string[];
+}
+
+export type Parameter =
+  | RangeParameter
+  | InputParameter
+  | ToggleParameter
+  | SelectParameter;
 
 export async function get_parameters(): Promise<Parameter[]> {
-  const response = await fetch("http://127.0.0.1:5000/params");
+  const response = await fetch("http://127.0.0.1:5000/params/allset");
   const responseText = await response.text();
   const body = JSON.parse(responseText) as Parameter[];
 
   return body;
+}
+
+export async function get_model_names(): Promise<Parameter> {
+  const response = await fetch("http://127.0.0.1:5000/models");
+  const responseText = await response.text();
+  const model_names = JSON.parse(responseText) as Parameter;
+
+  return model_names;
 }

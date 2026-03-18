@@ -1,8 +1,12 @@
 import { InputType, Parameter } from "../services/hgnn_service.ts";
 
-export function render_parameter_form(parameters: Parameter[]): string {
+export function render_parameter_form(
+  parameters: Parameter[],
+  model_names: Parameter,
+): string {
   return `
     <div class="flex justify-center">
+      ${generate_fieldset(model_names)}
       <form class="fieldset w-1/2 bg-base-200 border-base-300 rounded-box border p-4">
         ${parameters.map((parameter) => generate_fieldset(parameter)).join("")}
 
@@ -19,7 +23,7 @@ function generate_fieldset(parameter: Parameter): string {
     case InputType.Range:
       content = `
         <label>${parameter.name}</label>
-        <input type="range" class="range range-primary w-full" required min="${parameter.min}" max="${parameter.max}" value="${parameter.default}"/>
+        <input type="range" class="range range-primary w-full" required min="${parameter.min}" max="${parameter.max}" value="${parameter.default}" step="${parameter.step}"/>
         <p class="validator-hint hidden">Must input a number</p>
     `;
       break;
@@ -36,6 +40,18 @@ function generate_fieldset(parameter: Parameter): string {
         <input type="checkbox" class="toggle" required ${
         parameter.default ? 'checked="checked"' : ""
       }/>
+    `;
+      break;
+    case InputType.Select:
+      content = `
+        <select class="select select-success">
+          <option disabled selected>${parameter.name}</option>
+          ${
+        parameter.options
+          .map((option) => `<option>${option}</option>`)
+          .join("")
+      }
+        </select>
     `;
       break;
     default:

@@ -11,7 +11,7 @@ import {
 import { serveFile } from "@std/http/file-server";
 import { exists } from "@std/fs";
 import { render_parameter_form } from "./templates/parameter_template.ts";
-import { get_parameters } from "./services/hgnn_service.ts";
+import { get_model_names, get_parameters } from "./services/hgnn_service.ts";
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
@@ -63,6 +63,7 @@ Deno.serve(async (req) => {
     }
 
     const parameters = await get_parameters();
+    const model_names = await get_model_names();
     // File doesn't exist, return default page
     return new Response(
       render_default_page(
@@ -70,6 +71,7 @@ Deno.serve(async (req) => {
         `${render_heading("Halloej og velkommen til vores projekt!")} ${
           render_parameter_form(
             parameters,
+            model_names,
           )
         }`,
       ),
