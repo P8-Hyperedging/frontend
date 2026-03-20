@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run --watch --env-file=.env --allow-env --allow-read --allow-net main.ts & npx @tailwindcss/cli -i public/css/input.css -o public/css/output.css --watch"
+    "dev": "deno run --watch --env-file=.env --allow-env --allow-read --allow-net main.ts & npx @tailwindcss/cli -i public/css/input.css -o public/css/output.css --watch",
+    "start": "deno run --watch --env-file=.env --allow-env --allow-read --allow-net main.ts"
   },
   "lint": {
     "include": ["templates/", "services/", "./"],

@@ -10,4 +10,4 @@ COPY . .
 RUN deno install --entrypoint main.ts
 
 # Run the app
-CMD ["deno", "task", "dev"]
+CMD ["deno", "task", "start"]
