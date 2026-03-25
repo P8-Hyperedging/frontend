@@ -1,3 +1,5 @@
+import { Optional } from "../optional.ts";
+
 export enum InputType {
   Range = "range",
   Input = "input",
@@ -41,18 +43,25 @@ export type Parameter =
   | ToggleParameter
   | SelectParameter;
 
-export async function get_parameters(model_name: string): Promise<Parameter[]> {
-  const response = await fetch(`http://127.0.0.1:5000/params/${model_name}`);
-  const responseText = await response.text();
-  const body = JSON.parse(responseText) as Parameter[];
-
-  return body;
+export async function get_parameters(model_name: string): Promise<Optional<Parameter[]>> {
+  try {
+    const response = await fetch(`http://127.0.0.1:5002/params/${model_name}`);
+    const responseText = await response.text();
+    const body = JSON.parse(responseText) as Parameter[];
+    return [body, true];
+  }catch(_) {
+    return [null, false]
+  }
 }
 
-export async function get_model_names(): Promise<SelectParameter> {
-  const response = await fetch("http://127.0.0.1:5000/models");
-  const responseText = await response.text();
-  const model_names = JSON.parse(responseText) as SelectParameter;
+export async function get_model_names(): Promise<Optional<SelectParameter>> {
+  try {
+    const response = await fetch("http://127.0.0.1:5002/models");
+    const responseText = await response.text();
+    const model_names = JSON.parse(responseText) as SelectParameter;
 
-  return model_names;
+    return [model_names, true];
+  }catch(_) {
+    return [null, false];
+  }
 }

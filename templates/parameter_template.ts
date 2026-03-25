@@ -9,7 +9,7 @@ export function render_parameter_form(
   model_names: SelectParameter,
 ): string {
   return `
-    <div class="flex flex-col items-center gap-4">
+    <div class="flex flex-col w-full items-center gap-4">
       <div class="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
       <fieldset class="fieldset w-1/2 flex flex-col items-center">
         <legend class=fieldset-legend>Select a model</legend>

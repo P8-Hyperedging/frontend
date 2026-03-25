@@ -1354,18 +1354,6 @@
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
-  .fieldset-legend {
-    @layer daisyui.l1.l2.l3 {
-      margin-bottom: calc(0.25rem * -1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: calc(0.25rem * 2);
-      padding-block: calc(0.25rem * 2);
-      color: var(--color-base-content);
-      font-weight: 600;
-    }
-  }
   .status {
     @layer daisyui.l1.l2.l3 {
       display: inline-block;
@@ -1439,6 +1427,9 @@
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
+  .min-h-screen {
+    min-height: 100vh;
+  }
   .btn-block {
     @layer daisyui.l1.l2 {
       width: 100%;
@@ -1446,9 +1437,6 @@
   }
   .w-1\/2 {
     width: calc(1 / 2 * 100%);
-  }
-  .w-1\/4 {
-    width: calc(1 / 4 * 100%);
   }
   .w-2 {
     width: calc(var(--spacing) * 2);

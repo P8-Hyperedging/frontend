@@ -15,6 +15,8 @@ import {
   render_parameter_form_content,
 } from "./templates/parameter_template.ts";
 import { get_model_names, get_parameters } from "./services/hgnn_service.ts";
+import { getValue, hasValue } from "./optional.ts";
+import { NoConnectionResponse } from "./reponses.ts";
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
@@ -58,7 +60,10 @@ Deno.serve(async (req) => {
     } else if (pathname === "/parameter-form") {
       const model_name = url.searchParams.get("model") as string;
       const model_parameters = await get_parameters(model_name);
-      return new Response(render_parameter_form_content(model_parameters), {
+      if (!hasValue(model_parameters)) {
+        return NoConnectionResponse("Python Server");
+      }
+      return new Response(render_parameter_form_content(getValue(model_parameters)), {
         headers: { "content-type": "text/html" },
       });
     }
@@ -74,13 +79,17 @@ Deno.serve(async (req) => {
     const parameters = await get_parameters("allset");
     const model_names = await get_model_names();
     // File doesn't exist, return default page
+
+    if(!hasValue(parameters) || !hasValue(model_names)) {
+        return NoConnectionResponse("Python Server");
+    }
     return new Response(
       render_default_page(
         "Welcome",
-        `${render_heading("Halloej og velkommen til vores projekt!")} ${
+        `${
           render_parameter_form(
-            parameters,
-            model_names,
+            getValue(parameters),
+            getValue(model_names),
           )
         }`,
       ),
