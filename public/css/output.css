@@ -1427,9 +1427,6 @@
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
-  .min-h-screen {
-    min-height: 100vh;
-  }
   .btn-block {
     @layer daisyui.l1.l2 {
       width: 100%;

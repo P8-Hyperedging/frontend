@@ -3,15 +3,19 @@
   "specifiers": {
     "jsr:@db/postgres@*": "0.19.5",
     "jsr:@db/postgres@~0.19.5": "0.19.5",
+    "jsr:@deno-library/logger@*": "1.2.0",
+    "jsr:@deno-library/logger@^1.2.0": "1.2.0",
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/bytes@^1.0.5": "1.0.6",
     "jsr:@std/cli@^1.0.28": "1.0.28",
     "jsr:@std/crypto@^1.0.4": "1.0.5",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/encoding@^1.0.9": "1.0.10",
+    "jsr:@std/fmt@1.0.3": "1.0.3",
     "jsr:@std/fmt@^1.0.6": "1.0.9",
     "jsr:@std/fmt@^1.0.9": "1.0.9",
     "jsr:@std/fs@^1.0.23": "1.0.23",
+    "jsr:@std/fs@^1.0.6": "1.0.23",
     "jsr:@std/html@^1.0.5": "1.0.5",
     "jsr:@std/http@^1.0.25": "1.0.25",
     "jsr:@std/internal@^1.0.12": "1.0.12",
@@ -35,6 +39,13 @@
         "jsr:@std/path@^1.0.8"
       ]
     },
+    "@deno-library/logger@1.2.0": {
+      "integrity": "c6f0371cb2d08c0a7b82d30d494fac5d25f115695c63a3a295c4e35a0e6669a0",
+      "dependencies": [
+        "jsr:@std/fmt@1.0.3",
+        "jsr:@std/fs@^1.0.6"
+      ]
+    },
     "@std/assert@1.0.19": {
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
@@ -52,6 +63,9 @@
     },
     "@std/encoding@1.0.10": {
       "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
+    },
+    "@std/fmt@1.0.3": {
+      "integrity": "97765c16aa32245ff4e2204ecf7d8562496a3cb8592340a80e7e554e0bb9149f"
     },
     "@std/fmt@1.0.9": {
       "integrity": "2487343e8899fb2be5d0e3d35013e54477ada198854e52dd05ed0422eddcabe0"
@@ -72,7 +86,7 @@
         "jsr:@std/cli",
         "jsr:@std/encoding@^1.0.10",
         "jsr:@std/fmt@^1.0.9",
-        "jsr:@std/fs",
+        "jsr:@std/fs@^1.0.23",
         "jsr:@std/html",
         "jsr:@std/media-types",
         "jsr:@std/net",
@@ -545,6 +559,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@db/postgres@~0.19.5",
+      "jsr:@deno-library/logger@^1.2.0",
       "jsr:@std/assert@1",
       "jsr:@std/fs@^1.0.23",
       "jsr:@std/http@^1.0.25"
