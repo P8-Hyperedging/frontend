@@ -6,11 +6,12 @@ import { render_default_page, render_heading } from "./templates/default_templat
 import { render_parameter_form, render_parameter_form_content } from "./templates/parameter_template.ts";
 import { render_table } from "./templates/table_template.ts";
 
-export async function home_page(url: URL) {
+// deno-lint-ignore require-await
+export async function home_page(_url: URL) {
     return HtmlResponse(render_default_page("Hello!", "Hello!"))
 }
 
-export async function train_a_model_page(url: URL) {
+export async function train_a_model_page(_url: URL) {
  const parameters = await get_parameters("allset");
     const model_names = await get_model_names();
     // File doesn't exist, return default page

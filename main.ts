@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
   const pathname = url.pathname;
 
   const res = await router.route(pathname, url, req.method);
-  if(hasValue(res)) { 
+  if(hasValue(res)) {
     return getValue(res);
   }
 
