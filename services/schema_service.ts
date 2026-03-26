@@ -22,17 +22,17 @@ export async function get_database_schema(
     // Get column info plus table row count
     const result = await client.queryObject<TableRow>(
       `
-                SELECT
-                    c.column_name,
-                    c.data_type,
-                    c.is_nullable,
-                    c.column_default,
-                    c.character_maximum_length,
-                    t.reltuples::bigint AS table_rows
-                FROM information_schema.columns c
-                         JOIN pg_class t ON t.relname = $1
-                WHERE c.table_name = $1
-                ORDER BY c.ordinal_position;
+        SELECT
+            c.column_name,
+            c.data_type,
+            c.is_nullable,
+            c.column_default,
+            c.character_maximum_length,
+            t.reltuples::bigint AS table_rows
+        FROM information_schema.columns c
+                  JOIN pg_class t ON t.relname = $1
+        WHERE c.table_name = $1
+        ORDER BY c.ordinal_position;
             `,
       [tableName],
     );
@@ -41,10 +41,10 @@ export async function get_database_schema(
     // Return list of tables
     const result = await client.queryObject<TableInfo>(
       `
-                SELECT table_name
-                FROM information_schema.tables
-                WHERE table_schema='public'
-                ORDER BY table_name;
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema='public'
+      ORDER BY table_name;
             `,
     );
     return result.rows;
