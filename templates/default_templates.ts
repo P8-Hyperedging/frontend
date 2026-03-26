@@ -32,6 +32,9 @@ function render_toolbar() {
       <div class="navbar-center hidden lg:flex">
         <a class="btn btn-ghost" href="/schema">Schema</a>
       </div>
+      <div class="navbar-center hidden lg:flex">
+        <a class="btn btn-ghost" href="/results">Results</a>
+      </div>
       <div class="navbar-end">
         <div class="dropdown">
             <div tabindex="0" role="button" class="btn m-1">

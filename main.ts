@@ -17,6 +17,7 @@ import {
 import { get_model_names, get_parameters } from "./services/hgnn_service.ts";
 import { getValue, hasValue } from "./optional.ts";
 import { NoConnectionResponse } from "./reponses.ts";
+import { render_results } from "./templates/results_templates.ts";
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
@@ -63,7 +64,14 @@ Deno.serve(async (req) => {
       if (!hasValue(model_parameters)) {
         return NoConnectionResponse("Python Server");
       }
-      return new Response(render_parameter_form_content(getValue(model_parameters)), {
+      return new Response(
+        render_parameter_form_content(getValue(model_parameters)),
+        {
+          headers: { "content-type": "text/html" },
+        },
+      );
+    } else if (pathname === "/results") {
+      return new Response(render_default_page("Results", render_results()), {
         headers: { "content-type": "text/html" },
       });
     }
@@ -80,18 +88,13 @@ Deno.serve(async (req) => {
     const model_names = await get_model_names();
     // File doesn't exist, return default page
 
-    if(!hasValue(parameters) || !hasValue(model_names)) {
-        return NoConnectionResponse("Python Server");
+    if (!hasValue(parameters) || !hasValue(model_names)) {
+      return NoConnectionResponse("Python Server");
     }
     return new Response(
       render_default_page(
         "Welcome",
-        `${
-          render_parameter_form(
-            getValue(parameters),
-            getValue(model_names),
-          )
-        }`,
+        `${render_parameter_form(getValue(parameters), getValue(model_names))}`,
       ),
       { headers: { "content-type": "text/html" } },
     );
