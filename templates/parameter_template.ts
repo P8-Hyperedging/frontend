@@ -22,7 +22,7 @@ export function render_parameter_form(
           hx-swap="innerHTML">
           ${
     model_names.options.map(
-      (option) => `<option value="${option}">${option}</option>`,
+      (option) => `<option value="${option}">${option}</option>`
     )
   }
         </select>
@@ -39,10 +39,11 @@ export function render_parameter_form(
 }
 
 export function render_parameter_form_content(parameters: Parameter[]): string {
+  const val = parameters.map((parameter) => generate_fieldset(parameter)).join("");
   return `        
-    ${parameters.map((parameter) => generate_fieldset(parameter)).join("")}
-    <button class="btn btn-neutral mt-4" type="submit">Submit</button>
-    <button class="btn btn-ghost mt-1" type="reset">Reset</button>
+    ${val}
+    <button class="btn btn-neutral mt-4" type="submit"><i class="material-icons">send</i>Submit</button>
+    <button class="btn btn-ghost mt-1" type="reset"><i class="material-icons">restart_alt</i>Reset</button>
   `;
 }
 
