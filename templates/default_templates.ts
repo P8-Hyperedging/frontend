@@ -34,6 +34,7 @@ function render_toolbar() {
         <a class="btn btn-ghost" href="/"><i class="material-icons">home</i>Home</a>
         <a class="btn btn-ghost" href="/train"><i class="material-icons">smart_toy</i>Train</a>
         <a class="btn btn-ghost" href="/schema"><i class="material-icons">schema</i>Schema</a>
+        <a class="btn btn-ghost" href="/results"><i class="material-icons">analytics</i>Results</a>
       </div>
       <div class="navbar-end">
         <div class="dropdown">
