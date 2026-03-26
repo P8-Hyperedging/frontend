@@ -58,6 +58,14 @@ function generate_fieldset(parameter: Parameter): string {
     `;
       break;
     case InputType.Input:
+      if (parameter.name.includes("Seed")) { 
+        content = `
+          <label>${parameter.name}</label>
+          <input type="number" class="input validator w-full" min="${parameter.min}" max="${parameter.max}" value="${parameter.default}" step="1"/>
+          <p class="validator-hint hidden">Must input an integer</p>
+          `;
+        break; 
+      }
       content = `
         <label>${parameter.name}</label>
         <input type="number" class="input validator w-full" required min="${parameter.min}" max="${parameter.max}" value="${parameter.default}" step="0.0001"/>
