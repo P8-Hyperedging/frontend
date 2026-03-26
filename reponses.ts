@@ -12,6 +12,15 @@ export function NoConnectionResponse(instanceWithoutConnection: string) {
     return HtmlResponse(def);
 }
 
+export function NoPageResponse(path: string) {
+    const def = render_default_page(
+        `404 - Page Not Found`,
+        `The page "${path}" could not be found.
+        ${errorCodeCatImage(404)}`
+    );
+    return HtmlResponse(def);
+}
+
 export function HtmlResponse(html: string) {
   return new Response(html, {
     headers: { "content-type": "text/html" },

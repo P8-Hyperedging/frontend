@@ -10,6 +10,7 @@ export function render_default_page(title: string, content: string): string {
   <head>
     <title>${title}</title>
     <link rel="stylesheet" type="text/css" href="css/output.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
   </head>
@@ -30,7 +31,9 @@ function render_toolbar() {
         <a class="btn btn-ghost text-xl" href="/">Hyperedging</a>
       </div>
       <div class="navbar-center hidden lg:flex">
-        <a class="btn btn-ghost" href="/schema">Schema</a>
+        <a class="btn btn-ghost" href="/"><i class="material-icons">home</i>Home</a>
+        <a class="btn btn-ghost" href="/train"><i class="material-icons">smart_toy</i>Train</a>
+        <a class="btn btn-ghost" href="/schema"><i class="material-icons">schema</i>Schema</a>
       </div>
       <div class="navbar-end">
         <div class="dropdown">
