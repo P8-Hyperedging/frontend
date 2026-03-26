@@ -4,9 +4,9 @@ import { getValue, hasValue } from "./optional.ts";
 import { NoPageResponse } from "./reponses.ts";
 import { Router } from "./router.ts";
 import {
-  fuck,
   home_page,
   paramter_form,
+  results_page,
   schema,
   train_a_model_page,
 } from "./routes.ts";
@@ -16,7 +16,7 @@ const router = new Router();
 router.registerGetRoute("/schema", schema);
 router.registerGetRoute("/parameter-form", paramter_form);
 router.registerGetRoute("/train", train_a_model_page);
-router.registerGetRoute("/results", fuck);
+router.registerGetRoute("/results", results_page);
 router.registerGetRoute("/", home_page);
 
 Deno.serve(async (req) => {

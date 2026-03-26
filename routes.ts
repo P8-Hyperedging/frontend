@@ -16,6 +16,7 @@ import {
 } from "./templates/parameter_template.ts";
 import { render_table } from "./templates/table_template.ts";
 import { render_results } from "./templates/results_templates.ts";
+import { get_model_outputs } from "./services/model_output_service.ts";
 
 // deno-lint-ignore require-await
 export async function home_page(_url: URL) {
@@ -88,9 +89,13 @@ export async function paramter_form(url: URL) {
   );
 }
 
-// deno-lint-ignore require-await
-export async function fuck() {
-  return new Response(render_default_page("Results", render_results()), {
-    headers: { "content-type": "text/html" },
-  });
+export async function results_page() {
+  const model_outputs = await get_model_outputs();
+
+  return new Response(
+    render_default_page("Results", render_results(model_outputs)),
+    {
+      headers: { "content-type": "text/html" },
+    },
+  );
 }
