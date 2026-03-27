@@ -21,6 +21,15 @@ export function NoPageResponse(path: string) {
     return HtmlResponse(def);
 }
 
+export function RedirectResponse(path: string) {
+  return new Response(null, {
+    status: 302,
+    headers: {
+      "Location": path
+    }
+  });
+}
+
 export function HtmlResponse(html: string) {
   return new Response(html, {
     headers: { "content-type": "text/html" },

@@ -17,10 +17,16 @@
     "@deno-library/logger": "jsr:@deno-library/logger@^1.2.0",
     "@std/assert": "jsr:@std/assert@1",
     "@std/fs": "jsr:@std/fs@^1.0.23",
-    "@std/http": "jsr:@std/http@^1.0.25"
+    "@std/http": "jsr:@std/http@^1.0.25",
+    "react": "npm:react"
   },
   "allowScripts": {
     "allow": [],
     "deny": ["npm:@parcel/watcher@2.5.6"]
+  },
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment"
   }
 }
