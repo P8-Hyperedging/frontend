@@ -20,9 +20,8 @@ const logger = new Logger();
 router.registerGetRoute("/schema", schema);
 router.registerGetRoute("/parameter-form", paramter_form);
 router.registerPostRoute("/train", post_train)
-
-router.registerGetRoute("/train", train_a_model_page);
 router.registerGetRoute("/running-jobs", running_jobs_page);
+router.registerGetRoute("/train", train_a_model_page);
 router.registerGetRoute("/results", results_page);
 router.registerGetRoute("/", home_page);
 
@@ -36,7 +35,7 @@ Deno.serve(async (req) => {
   const pathname = url.pathname;
 
   const res = await router.route(pathname, url, req.method);
-  if(hasValue(res)) { 
+  if (hasValue(res)) {
     return getValue(res);
   }
 
@@ -47,6 +46,5 @@ Deno.serve(async (req) => {
     return await serveFile(req, fullPath);
   }
 
-  return NoPageResponse(pathname)
-  }
-);
+  return NoPageResponse(pathname);
+});

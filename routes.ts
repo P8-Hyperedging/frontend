@@ -16,8 +16,9 @@ import { get_model_outputs } from "./services/model_output_service.ts";
 import render_parameter_form, { render_parameter_form_content } from "./components/render_parameter_form.tsx";
 import { renderToString } from "preact-render-to-string";
 
-export async function home_page(url: URL) {
-    return HtmlResponse(render_default_page("Hello!", "Hello!"))
+// deno-lint-ignore require-await
+export async function home_page(_url: URL) {
+  return HtmlResponse(render_default_page("Hello!", "Hello!"));
 }
 
 export async function train_a_model_page(_url: URL) {
