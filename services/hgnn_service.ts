@@ -49,7 +49,7 @@ export async function get_parameters(
   model_name: string,
 ): Promise<Optional<Parameter[]>> {
   try {
-    const response = await fetch(`http://127.0.0.1:5000/params/${model_name}`);
+    const response = await fetch(`http://127.0.0.1:5002/params/${model_name}`);
     const responseText = await response.text();
     const body = JSON.parse(responseText) as Parameter[];
     return [body, true];
@@ -61,7 +61,7 @@ export async function get_parameters(
 
 export async function get_model_names(): Promise<Optional<SelectParameter>> {
   try {
-    const response = await fetch("http://127.0.0.1:5000/models");
+    const response = await fetch("http://127.0.0.1:5002/models");
     const responseText = await response.text();
     const model_names = JSON.parse(responseText) as SelectParameter;
 
