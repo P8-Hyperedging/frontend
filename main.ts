@@ -1,7 +1,7 @@
 import { serveFile } from "@std/http/file-server";
 import { exists } from "@std/fs";
 import { getValue, hasValue } from "./optional.ts";
-import { NoPageResponse, RedirectResponse } from "./reponses.ts";
+import { NoPageResponse } from "./reponses.ts";
 import { Router } from "./router.ts";
 import {
   home_page,
@@ -19,7 +19,7 @@ const logger = new Logger();
 
 router.registerGetRoute("/schema", schema);
 router.registerGetRoute("/parameter-form", parameter_form);
-router.registerPostRoute("/train/allset", post_train)
+router.registerPostRoute("/train", post_train);
 router.registerGetRoute("/running-jobs", running_jobs_page);
 router.registerGetRoute("/train", train_a_model_page);
 router.registerGetRoute("/results", results_page);
@@ -27,7 +27,7 @@ router.registerGetRoute("/", home_page);
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
-  logger.debug(req.method + " " + url.pathname)
+  logger.debug(req.method + " " + url.pathname);
   const pathname = url.pathname;
 
   const res = await router.route(pathname, req, req.method);

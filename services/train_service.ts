@@ -1,6 +1,4 @@
-import { log } from "node:console";
 import { RedirectResponse } from "../reponses.ts";
-
 
 export default async function post_train(req: Request) {
   const form = await req.formData();
@@ -10,8 +8,9 @@ export default async function post_train(req: Request) {
     data[key] = value;
   }
 
-  const incomingUrl = new URL(req.url);
-  const targetUrl = new URL(`http://127.0.0.1:5002${incomingUrl.pathname}`);
+  console.log(data);
+
+  const targetUrl = new URL(`http://127.0.0.1:5002/train/${data.model_name}`);
 
   const response = await fetch(targetUrl.toString(), {
     method: "POST",
@@ -21,7 +20,11 @@ export default async function post_train(req: Request) {
     body: JSON.stringify(data),
   });
 
-  console.log(await response.json())
+  //console.log(await response.json());
 
-  return RedirectResponse("/running-jobs");
+  const json = await response.json();
+  const job_id = json.job_id;
+  console.log(job_id);
+
+  return RedirectResponse(`/running-jobs?job_id=${job_id}`);
 }

@@ -13,8 +13,11 @@ import {
 import { render_table } from "./templates/table_template.ts";
 import { render_results } from "./templates/results_templates.ts";
 import { get_model_outputs } from "./services/model_output_service.ts";
-import render_parameter_form, { render_parameter_form_content } from "./components/render_parameter_form.tsx";
+import render_parameter_form, {
+  render_parameter_form_content,
+} from "./components/render_parameter_form.tsx";
 import { renderToString } from "preact-render-to-string";
+import { render_running_jobs } from "./templates/running_jobs_template.ts";
 
 // deno-lint-ignore require-await
 export async function home_page(_req: Request) {
@@ -31,7 +34,9 @@ export async function train_a_model_page(_req: Request) {
   return HtmlResponse(
     render_default_page(
       "Welcome",
-      renderToString(render_parameter_form(getValue(parameters), getValue(model_names))),
+      renderToString(
+        render_parameter_form(getValue(parameters), getValue(model_names)),
+      ),
     ),
   );
 }
@@ -43,7 +48,7 @@ export async function schema(req: Request) {
   if (tableName) {
     const schema = (await get_database_schema(tableName)) as TableRow[];
     return HtmlResponse(
-      render_default_page(`Schema: ${tableName}`, render_table(schema))
+      render_default_page(`Schema: ${tableName}`, render_table(schema)),
     );
   } else {
     const tables = (await get_database_schema(null)) as TableInfo[];
@@ -66,7 +71,7 @@ export async function schema(req: Request) {
             "Available Tables",
           )
         }<ul class="list w-1/2">${linksHtml}</ul>`,
-      )
+      ),
     );
   }
 }
@@ -79,7 +84,9 @@ export async function parameter_form(req: Request) {
     return NoConnectionResponse("Python Server");
   }
   return HtmlResponse(
-    renderToString(render_parameter_form_content(getValue(model_parameters)))
+    renderToString(
+      render_parameter_form_content(getValue(model_parameters), model_name),
+    ),
   );
 }
 
@@ -87,13 +94,12 @@ export async function results_page() {
   const model_outputs = await get_model_outputs();
 
   return HtmlResponse(
-    render_default_page("Results", render_results(model_outputs))
+    render_default_page("Results", render_results(model_outputs)),
   );
 }
 
-
 export async function running_jobs_page() {
   return HtmlResponse(
-    render_default_page("Running jobs", "Running jobs")
-  )
+    render_default_page("Running jobs", render_running_jobs()),
+  );
 }
