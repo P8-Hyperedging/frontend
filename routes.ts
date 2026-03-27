@@ -17,11 +17,11 @@ import render_parameter_form, { render_parameter_form_content } from "./componen
 import { renderToString } from "preact-render-to-string";
 
 // deno-lint-ignore require-await
-export async function home_page(_url: URL) {
+export async function home_page(_req: Request) {
   return HtmlResponse(render_default_page("Hello!", "Hello!"));
 }
 
-export async function train_a_model_page(_url: URL) {
+export async function train_a_model_page(_req: Request) {
   const parameters = await get_parameters("allset");
   const model_names = await get_model_names();
 
@@ -36,7 +36,8 @@ export async function train_a_model_page(_url: URL) {
   );
 }
 
-export async function schema(url: URL) {
+export async function schema(req: Request) {
+  const url = new URL(req.url);
   const tableName = url.searchParams.get("table");
 
   if (tableName) {
@@ -70,7 +71,8 @@ export async function schema(url: URL) {
   }
 }
 
-export async function paramter_form(url: URL) {
+export async function parameter_form(req: Request) {
+  const url = new URL(req.url);
   const model_name = url.searchParams.get("model") as string;
   const model_parameters = await get_parameters(model_name);
   if (!hasValue(model_parameters)) {

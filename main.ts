@@ -5,7 +5,7 @@ import { NoPageResponse, RedirectResponse } from "./reponses.ts";
 import { Router } from "./router.ts";
 import {
   home_page,
-  paramter_form,
+  parameter_form,
   results_page,
   running_jobs_page,
   schema,
@@ -18,8 +18,8 @@ const router = new Router();
 const logger = new Logger();
 
 router.registerGetRoute("/schema", schema);
-router.registerGetRoute("/parameter-form", paramter_form);
-router.registerPostRoute("/train", post_train)
+router.registerGetRoute("/parameter-form", parameter_form);
+router.registerPostRoute("/train/allset", post_train)
 router.registerGetRoute("/running-jobs", running_jobs_page);
 router.registerGetRoute("/train", train_a_model_page);
 router.registerGetRoute("/results", results_page);
@@ -28,13 +28,9 @@ router.registerGetRoute("/", home_page);
 Deno.serve(async (req) => {
   const url = new URL(req.url);
   logger.debug(req.method + " " + url.pathname)
-  if (req.method === "POST") {
-    logger.debug( await req.formData());
-    return RedirectResponse("/running-jobs")
-  }
   const pathname = url.pathname;
 
-  const res = await router.route(pathname, url, req.method);
+  const res = await router.route(pathname, req, req.method);
   if (hasValue(res)) {
     return getValue(res);
   }

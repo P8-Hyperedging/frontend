@@ -27,7 +27,7 @@ export default function render_parameter_form(
         </select>
       </fieldset>
 
-      <form class="fieldset w-full" method="post" action="/train">
+      <form class="fieldset w-full" method="post" action={"/train/" + model_names.options[0]}>
         <div id="parameter-form-content">
           {render_parameter_form_content(parameters)}
         </div>
