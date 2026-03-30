@@ -7,6 +7,7 @@ function getJobIdFromURL() {
 
 const jobId = getJobIdFromURL();
 if (!jobId) {
+  // deno-lint-ignore no-console
   console.error("No job ID found in URL!");
 }
 
@@ -31,6 +32,7 @@ function appendLine(container, text, type) {
 
 const mockupDiv = document.querySelector(".mockup-code");
 if (!mockupDiv) {
+  // deno-lint-ignore no-console
   console.error("No .mockup-code div found!");
 }
 
