@@ -29,7 +29,7 @@ export default function render_parameter_form(
           </select>
         </fieldset>
 
-        <form class="fieldset w-full" method="post" action={"/train"}>
+        <form class="fieldset w-full" method="post" action="/train">
           <div id="parameter-form-content">
             {render_parameter_form_content(parameters, model_names.options[0])}
           </div>
@@ -47,13 +47,7 @@ export function render_parameter_form_content(
   return (
     <>
       {val}
-      <input
-        type="text"
-        value={model_name}
-        class="hidden"
-        name="model_name"
-      >
-      </input>
+      <input type="text" value={model_name} class="hidden" name="model_name" />
       <button class="btn btn-neutral mt-4" type="submit">
         <i class="material-icons">send</i>Submit
       </button>

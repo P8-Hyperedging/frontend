@@ -98,6 +98,7 @@ export async function results_page() {
   );
 }
 
+// deno-lint-ignore require-await
 export async function running_jobs_page() {
   return HtmlResponse(
     render_default_page("Running jobs", render_running_jobs()),

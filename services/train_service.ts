@@ -3,7 +3,7 @@ import { RedirectResponse } from "../reponses.ts";
 export default async function post_train(req: Request) {
   const form = await req.formData();
 
-  const data: Record<string, any> = {};
+  const data: Record<string, string | File> = {};
   for (const [key, value] of form.entries()) {
     data[key] = value;
   }
