@@ -13,6 +13,7 @@ export function render_default_page(title: string, content: string): string {
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
   </head>
   <body class="bg-base-100 ">
     <div class="flex flex-col w-full flex justify-center items-center">
