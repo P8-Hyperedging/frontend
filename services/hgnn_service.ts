@@ -49,7 +49,9 @@ export async function get_parameters(
   model_name: string,
 ): Promise<Optional<Parameter[]>> {
   try {
-    const response = await fetch(`${Deno.env.get("BASEMENT_PC_IP")}/params/${model_name}`);
+    const response = await fetch(
+      `${Deno.env.get("BASEMENT_PC_IP")}/params/${model_name}`,
+    );
     const responseText = await response.text();
     const body = JSON.parse(responseText) as Parameter[];
     return [body, true];

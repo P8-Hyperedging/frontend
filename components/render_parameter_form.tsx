@@ -1,3 +1,5 @@
+/** @jsxImportSource https://esm.sh/preact */
+
 import {
   InputType,
   Parameter,
@@ -58,7 +60,7 @@ export function render_parameter_form_content(
 
 function generate_fieldset(parameter: Parameter) {
   let content = null;
-  const parameter_name = parameter.name.replaceAll(" ", "_")
+  const parameter_name = parameter.name.replaceAll(" ", "_");
   switch (parameter.type) {
     case InputType.Range:
       content = (
