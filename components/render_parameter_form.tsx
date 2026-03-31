@@ -55,7 +55,7 @@ export function render_parameter_form_content(
 }
 
 function generate_fieldset(parameter: Parameter) {
-  let content = (<></>);
+  let content = null;
   const parameter_name = parameter.name.replaceAll(" ", "_")
   switch (parameter.type) {
     case InputType.Range:
