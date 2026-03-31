@@ -53,14 +53,13 @@ function render_results_table(model_outputs: Model_output[]) {
                           {
           Object.entries(row.parameters)
             .map(
-              ([key, value]) => `
-                                <tr>
-                                  <td class="font-semibold">${key}</td>
-                                  <td>{value}</td>
-                                </tr>
-                              `,
+              ([key, value]) => (
+                <tr>
+                  <td class="font-semibold">{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ),
             )
-            .join("")
         }
                         </tbody>
                       </table>
