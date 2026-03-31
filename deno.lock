@@ -26,6 +26,10 @@
     "jsr:@std/streams@^1.0.17": "1.0.17",
     "npm:@tailwindcss/cli@^4.2.1": "4.2.1",
     "npm:daisyui@^5.5.19": "5.5.19",
+    "npm:preact-render-to-string@^6.6.6": "6.6.6_preact@10.29.0",
+    "npm:preact@^10.29.0": "10.29.0",
+    "npm:react@*": "19.2.4",
+    "npm:react@^19.2.4": "19.2.4",
     "npm:tailwindcss@^4.2.1": "4.2.1"
   },
   "jsr": {
@@ -453,6 +457,18 @@
     "picomatch@4.0.3": {
       "integrity": "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q=="
     },
+    "preact-render-to-string@6.6.6_preact@10.29.0": {
+      "integrity": "sha512-EfqZJytnjJldV+YaaqhthU2oXsEf5e+6rDv957p+zxAvNfFLQOPfvBOTncscQ+akzu6Wrl7s3Pa0LjUQmWJsGQ==",
+      "dependencies": [
+        "preact"
+      ]
+    },
+    "preact@10.29.0": {
+      "integrity": "sha512-wSAGyk2bYR1c7t3SZ3jHcM6xy0lcBcDel6lODcs9ME6Th++Dx2KU+6D3HD8wMMKGA8Wpw7OMd3/4RGzYRpzwRg=="
+    },
+    "react@19.2.4": {
+      "integrity": "sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ=="
+    },
     "source-map-js@1.2.1": {
       "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA=="
     },
@@ -462,6 +478,9 @@
     "tapable@2.3.0": {
       "integrity": "sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg=="
     }
+  },
+  "redirects": {
+    "https://esm.sh/preact/jsx-runtime": "https://esm.sh/preact@10.29.0/jsx-runtime"
   },
   "remote": {
     "https://deno.land/std@0.211.0/assert/assert.ts": "bec068b2fccdd434c138a555b19a2c2393b71dfaada02b7d568a01541e67cdc5",
@@ -554,7 +573,10 @@
     "https://deno.land/std@0.211.0/path/windows/resolve.ts": "75b2e3e1238d840782cee3d8864d82bfaa593c7af8b22f19c6422cf82f330ab3",
     "https://deno.land/std@0.211.0/path/windows/separator.ts": "2bbcc551f64810fb43252185bd1d33d66e0477d74bd52f03b89f5dc21a3dd486",
     "https://deno.land/std@0.211.0/streams/byte_slice_stream.ts": "5bbdcadb118390affa9b3d0a0f73ef8e83754f59bb89df349add669dd9369713",
-    "https://deno.land/std@0.211.0/version.ts": "46f833faaf024c7f0b0b902bf004065de0bb873cbd4bcf088ac673eab97d897d"
+    "https://deno.land/std@0.211.0/version.ts": "46f833faaf024c7f0b0b902bf004065de0bb873cbd4bcf088ac673eab97d897d",
+    "https://esm.sh/preact@10.29.0/denonext/jsx-runtime.mjs": "3687d1dcc962e56d388c225bae41ac1382a51e58aafc9248ca21fd594386da24",
+    "https://esm.sh/preact@10.29.0/denonext/preact.mjs": "a8381b8ae6391298439ec004d138a49487e60d232e364abadb59ed39deb50d22",
+    "https://esm.sh/preact@10.29.0/jsx-runtime": "85f44f1dcd993527f95e7104f7537a6586f12b93860a959337ed2469868518c3"
   },
   "workspace": {
     "dependencies": [
@@ -562,12 +584,16 @@
       "jsr:@deno-library/logger@^1.2.0",
       "jsr:@std/assert@1",
       "jsr:@std/fs@^1.0.23",
-      "jsr:@std/http@^1.0.25"
+      "jsr:@std/http@^1.0.25",
+      "npm:react@*"
     ],
     "packageJson": {
       "dependencies": [
         "npm:@tailwindcss/cli@^4.2.1",
         "npm:daisyui@^5.5.19",
+        "npm:preact-render-to-string@^6.6.6",
+        "npm:preact@^10.29.0",
+        "npm:react@^19.2.4",
         "npm:tailwindcss@^4.2.1"
       ]
     }

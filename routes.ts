@@ -10,23 +10,23 @@ import {
   render_default_page,
   render_heading,
 } from "./templates/default_templates.ts";
-import {
-  render_parameter_form,
-  render_parameter_form_content,
-} from "./templates/parameter_template.ts";
 import { render_table } from "./templates/table_template.ts";
 import { render_results } from "./templates/results_templates.ts";
 import { get_model_outputs } from "./services/model_output_service.ts";
+import render_parameter_form, {
+  render_parameter_form_content,
+} from "./components/render_parameter_form.tsx";
+import { renderToString } from "preact-render-to-string";
+import { render_running_jobs } from "./templates/running_jobs_template.ts";
 
 // deno-lint-ignore require-await
-export async function home_page(_url: URL) {
+export async function home_page(_req: Request) {
   return HtmlResponse(render_default_page("Hello!", "Hello!"));
 }
 
-export async function train_a_model_page(_url: URL) {
+export async function train_a_model_page(_req: Request) {
   const parameters = await get_parameters("allset");
   const model_names = await get_model_names();
-  // File doesn't exist, return default page
 
   if (!hasValue(parameters) || !hasValue(model_names)) {
     return NoConnectionResponse("Python Server");
@@ -34,19 +34,21 @@ export async function train_a_model_page(_url: URL) {
   return HtmlResponse(
     render_default_page(
       "Welcome",
-      `${render_parameter_form(getValue(parameters), getValue(model_names))}`,
+      renderToString(
+        render_parameter_form(getValue(parameters), getValue(model_names)),
+      ),
     ),
   );
 }
 
-export async function schema(url: URL) {
+export async function schema(req: Request) {
+  const url = new URL(req.url);
   const tableName = url.searchParams.get("table");
 
   if (tableName) {
     const schema = (await get_database_schema(tableName)) as TableRow[];
-    return new Response(
+    return HtmlResponse(
       render_default_page(`Schema: ${tableName}`, render_table(schema)),
-      { headers: { "content-type": "text/html" } },
     );
   } else {
     const tables = (await get_database_schema(null)) as TableInfo[];
@@ -61,7 +63,7 @@ export async function schema(url: URL) {
       )
       .join("");
 
-    return new Response(
+    return HtmlResponse(
       render_default_page(
         "All Tables",
         `${
@@ -70,32 +72,35 @@ export async function schema(url: URL) {
           )
         }<ul class="list w-1/2">${linksHtml}</ul>`,
       ),
-      { headers: { "content-type": "text/html" } },
     );
   }
 }
 
-export async function paramter_form(url: URL) {
+export async function parameter_form(req: Request) {
+  const url = new URL(req.url);
   const model_name = url.searchParams.get("model") as string;
   const model_parameters = await get_parameters(model_name);
   if (!hasValue(model_parameters)) {
     return NoConnectionResponse("Python Server");
   }
-  return new Response(
-    render_parameter_form_content(getValue(model_parameters)),
-    {
-      headers: { "content-type": "text/html" },
-    },
+  return HtmlResponse(
+    renderToString(
+      render_parameter_form_content(getValue(model_parameters), model_name),
+    ),
   );
 }
 
 export async function results_page() {
   const model_outputs = await get_model_outputs();
 
-  return new Response(
+  return HtmlResponse(
     render_default_page("Results", render_results(model_outputs)),
-    {
-      headers: { "content-type": "text/html" },
-    },
+  );
+}
+
+// deno-lint-ignore require-await
+export async function running_jobs_page() {
+  return HtmlResponse(
+    render_default_page("Running jobs", render_running_jobs()),
   );
 }
