@@ -1,6 +1,8 @@
-/** @jsxImportSource https://esm.sh/preact */
-
-import { InputType, Parameter, SelectParameter } from "../services/hgnn_service.ts";
+import {
+  InputType,
+  Parameter,
+  SelectParameter,
+} from "../services/hgnn_service.ts";
 
 export default function render_parameter_form(
   parameters: Parameter[],
