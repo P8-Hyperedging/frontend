@@ -27,7 +27,9 @@ export class Router {
     method: UrlMethod,
   ): Promise<Optional<Response>> {
     const route = this.routes.find((r) => r[0] === path && r[1] === method);
-    const page = this.pages.find((p) => p[0] === path && UrlMethod.GET === method);
+    const page = this.pages.find((p) =>
+      p[0] === path && UrlMethod.GET === method
+    );
 
     if (!route && !page) {
       return [null, false];
