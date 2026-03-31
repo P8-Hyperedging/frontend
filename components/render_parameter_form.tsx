@@ -88,7 +88,7 @@ function generate_fieldset(parameter: Parameter) {
             type="number"
             name={parameter_name}
             class="input validator w-full"
-            required
+            required={parameter.name !== "seed" || undefined}
             min={parameter.min}
             max={parameter.max}
             value={parameter.default}

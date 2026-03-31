@@ -8,7 +8,7 @@ export default async function post_train(req: Request) {
     data[key] = value;
   }
 
-  const targetUrl = new URL(`http://127.0.0.1:5002/train/${data.model_name}`);
+  const targetUrl = new URL(`${Deno.env.get("BASEMENT_PC_IP")}/train/${data.model_name}`);
 
   const response = await fetch(targetUrl.toString(), {
     method: "POST",
