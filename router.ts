@@ -23,17 +23,23 @@ export class Router {
 
     async route(path: string, req: Request, method: UrlMethod): Promise<Optional<Response>> {
         const r = this.routes.find(r => r[0] === path && r[1] === method);
-        const p = this.pages.find(r => r[0] === path);
+        const p = this.pages.find(r => r[0] === path && UrlMethod.GET === method);
 
-        if (p) {
-            return [HtmlResponse(renderToString(await p[1](req))), true];
-        }
 
-        if (!r) {
+
+        if (!r && !p) {
             return [null, false];
         }
 
-        return [await r[2](req), true];
+        if (!p && r) {
+            return [await r[2](req), true];
+        }
+
+        if(p) {
+            return [HtmlResponse(renderToString(await p[1](req))), true];
+        }
+
+        return [null, false];
     }
 
     registerPage(path: string, func: PageHandler): void {
