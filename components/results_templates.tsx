@@ -24,7 +24,7 @@ function render_results_table(model_outputs: Model_output[]) {
           <tr>
             <th>#</th>
             {Object.keys(model_outputs[0])
-              .map((key) => <th>{key}</th>)}
+              .map((key) => <th key={key}>{key}</th>)}
           </tr>
         </thead>
 
