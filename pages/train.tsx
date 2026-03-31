@@ -10,10 +10,10 @@ export async function train_a_model_page(_req: Request) {
   const model_names = await get_model_names();
 
   if (!hasValue(parameters) || !hasValue(model_names)) {
-    return (<>"Python Server"</>);
+    return <>"Python Server"</>;
   }
   return render_default_page(
-      "Welcome",
-      render_parameter_form(getValue(parameters), getValue(model_names))
-    );
+    "Welcome",
+    render_parameter_form(getValue(parameters), getValue(model_names)),
+  );
 }

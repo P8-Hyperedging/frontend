@@ -1,6 +1,10 @@
 /** @jsxImportSource https://esm.sh/preact */
 
-import { InputType, Parameter, SelectParameter } from "../services/hgnn_service.ts";
+import {
+  InputType,
+  Parameter,
+  SelectParameter,
+} from "../services/hgnn_service.ts";
 
 export default function render_parameter_form(
   parameters: Parameter[],
@@ -56,7 +60,7 @@ export function render_parameter_form_content(
 
 function generate_fieldset(parameter: Parameter) {
   let content = null;
-  const parameter_name = parameter.name.replaceAll(" ", "_")
+  const parameter_name = parameter.name.replaceAll(" ", "_");
   switch (parameter.type) {
     case InputType.Range:
       content = (

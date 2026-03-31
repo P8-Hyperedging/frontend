@@ -19,6 +19,3 @@ export async function parameter_form(req: Request) {
     ),
   );
 }
-
-
-

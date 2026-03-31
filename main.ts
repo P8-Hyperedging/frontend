@@ -2,9 +2,7 @@ import { serveFile } from "@std/http/file-server";
 import { exists } from "@std/fs";
 import { getValue, hasValue } from "./optional.ts";
 import { Router, UrlMethod } from "./router.ts";
-import {
-  parameter_form,
-} from "./routes.ts";
+import { parameter_form } from "./routes.ts";
 import { Logger } from "@deno-library/logger";
 import post_train from "./services/train_service.ts";
 import { NoPageResponse } from "./components/responses.tsx";

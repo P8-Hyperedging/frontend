@@ -10,21 +10,21 @@ export type TableRow = {
 };
 
 function render_table<T extends TableRow>(rows: T[]) {
-  return (<>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Column</th>
-          <th>Type</th>
-          <th>Nullable</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${
-    rows
-      .map(
-        (r) => `
+  return (
+    <>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Column</th>
+            <th>Type</th>
+            <th>Nullable</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows
+            .map(
+              (r) => `
             <tr>
               <td>${r.column_name}</td>
               <td>${r.data_type}</td>
@@ -32,10 +32,10 @@ function render_table<T extends TableRow>(rows: T[]) {
               <td>${r.column_default ?? ""}</td>
             </tr>
           `,
-      )
-      .join("")
-  }
-      </tbody>
-    </table>
-  </>);
+            )
+            .join("")}
+        </tbody>
+      </table>
+    </>
+  );
 }

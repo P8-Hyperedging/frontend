@@ -4,53 +4,55 @@ import { renderToString } from "preact-render-to-string";
 import { HtmlResponse } from "./components/responses.tsx";
 
 export enum UrlMethod {
-    GET = "GET",
-    POST = "POST",
-    UPDATE = "UPDATE"
+  GET = "GET",
+  POST = "POST",
+  UPDATE = "UPDATE",
 }
 
 type RouteHandler = (req: Request) => Promise<Response>;
 type PageHandler = (req: Request) => Promise<JSX.Element>;
 
 export class Router {
-    routes: [string, UrlMethod, RouteHandler][];
-    pages: [string, PageHandler][];
+  routes: [string, UrlMethod, RouteHandler][];
+  pages: [string, PageHandler][];
 
-    constructor() {
-        this.routes = [];
-        this.pages = [];
+  constructor() {
+    this.routes = [];
+    this.pages = [];
+  }
+
+  async route(
+    path: string,
+    req: Request,
+    method: UrlMethod,
+  ): Promise<Optional<Response>> {
+    const r = this.routes.find((r) => r[0] === path && r[1] === method);
+    const p = this.pages.find((r) => r[0] === path && UrlMethod.GET === method);
+
+    if (!r && !p) {
+      return [null, false];
     }
 
-    async route(path: string, req: Request, method: UrlMethod): Promise<Optional<Response>> {
-        const r = this.routes.find(r => r[0] === path && r[1] === method);
-        const p = this.pages.find(r => r[0] === path && UrlMethod.GET === method);
-
-
-
-        if (!r && !p) {
-            return [null, false];
-        }
-
-        if (!p && r) {
-            return [await r[2](req), true];
-        }
-
-        if(p) {
-            return [HtmlResponse(renderToString(await p[1](req))), true];
-        }
-
-        return [null, false];
+    if (!p && r) {
+      return [await r[2](req), true];
     }
 
-    registerPage(path: string, func: PageHandler): void {
-        this.pages.push([path, func]);
+    if (p) {
+      return [HtmlResponse(renderToString(await p[1](req))), true];
     }
 
-    registerGetRoute(path: string, func: RouteHandler): void {
-        this.routes.push([path, UrlMethod.GET, func]);
-    }
+    return [null, false];
+  }
 
-    registerPostRoute(path: string, func: RouteHandler): void {
-        this.routes.push([path, UrlMethod.POST, func]);
-    }
+  registerPage(path: string, func: PageHandler): void {
+    this.pages.push([path, func]);
+  }
+
+  registerGetRoute(path: string, func: RouteHandler): void {
+    this.routes.push([path, UrlMethod.GET, func]);
+  }
+
+  registerPostRoute(path: string, func: RouteHandler): void {
+    this.routes.push([path, UrlMethod.POST, func]);
+  }
 }
