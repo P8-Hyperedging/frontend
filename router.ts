@@ -26,19 +26,19 @@ export class Router {
     req: Request,
     method: UrlMethod,
   ): Promise<Optional<Response>> {
-    const r = this.routes.find((r) => r[0] === path && r[1] === method);
-    const p = this.pages.find((r) => r[0] === path && UrlMethod.GET === method);
+    const route = this.routes.find((r) => r[0] === path && r[1] === method);
+    const page = this.pages.find((p) => p[0] === path && UrlMethod.GET === method);
 
-    if (!r && !p) {
+    if (!route && !page) {
       return [null, false];
     }
 
-    if (!p && r) {
-      return [await r[2](req), true];
+    if (!page && route) {
+      return [await route[2](req), true];
     }
 
-    if (p) {
-      return [HtmlResponse(renderToString(await p[1](req))), true];
+    if (page) {
+      return [HtmlResponse(renderToString(await page[1](req))), true];
     }
 
     return [null, false];
