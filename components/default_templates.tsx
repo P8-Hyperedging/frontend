@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact */
-
 import { JSX } from "preact";
 
 /**
@@ -40,7 +38,9 @@ function render_toolbar() {
     <>
       <div class="navbar bg-base-200 shadow-sm">
         <div class="navbar-start">
-          <a class="btn btn-ghost text-xl" href="/">Hyperedging</a>
+          <a class="btn btn-ghost text-xl" href="/">
+            Hyperedging
+          </a>
         </div>
         <div class="navbar-center hidden lg:flex">
           <a class="btn btn-ghost" href="/">
@@ -58,7 +58,7 @@ function render_toolbar() {
         </div>
         <div class="navbar-end">
           <div class="dropdown">
-            <div role="button" class="btn m-1">
+            <div tabindex={0} role="button" class="btn m-1">
               Theme
               <svg
                 width="12px"
@@ -71,7 +71,10 @@ function render_toolbar() {
                 </path>
               </svg>
             </div>
-            <ul class="dropdown-content bg-base-300 rounded-box z-1 w-auto p-2 shadow-2xl">
+            <ul
+              tabindex={-1}
+              class="dropdown-content bg-base-300 rounded-box z-1 w-auto p-2 shadow-2xl"
+            >
               {render_theme()}
             </ul>
           </div>
@@ -90,7 +93,7 @@ function render_theme() {
         type="radio"
         name="theme-dropdown"
         class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-        aria-label={theme.toUpperCase()}
+        aria-label={theme}
         value={theme}
         data-set-theme={theme}
         data-act-class="ACTIVECLASS"
