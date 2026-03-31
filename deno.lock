@@ -27,9 +27,8 @@
     "npm:@tailwindcss/cli@^4.2.1": "4.2.1",
     "npm:daisyui@^5.5.19": "5.5.19",
     "npm:preact-render-to-string@^6.6.6": "6.6.6_preact@10.29.0",
+    "npm:preact@*": "10.29.0",
     "npm:preact@^10.29.0": "10.29.0",
-    "npm:react@*": "19.2.4",
-    "npm:react@^19.2.4": "19.2.4",
     "npm:tailwindcss@^4.2.1": "4.2.1"
   },
   "jsr": {
@@ -585,7 +584,7 @@
       "jsr:@std/assert@1",
       "jsr:@std/fs@^1.0.23",
       "jsr:@std/http@^1.0.25",
-      "npm:react@*"
+      "npm:preact@*"
     ],
     "packageJson": {
       "dependencies": [

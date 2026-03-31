@@ -1,6 +1,8 @@
-/** @jsxImportSource https://esm.sh/preact */
-
-import { InputType, Parameter, SelectParameter } from "../services/hgnn_service.ts";
+import {
+  InputType,
+  Parameter,
+  SelectParameter,
+} from "../services/hgnn_service.ts";
 
 export default function render_parameter_form(
   parameters: Parameter[],
@@ -84,7 +86,7 @@ function generate_fieldset(parameter: Parameter) {
             type="number"
             name={parameter_name}
             class="input validator w-full"
-            required
+            required={parameter.name !== "seed" || undefined}
             min={parameter.min}
             max={parameter.max}
             value={parameter.default}
