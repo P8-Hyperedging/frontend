@@ -1,6 +1,5 @@
 /** @jsxImportSource https://esm.sh/preact */
 
-
 import { InputType, Parameter, SelectParameter } from "../services/hgnn_service.ts";
 
 export default function render_parameter_form(
@@ -48,7 +47,7 @@ export function render_parameter_form_content(parameters: Parameter[]) {
 
 
 function generate_fieldset(parameter: Parameter) {
-  let content;
+  let content = (<></>);
   const parameter_name = parameter.name.replaceAll(" ", "_")
   switch (parameter.type) {
     case InputType.Range:
@@ -103,9 +102,6 @@ function generate_fieldset(parameter: Parameter) {
           {parameter.options.map((option) => `<option>${option}</option>`).join("")}
         </select>
         </>)
-      break;
-    default:
-      content = ``;
       break;
   }
 
