@@ -1,32 +1,57 @@
+/** @jsxImportSource https://esm.sh/preact */
+
+import { JSX } from "preact";
+
 /**
  * Get a default page
  * @param title title of the page
  * @param content content of the page
  */
-export function render_default_page(title: string, content: string): string {
-  return `
-  <!DOCTYPE html>
+export function render_default_page(title: string, content: JSX.Element) {
+  return (<>
   <html data-theme="cupcake">
   <head>
-    <title>${title}</title>
-    <link rel="stylesheet" type="text/css" href="css/output.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>{title}</title>
+    <link rel="stylesheet" type="text/css" href="css/output.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
   </head>
   <body class="bg-base-100 ">
     <div class="flex flex-col w-full flex justify-center items-center">
-      ${render_toolbar() + content}
+      {[render_toolbar(), content]}
     </div>
   </body>
   </html>
-  `;
+    </>);
 }
+
+export function render_default_string_page(title: string, content: string) {
+  return (<>
+  <html data-theme="cupcake">
+  <head>
+    <title>{title}</title>
+    <link rel="stylesheet" type="text/css" href="css/output.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  </head>
+  <body class="bg-base-100 ">
+    <div class="flex flex-col w-full flex justify-center items-center">
+      {render_toolbar()}
+      {content}
+    </div>
+  </body>
+  </html>
+    </>);
+}
+
 
 /** */
 function render_toolbar() {
-  return `
+  return (<>
     <div class="navbar bg-base-200 shadow-sm">
       <div class="navbar-start">
         <a class="btn btn-ghost text-xl" href="/">Hyperedging</a>
@@ -39,7 +64,7 @@ function render_toolbar() {
       </div>
       <div class="navbar-end">
         <div class="dropdown">
-            <div tabindex="0" role="button" class="btn m-1">
+            <div role="button" class="btn m-1">
                 Theme
                 <svg
                 width="12px"
@@ -50,35 +75,33 @@ function render_toolbar() {
                 <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
                 </svg>
             </div>
-            <ul tabindex="-1" class="dropdown-content bg-base-300 rounded-box z-1 w-auto p-2 shadow-2xl">
-                ${render_theme()}
+            <ul class="dropdown-content bg-base-300 rounded-box z-1 w-auto p-2 shadow-2xl">
+                {render_theme()}
             </ul>
         </div>
       </div>
     </div>
-    `;
+    </>);
 }
 
 function render_theme() {
   const themes = ["light", "dark", "cupcake"];
 
-  return themes
-    .map(
-      (theme) => `
-                <li>
-                    <input
-                        type="radio"
-                        name="theme-dropdown"
-                        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-                        aria-label="${theme.toUpperCase()}"
-                        value="${theme}"
-                        data-set-theme="${theme}" data-act-class="ACTIVECLASS"/>
-                </li>
-        `,
-    )
-    .join("");
+  return themes.map((theme) => (
+    <li key={theme}>
+      <input
+        type="radio"
+        name="theme-dropdown"
+        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+        aria-label={theme.toUpperCase()}
+        value={theme}
+        data-set-theme={theme}
+        data-act-class="ACTIVECLASS"
+      />
+    </li>
+  ));
 }
 
 export function render_heading(heading: string) {
-  return `<h1 class="text-xl text-base-content p-8">${heading}</h1>`;
+  return <h1 class="text-xl text-base-content p-8">{heading}</h1>;
 }

@@ -1,3 +1,5 @@
+/** @jsxImportSource https://esm.sh/preact */
+
 export { render_table };
 
 export type TableRow = {
@@ -7,8 +9,8 @@ export type TableRow = {
   column_default?: string | null;
 };
 
-function render_table<T extends TableRow>(rows: T[]): string {
-  return `
+function render_table<T extends TableRow>(rows: T[]) {
+  return (<>
     <table class="table">
       <thead>
         <tr>
@@ -35,5 +37,5 @@ function render_table<T extends TableRow>(rows: T[]): string {
   }
       </tbody>
     </table>
-  `;
+  </>);
 }
