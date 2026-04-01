@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact */
-
 import { render_default_page } from "../components/default_templates.tsx";
 import render_parameter_form from "../components/render_parameter_form.tsx";
 import { getValue, hasValue } from "../optional.ts";

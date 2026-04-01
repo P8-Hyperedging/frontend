@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact */
-
 import { Model_output } from "../services/model_output_service.ts";
 
 export function render_results(model_outputs: Model_output[]) {
@@ -23,57 +21,57 @@ function render_results_table(model_outputs: Model_output[]) {
         <thead>
           <tr>
             <th>#</th>
-            {Object.keys(model_outputs[0])
-              .map((key) => <th key={key}>{key}</th>)}
+            {Object.keys(model_outputs[0]).map((key) => <th key={key}>{key}
+            </th>)}
           </tr>
         </thead>
 
         <tbody>
-          {model_outputs
-            .map((row, index) => {
-              return (
-                <>
-                  <tr>
-                    <th>{index + 1}</th>
-                    <td>{row.job_id}</td>
-                    <td>{row.training_time}</td>
-                    <td>{row.total_runtime}</td>
-                    <td>{row.seed}</td>
-                    <td>{row.train_acc}</td>
-                    <td>{row.valid_acc}</td>
-                    <td>{row.test_acc}</td>
+          {model_outputs.map((row, index) => {
+            return (
+              <>
+                <tr>
+                  <th>{index + 1}</th>
+                  <td>{row.job_id}</td>
+                  <td>{row.training_time}</td>
+                  <td>{row.total_runtime}</td>
+                  <td>{row.seed}</td>
+                  <td>{row.train_acc}</td>
+                  <td>{row.valid_acc}</td>
+                  <td>{row.test_acc}</td>
 
-                    <td>
-                      <div class="dropdown">
-                        <div role="button" class="btn m-1">
-                          Parameters
-                        </div>
-                        <div class="dropdown-content bg-base-300 rounded-box p-2 shadow-2xl">
-                          <table class="table table-xs">
-                            <tbody>
-                              {Object.entries(row.parameters)
-                                .map(
-                                  ([key, value]) => (
-                                    <tr>
-                                      <td class="font-semibold">{key}</td>
-                                      <td>{value}</td>
-                                    </tr>
-                                  ),
-                                )}
-                            </tbody>
-                          </table>
-                        </div>
+                  <td>
+                    <div class="dropdown">
+                      <div role="button" class="btn m-1">
+                        Parameters
                       </div>
-                    </td>
+                      <div class="dropdown-content bg-base-300 rounded-box p-2 shadow-2xl">
+                        <table class="table table-xs">
+                          <tbody>
+                            {Object.entries(row.parameters).map(
+                              ([key, value]) => (
+                                <tr>
+                                  <td class="font-semibold">{key}</td>
+                                  <td>{value}</td>
+                                </tr>
+                              ),
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </td>
 
-                    <td>{row.model_name}</td>
-                    <td>{row.id}</td>
-                  </tr>
-                </>
-              );
-            })}
+                  <td>{row.model_name}</td>
+                  <td>{row.id}</td>
+                </tr>
+              </>
+            );
+          })}
         </tbody>
       </table>
+      <div id="myPlot" class="w-1/2"></div>
+      <script src="js/plots.js"></script>
     </>
   );
 }

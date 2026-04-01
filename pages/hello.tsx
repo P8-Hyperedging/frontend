@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact */
-
 import { render_default_page } from "../components/default_templates.tsx";
 
 // deno-lint-ignore require-await

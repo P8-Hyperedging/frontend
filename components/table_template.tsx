@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact */
-
 export { render_table };
 
 export type TableRow = {
@@ -22,7 +20,8 @@ function render_table<T extends TableRow>(rows: T[]) {
           </tr>
         </thead>
         <tbody>
-          ${rows
+          $
+          {rows
             .map(
               (r) => `
             <tr>
