@@ -1,6 +1,6 @@
-import { JSX } from "preact";
+import type { ReactElement } from "react";
 import { Optional } from "./optional.ts";
-import { renderToString } from "preact-render-to-string";
+import { renderToString } from "react-dom/server";
 import { HtmlResponse } from "./components/responses.tsx";
 
 export enum UrlMethod {
@@ -10,7 +10,7 @@ export enum UrlMethod {
 }
 
 type RouteHandler = (req: Request) => Promise<Response>;
-type PageHandler = (req: Request) => Promise<JSX.Element>;
+type PageHandler = (req: Request) => Promise<ReactElement>;
 
 export class Router {
   routes: [string, UrlMethod, RouteHandler][];
@@ -27,8 +27,8 @@ export class Router {
     method: UrlMethod,
   ): Promise<Optional<Response>> {
     const route = this.routes.find((r) => r[0] === path && r[1] === method);
-    const page = this.pages.find((p) =>
-      p[0] === path && UrlMethod.GET === method
+    const page = this.pages.find(
+      (p) => p[0] === path && UrlMethod.GET === method,
     );
 
     if (!route && !page) {

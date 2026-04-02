@@ -19,9 +19,9 @@ export async function render_schema(req: Request) {
   } else {
     const tables = (await get_database_schema(null)) as TableInfo[];
     const linksHtml = tables.map((t) => (
-      <li class="list-row">
+      <li className="list-row">
         <a
-          class="link link-hover"
+          className="link link-hover"
           href="/schema?table=${
             encodeURIComponent(
               t.table_name,
@@ -37,7 +37,7 @@ export async function render_schema(req: Request) {
       "All Tables",
       <>
         {render_heading("Available Tables")}
-        <ul class="list w-1/2">{linksHtml}</ul>
+        <ul className="list w-1/2">{linksHtml}</ul>
       </>,
     );
   }
