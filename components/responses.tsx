@@ -1,5 +1,5 @@
 import { renderToString } from "preact-render-to-string";
-import { render_default_page } from "./default_templates.tsx";
+import { DefaultPage } from "./default_templates.tsx";
 
 export function errorCodeCatImage(errorCode: number) {
   return (
@@ -11,24 +11,30 @@ export function errorCodeCatImage(errorCode: number) {
 }
 
 export function NoConnectionResponse(instanceWithoutConnection: string) {
-  const def = renderToString(
-    render_default_page(
-      `No connection to the ${instanceWithoutConnection}!`,
-      <>
-        No connection to the {instanceWithoutConnection}!
-        {errorCodeCatImage(521)}
-      </>,
-    ),
+  const def = (
+    <DefaultPage
+      title={`No connection to the ${instanceWithoutConnection}!`}
+      content={
+        <>
+          No connection to the {instanceWithoutConnection}!
+          {errorCodeCatImage(521)}
+        </>
+      }
+    />
   );
-  return HtmlResponse(def);
+  return HtmlResponse(renderToString(def));
 }
 
 export function NoPageResponse(path: string) {
-  const def = render_default_page(
-    `404 - Page Not Found`,
-    <>
-      The page "${path}" could not be found. {errorCodeCatImage(404)}
-    </>,
+  const def = (
+    <DefaultPage
+      title={`404 - Page Not Found`}
+      content={
+        <>
+          The page "${path}" could not be found. {errorCodeCatImage(404)}
+        </>
+      }
+    />
   );
   return HtmlResponse(renderToString(def));
 }

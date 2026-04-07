@@ -5,7 +5,13 @@ import type { ReactElement } from "react";
  * @param title title of the page
  * @param content content of the page
  */
-export function render_default_page(title: string, content: ReactElement) {
+export function DefaultPage({
+  title,
+  content,
+}: {
+  title: string;
+  content: ReactElement;
+}) {
   return (
     <>
       <html data-theme="cupcake">

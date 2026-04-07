@@ -1,8 +1,8 @@
-import { render_default_page } from "../components/default_templates.tsx";
+import { DefaultPage } from "../components/default_templates.tsx";
 
 // deno-lint-ignore require-await
 export async function running_jobs_page() {
-  return render_default_page("Running jobs", render_running_jobs());
+  return <DefaultPage title="Running jobs" content={render_running_jobs()} />;
 }
 
 function render_running_jobs() {

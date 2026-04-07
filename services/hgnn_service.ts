@@ -1,6 +1,6 @@
 import { Optional } from "../optional.ts";
-import { Logger } from "@deno-library/logger";
-const logger = new Logger();
+//import { Logger } from "@deno-library/logger";
+//const logger = new Logger();
 
 export enum InputType {
   Range = "range",
@@ -56,7 +56,7 @@ export async function get_parameters(
     const body = JSON.parse(responseText) as Parameter[];
     return [body, true];
   } catch (err) {
-    logger.warn("Could not get paramters", err);
+    //logger.warn("Could not get paramters", err);
     return [null, false];
   }
 }
@@ -69,7 +69,7 @@ export async function get_model_names(): Promise<Optional<SelectParameter>> {
 
     return [model_names, true];
   } catch (err) {
-    logger.warn("Could not get model names", err);
+    //logger.warn("Could not get model names", err);
     return [null, false];
   }
 }

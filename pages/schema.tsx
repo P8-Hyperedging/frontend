@@ -4,41 +4,59 @@ import {
   TableRow,
 } from "../services/schema_service.ts";
 import {
-  render_default_page,
+  DefaultPage,
   render_heading,
 } from "../components/default_templates.tsx";
-import { render_table } from "../components/table_template.tsx";
+import { RenderTable } from "../components/table_template.tsx";
+import { useSearchParams } from "react-router-dom";
+// @ts-types="react"
+import {
+  // @ts-types="react"
+  ReactElement,
+  // @ts-types="react"
+  useEffect,
+  useState,
+} from "react";
 
-export async function render_schema(req: Request) {
-  const url = new URL(req.url);
-  const tableName = url.searchParams.get("table");
+export function RenderSchema() {
+  const [searchParams] = useSearchParams();
+  const tableName = searchParams.get("table");
 
-  if (tableName) {
-    const schema = (await get_database_schema(tableName)) as TableRow[];
-    return render_default_page(`Schema: ${tableName}`, render_table(schema));
-  } else {
-    const tables = (await get_database_schema(null)) as TableInfo[];
-    const linksHtml = tables.map((t) => (
-      <li className="list-row">
-        <a
-          className="link link-hover"
-          href="/schema?table=${
-            encodeURIComponent(
-              t.table_name,
-            )
-          }"
-        >
-          {t.table_name}
-        </a>
-      </li>
-    ));
+  const [content, setContent] = useState<ReactElement>(<span>Loading...</span>);
 
-    return render_default_page(
-      "All Tables",
-      <>
-        {render_heading("Available Tables")}
-        <ul className="list w-1/2">{linksHtml}</ul>
-      </>,
-    );
-  }
+  useEffect(() => {
+    async function fetchData() {
+      if (tableName) {
+        const schema = (await get_database_schema(tableName)) as TableRow[];
+        setContent(<RenderTable rows={schema} />);
+      } else {
+        const tables = (await get_database_schema(null)) as TableInfo[];
+        setContent(
+          <>
+            {render_heading("Available Tables")}
+            <ul className="list w-1/2">
+              {tables.map((t) => (
+                <li key={t.table_name} className="list-row">
+                  <a
+                    className="link link-hover"
+                    href="{`/schema?table=${encodeURIComponent(t.table_name)}`}"
+                  >
+                    {t.table_name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>,
+        );
+      }
+    }
+    fetchData();
+  }, [tableName]);
+
+  return (
+    <DefaultPage
+      title={tableName ? `Schema: ${tableName}` : "All Tables"}
+      content={content}
+    />
+  );
 }

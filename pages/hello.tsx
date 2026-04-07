@@ -1,5 +1,5 @@
-import { render_default_page } from "../components/default_templates.tsx";
+import { DefaultPage } from "../components/default_templates.tsx";
 
 export function HomePage(_req: Request) {
-  return render_default_page("Hello!", <h1>"Hello!"</h1>);
+  return <DefaultPage title="Hello!" content={<h1>Hello!</h1>} />;
 }
