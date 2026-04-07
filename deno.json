@@ -21,7 +21,7 @@
     "react": "npm:react",
     "react/jsx-runtime": "npm:react/jsx-runtime",
     "react-dom": "npm:react-dom",
-    "react-dom/client": "npm:react/client",
+    "react-dom/client": "npm:react-dom/client",
     "@types/react": "npm:@types/react"
   },
   "allowScripts": {
