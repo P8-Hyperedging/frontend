@@ -1,8 +1,4 @@
-import {
-  get_database_schema,
-  TableInfo,
-  TableRow,
-} from "../services/schema_service.ts";
+import { TableInfo } from "../services/schema_service.ts";
 import {
   DefaultPage,
   render_heading,

@@ -17,7 +17,6 @@ export default function ResultsPage() {
       const url = "/api/get-model-outputs";
       const res = await fetch(url);
       const data = await res.json();
-      console.log("data", data);
       setModelOutputs(data);
     }
 
