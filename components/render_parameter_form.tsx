@@ -1,13 +1,37 @@
+// @ts-types="react"
+import {
+  // @ts-types="react"
+  useEffect,
+  useState,
+} from "react";
 import {
   InputType,
   Parameter,
   SelectParameter,
 } from "../services/hgnn_service.ts";
 
-export default function render_parameter_form(
-  parameters: Parameter[],
-  model_names: SelectParameter,
-) {
+export default function ParameterForm({
+  parameters,
+  model_names,
+}: {
+  parameters: Parameter[];
+  model_names: SelectParameter;
+}) {
+  const [selectedModel, setSelectedModel] = useState(model_names.options[0]);
+  const [currentParams, setCurrentParams] = useState(parameters);
+
+  useEffect(() => {
+    async function fetchParams() {
+      const res = await fetch(
+        `/api/get-parameters?model_name=${encodeURIComponent(selectedModel)}`,
+      );
+      const data = await res.json();
+      setCurrentParams(data);
+    }
+
+    fetchParams();
+  }, [selectedModel]);
+
   return (
     <div className="flex flex-col w-full items-center gap-4">
       <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
@@ -16,13 +40,11 @@ export default function render_parameter_form(
           <select
             className="select select-primary select-xl w-full"
             name="model"
-            hx-get="/parameter-form"
-            hx-trigger="change"
-            hx-target="#parameter-form-content"
-            hx-swap="innerHTML"
+            value={selectedModel}
+            onChange={(e) => setSelectedModel(e.target.value)}
           >
             {model_names.options.map((option) => (
-              <option key={option} defaultValue={option}>
+              <option key={option} value={option}>
                 {option}
               </option>
             ))}
@@ -31,7 +53,10 @@ export default function render_parameter_form(
 
         <form className="fieldset w-full" method="post" action="/api/train">
           <div id="parameter-form-content">
-            {render_parameter_form_content(parameters, model_names.options[0])}
+            <ParameterFormContent
+              parameters={currentParams}
+              model_name={selectedModel}
+            />
           </div>
         </form>
       </div>
@@ -39,10 +64,13 @@ export default function render_parameter_form(
   );
 }
 
-export function render_parameter_form_content(
-  parameters: Parameter[],
-  model_name: string,
-) {
+function ParameterFormContent({
+  parameters,
+  model_name,
+}: {
+  parameters: Parameter[];
+  model_name: string;
+}) {
   return (
     <>
       {parameters.map((parameter) => (

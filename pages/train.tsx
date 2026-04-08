@@ -5,9 +5,9 @@ import {
   useState,
 } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
-import render_parameter_form from "../components/render_parameter_form.tsx";
 import { errorCodeCatImage } from "../components/responses.tsx";
 import { Parameter, SelectParameter } from "../services/hgnn_service.ts";
+import ParameterForm from "../components/render_parameter_form.tsx";
 
 export function TrainModel() {
   const [parameters, setParameters] = useState<Parameter[] | null>(null);
@@ -42,7 +42,9 @@ export function TrainModel() {
   return (
     <DefaultPage
       title="Welcome"
-      content={render_parameter_form(parameters, model_names)}
+      content={
+        <ParameterForm parameters={parameters} model_names={model_names} />
+      }
     />
   );
 }
