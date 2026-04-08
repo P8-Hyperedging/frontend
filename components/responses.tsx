@@ -53,3 +53,15 @@ export function HtmlResponse(html: string) {
     headers: { "content-type": "text/html" },
   });
 }
+
+export function JsonResponse<T>(body: T): Response {
+  return new Response(
+    JSON.stringify(
+      body,
+      (_, value) => typeof value === "bigint" ? value.toString() : value,
+    ),
+    {
+      headers: { "content-type": "application/json" },
+    },
+  );
+}

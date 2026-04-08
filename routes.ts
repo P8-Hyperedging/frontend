@@ -1,11 +1,9 @@
 import { getValue, hasValue } from "./optional.ts";
-import { get_parameters } from "./services/hgnn_service.ts";
-import {
-  render_parameter_form_content,
-} from "./components/render_parameter_form.tsx";
+import { render_parameter_form_content } from "./components/render_parameter_form.tsx";
 import { renderToString } from "preact-render-to-string";
 import { HtmlResponse, NoConnectionResponse } from "./components/responses.tsx";
-
+import { get_parameters } from "./services/model_output_service.ts";
+/*
 export async function parameter_form(req: Request) {
   const url = new URL(req.url);
   const model_name = url.searchParams.get("model") as string;
@@ -19,3 +17,4 @@ export async function parameter_form(req: Request) {
     ),
   );
 }
+*/

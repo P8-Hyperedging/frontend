@@ -1,3 +1,4 @@
+import { JsonResponse } from "../components/responses.tsx";
 import { get_client } from "./database_service.ts";
 
 export interface TableRow {
@@ -13,9 +14,9 @@ export interface TableInfo {
   table_name: string;
 }
 
-export async function get_database_schema(
-  tableName: string | null,
-): Promise<TableRow[] | TableInfo[]> {
+export async function get_database_schema(req: Request): Promise<Response> {
+  const url = new URL(req.url);
+  const tableName = url.searchParams.get("table");
   const client = await get_client();
 
   if (tableName) {
@@ -36,7 +37,7 @@ export async function get_database_schema(
             `,
       [tableName],
     );
-    return result.rows;
+    return JsonResponse(result.rows);
   } else {
     // Return list of tables
     const result = await client.queryObject<TableInfo>(
@@ -47,6 +48,6 @@ export async function get_database_schema(
       ORDER BY table_name;
             `,
     );
-    return result.rows;
+    return JsonResponse(result.rows);
   }
 }

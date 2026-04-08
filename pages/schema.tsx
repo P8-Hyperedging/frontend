@@ -26,20 +26,27 @@ export function RenderSchema() {
 
   useEffect(() => {
     async function fetchData() {
+      let url = "/api/get-database-schema";
+
       if (tableName) {
-        const schema = (await get_database_schema(tableName)) as TableRow[];
-        setContent(<RenderTable rows={schema} />);
+        url += `?table=${encodeURIComponent(tableName)}`;
+      }
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (tableName) {
+        setContent(<RenderTable rows={data} />);
       } else {
-        const tables = (await get_database_schema(null)) as TableInfo[];
         setContent(
           <>
             {render_heading("Available Tables")}
             <ul className="list w-1/2">
-              {tables.map((t) => (
+              {data.map((t: TableInfo) => (
                 <li key={t.table_name} className="list-row">
                   <a
                     className="link link-hover"
-                    href="{`/schema?table=${encodeURIComponent(t.table_name)}`}"
+                    href={`/schema?table=${encodeURIComponent(t.table_name)}`}
                   >
                     {t.table_name}
                   </a>

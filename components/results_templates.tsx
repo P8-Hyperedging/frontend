@@ -1,16 +1,61 @@
+// @ts-types="react"
+import {
+  // @ts-types="react"
+  useEffect,
+  useState,
+} from "react";
 import { Model_output } from "../services/model_output_service.ts";
+import { DefaultPage } from "./default_templates.tsx";
 
-export function render_results(model_outputs: Model_output[]) {
+export default function ResultsPage() {
+  const [model_outputs, setModelOutputs] = useState<Model_output[] | null>(
+    null,
+  );
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = "/api/get-model-outputs";
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log("data", data);
+      setModelOutputs(data);
+    }
+
+    fetchData();
+  }, []);
+
+  if (!model_outputs || model_outputs.length === 0) {
+    return (
+      <DefaultPage
+        title="Results"
+        content={
+          <>
+            <div className="flex flex-col w-full items-center gap-4">
+              <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4 shadow-xl">
+                <h1 className="text-xl">This is results page xD</h1>
+              </div>
+            </div>
+          </>
+        }
+      />
+    );
+  }
+
   return (
-    <>
-      <div className="flex flex-col w-full items-center gap-4">
-        <div className="w-auto flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4 shadow-xl">
-          <h1 className="text-xl">This is results page xD</h1>
+    <DefaultPage
+      title="Results"
+      content={
+        <>
+          <div className="flex flex-col w-full items-center gap-4">
+            <div className="w-auto flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4 shadow-xl">
+              <h1 className="text-xl">This is results page xD</h1>
 
-          {render_results_table(model_outputs)}
-        </div>
-      </div>
-    </>
+              {render_results_table(model_outputs)}
+            </div>
+          </div>
+        </>
+      }
+    />
   );
 }
 
