@@ -18,12 +18,14 @@
     "react-dom/client": "npm:react-dom/client",
     "@types/react": "npm:@types/react"
   },
+  "nodeModulesDir": "auto",
   "allowScripts": {
     "allow": [],
     "deny": ["npm:@parcel/watcher@2.5.6"]
   },
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "types": ["npm:@types/react"]
   }
 }

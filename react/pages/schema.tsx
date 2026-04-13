@@ -5,14 +5,7 @@ import {
 } from "../components/default_templates.tsx";
 import { RenderTable } from "../components/table_template.tsx";
 import { useSearchParams } from "react-router-dom";
-// @ts-types="react"
-import {
-  // @ts-types="react"
-  ReactElement,
-  // @ts-types="react"
-  useEffect,
-  useState,
-} from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 export function RenderSchema() {
   const [searchParams] = useSearchParams();

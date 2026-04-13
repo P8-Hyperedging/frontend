@@ -1,9 +1,4 @@
-// @ts-types="react"
-import {
-  // @ts-types="react"
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
 import { errorCodeCatImage } from "../components/responses.tsx";
 import { Parameter, SelectParameter } from "../../shared/parameters.ts";

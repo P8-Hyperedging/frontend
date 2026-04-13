@@ -1,9 +1,4 @@
-// @ts-types="react"
-import {
-  // @ts-types="react"
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { Model_output } from "../../shared/model_output.ts";
 import { DefaultPage } from "./default_templates.tsx";
 

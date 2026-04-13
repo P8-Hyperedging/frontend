@@ -1,7 +1,4 @@
-import {
-  // @ts-types="react"
-  ReactElement,
-} from "react";
+import { ReactElement } from "react";
 
 /**
  * Get a default page

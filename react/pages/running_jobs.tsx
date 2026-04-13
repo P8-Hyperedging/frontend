@@ -1,4 +1,3 @@
-// @ts-types="react"
 import { useEffect } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
 

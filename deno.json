@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@types/react": "npm:@types/react@^19.2.14"
+  }
+}
