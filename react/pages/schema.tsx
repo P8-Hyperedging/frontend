@@ -1,4 +1,4 @@
-import { TableInfo } from "../services/schema_service.ts";
+import { TableInfo } from "../../shared/table.ts";
 import {
   DefaultPage,
   render_heading,

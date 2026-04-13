@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import {
+  // @ts-types="react"
+  useEffect,
+  useState,
+} from "react";
 import {
   InputType,
   Parameter,
   SelectParameter,
-} from "../../deno-api/services/hgnn_service.ts";
+} from "../../shared/parameters.ts";
 
 export default function ParameterForm({
   parameters,
