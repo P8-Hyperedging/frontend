@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
-import { errorCodeCatImage } from "../components/responses.tsx";
+import { errorCodeCatImage } from "../components/error_cats.tsx";
 import { Parameter, SelectParameter } from "../../shared/parameters.ts";
 import ParameterForm from "../components/render_parameter_form.tsx";
 
