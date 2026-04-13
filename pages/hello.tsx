@@ -1,8 +1,5 @@
-/** @jsxImportSource https://esm.sh/preact */
+import { DefaultPage } from "../components/default_templates.tsx";
 
-import { render_default_page } from "../components/default_templates.tsx";
-
-// deno-lint-ignore require-await
-export async function home_page(_req: Request) {
-  return render_default_page("Hello!", <h1>"Hello!"</h1>);
+export function HomePage(_req: Request) {
+  return <DefaultPage title="Hello!" content={<h1>Hello!</h1>} />;
 }

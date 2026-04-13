@@ -18,10 +18,11 @@
     "@std/assert": "jsr:@std/assert@1",
     "@std/fs": "jsr:@std/fs@^1.0.23",
     "@std/http": "jsr:@std/http@^1.0.25",
-    "react": "npm:preact/compat",
-    "react/jsx-runtime": "npm:preact/compat/jsx-runtime",
-    "react-dom": "npm:preact/compat",
-    "react-dom/client": "npm:preact/compat/client"
+    "react": "npm:react",
+    "react/jsx-runtime": "npm:react/jsx-runtime",
+    "react-dom": "npm:react-dom",
+    "react-dom/client": "npm:react-dom/client",
+    "@types/react": "npm:@types/react"
   },
   "allowScripts": {
     "allow": [],

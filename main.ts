@@ -2,26 +2,24 @@ import { serveFile } from "@std/http/file-server";
 import { exists } from "@std/fs";
 import { getValue, hasValue } from "./optional.ts";
 import { Router, UrlMethod } from "./router.ts";
-import { parameter_form } from "./routes.ts";
 import { Logger } from "@deno-library/logger";
 import post_train from "./services/train_service.ts";
 import { NoPageResponse } from "./components/responses.tsx";
-import { render_schema } from "./pages/schema.tsx";
-import { train_a_model_page } from "./pages/train.tsx";
-import { results_page } from "./pages/results.tsx";
-import { home_page } from "./pages/hello.tsx";
-import { running_jobs_page } from "./pages/running_jobs.tsx";
+import { get_database_schema } from "./services/schema_service.ts";
+import {
+  get_model_names,
+  get_model_outputs,
+  get_parameters,
+} from "./services/model_output_service.ts";
 
 const router = new Router();
 const logger = new Logger();
 
-router.registerPage("/schema", render_schema);
-router.registerPage("/train", train_a_model_page);
-router.registerPage("/results", results_page);
-router.registerGetRoute("/parameter-form", parameter_form);
-router.registerPostRoute("/train", post_train);
-router.registerPage("/running-jobs", running_jobs_page);
-router.registerPage("/", home_page);
+router.registerGetRoute("/api/get-database-schema", get_database_schema);
+router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
+router.registerGetRoute("/api/get-parameters", get_parameters);
+router.registerGetRoute("/api/get-model-names", get_model_names);
+router.registerPostRoute("/api/train", post_train);
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);

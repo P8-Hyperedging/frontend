@@ -1,51 +1,65 @@
-/** @jsxImportSource https://esm.sh/preact */
-
+import { TableInfo } from "../services/schema_service.ts";
 import {
-  get_database_schema,
-  TableInfo,
-  TableRow,
-} from "../services/schema_service.ts";
-import {
-  render_default_page,
+  DefaultPage,
   render_heading,
 } from "../components/default_templates.tsx";
-import { render_table } from "../components/table_template.tsx";
+import { RenderTable } from "../components/table_template.tsx";
+import { useSearchParams } from "react-router-dom";
+// @ts-types="react"
+import {
+  // @ts-types="react"
+  ReactElement,
+  // @ts-types="react"
+  useEffect,
+  useState,
+} from "react";
 
-export async function render_schema(req: Request) {
-  const url = new URL(req.url);
-  const tableName = url.searchParams.get("table");
+export function RenderSchema() {
+  const [searchParams] = useSearchParams();
+  const tableName = searchParams.get("table");
 
-  if (tableName) {
-    const schema = (await get_database_schema(tableName)) as TableRow[];
-    return (render_default_page(`Schema: ${tableName}`, render_table(schema)));
-  } else {
-    const tables = (await get_database_schema(null)) as TableInfo[];
-    const linksHtml = tables
-      .map(
-        (t) => (
-          <li class="list-row">
-            <a
-              class="link link-hover"
-              href="/schema?table=${
-            encodeURIComponent(
-              t.table_name,
-            )
-          }"
-            >
-              {t.table_name}
-            </a>
-          </li>
-        ),
-      );
+  const [content, setContent] = useState<ReactElement>(<span>Loading...</span>);
 
-    return (render_default_page(
-      "All Tables",
-      <>
-        {render_heading(
-          "Available Tables",
-        )}
-        <ul class="list w-1/2">{linksHtml}</ul>
-      </>,
-    ));
-  }
+  useEffect(() => {
+    async function fetchData() {
+      let url = "/api/get-database-schema";
+
+      if (tableName) {
+        url += `?table=${encodeURIComponent(tableName)}`;
+      }
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (tableName) {
+        setContent(<RenderTable rows={data} />);
+      } else {
+        setContent(
+          <>
+            {render_heading("Available Tables")}
+            <ul className="list w-1/2">
+              {data.map((t: TableInfo) => (
+                <li key={t.table_name} className="list-row">
+                  <a
+                    className="link link-hover"
+                    href={`/schema?table=${encodeURIComponent(t.table_name)}`}
+                  >
+                    {t.table_name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>,
+        );
+      }
+    }
+    fetchData();
+  }, [tableName]);
+
+  return (
+    <DefaultPage
+      title={tableName ? `Schema: ${tableName}` : "All Tables"}
+      content={content}
+    />
+  );
 }
