@@ -1,8 +1,5 @@
+import { JsonResponse, NoConnectionResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
-import {
-  JsonResponse,
-  NoConnectionResponse,
-} from "../components/responses.tsx";
 import { Parameter, SelectParameter } from "./hgnn_service.ts";
 import { Logger } from "@deno-library/logger";
 const logger = new Logger();

@@ -1,0 +1,25 @@
+{
+  "tasks": {
+    "vite": "deno run -A npm:vite"
+  },
+  "lint": {
+    "include": ["templates/", "services/", "./"],
+    "exclude": [],
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["no-console", "no-commented-code"],
+      "exclude": [""]
+    }
+  },
+  "imports": {
+    "react": "npm:react",
+    "react/jsx-runtime": "npm:react/jsx-runtime",
+    "react-dom": "npm:react-dom",
+    "react-dom/client": "npm:react-dom/client",
+    "@types/react": "npm:@types/react"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
+}

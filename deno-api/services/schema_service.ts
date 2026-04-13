@@ -1,4 +1,4 @@
-import { JsonResponse } from "../components/responses.tsx";
+import { JsonResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
 
 export interface TableRow {
