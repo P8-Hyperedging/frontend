@@ -1,3 +1,4 @@
+import { document } from "react-dom";
 import { ReactElement } from "react";
 
 /**
@@ -28,6 +29,36 @@ function Toolbar() {
   return (
     <div className="navbar bg-base-200 shadow-sm">
       <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <i className="material-icons">menu</i>
+          </div>
+          <ul
+            tabIndex={-1}
+            className="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-auto p-2 shadow"
+          >
+            <li>
+              <a href="/">
+                <i className="material-icons">home</i>Home
+              </a>
+            </li>
+            <li>
+              <a href="/train">
+                <i className="material-icons">smart_toy</i>Train
+              </a>
+            </li>
+            <li>
+              <a href="/schema">
+                <i className="material-icons">schema</i>Schema
+              </a>
+            </li>
+            <li>
+              <a href="/results">
+                <i className="material-icons">analytics</i>Results
+              </a>
+            </li>
+          </ul>
+        </div>
         <a className="btn btn-ghost text-xl" href="/">
           Hyperedging
         </a>
