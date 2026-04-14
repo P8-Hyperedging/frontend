@@ -1,4 +1,3 @@
-import { document } from "react-dom";
 import { useEffect } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
 
@@ -6,11 +5,11 @@ export function RunningJobPage() {
   useEffect(() => {
     const script = document.createElement("script");
 
-    script.src = "public/js/socket.js";
+    script.src = "js/socket.js";
     script.async = true;
 
     document.body.appendChild(script);
-  });
+  }, []);
   return (
     <DefaultPage
       title="Running Jobs"
