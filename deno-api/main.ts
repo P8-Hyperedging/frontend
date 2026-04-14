@@ -11,9 +11,11 @@ import {
   get_parameters,
 } from "./services/model_output_service.ts";
 import { NotFound } from "./respons.ts";
+import { WebSocketBridge } from "./services/websocket_bridge.ts";
 
 const router = new Router();
 const logger = new Logger();
+const wsBridge = new WebSocketBridge(logger);
 
 router.registerGetRoute("/api/get-database-schema", get_database_schema);
 router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
@@ -21,10 +23,16 @@ router.registerGetRoute("/api/get-parameters", get_parameters);
 router.registerGetRoute("/api/get-model-names", get_model_names);
 router.registerPostRoute("/api/train", post_train);
 
+wsBridge.start();
+
 Deno.serve(async (req) => {
   const url = new URL(req.url);
   logger.debug(req.method + " " + url.pathname);
   const pathname = url.pathname;
+
+  if (pathname === "/ws" && req.headers.get("upgrade") === "websocket") {
+    return wsBridge.handleFrontendUpgrade(req);
+  }
 
   const res = await router.route(pathname, req, req.method as UrlMethod);
   if (hasValue(res)) {
