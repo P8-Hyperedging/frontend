@@ -1,6 +1,24 @@
 # Hyperedging Front-End
 
-## Running it
+## Running it (the smart way)
+
+### Bash shell
+
+```bash
+run.sh
+```
+
+### non-bash shell
+
+```bash
+bash run.sh
+```
+
+### Powershell?
+
+don't
+
+## Running it (manually)
 
 ### 1. Start deno api
 
