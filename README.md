@@ -5,7 +5,7 @@
 ### Bash shell
 
 ```bash
-run.sh
+./run.sh
 ```
 
 ### non-bash shell
