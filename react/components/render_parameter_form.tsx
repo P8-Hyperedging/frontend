@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  InputType,
-  Parameter,
-  SelectParameter,
-} from "../../shared/parameters.ts";
+import { InputType, Parameter, SelectParameter } from "@shared/parameters.ts";
 
 export default function ParameterForm({
   parameters,

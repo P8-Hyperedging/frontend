@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Model_output } from "../../shared/model_output.ts";
+import { Model_output } from "@shared/model_output.ts";
 import { DefaultPage } from "./default_templates.tsx";
 
 export default function ResultsPage() {

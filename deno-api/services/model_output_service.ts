@@ -1,8 +1,8 @@
 import { JsonResponse, NoConnectionResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
-import { Parameter, SelectParameter } from "../../shared/parameters.ts";
+import { Parameter, SelectParameter } from "@shared/parameters.ts";
 import { Logger } from "@deno-library/logger";
-import { Model_output } from "../../shared/model_output.ts";
+import { Model_output } from "@shared/model_output.ts";
 const logger = new Logger();
 
 export async function get_model_outputs(): Promise<Response> {

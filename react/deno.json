@@ -16,7 +16,8 @@
     "react/jsx-runtime": "npm:react/jsx-runtime",
     "react-dom": "npm:react-dom",
     "react-dom/client": "npm:react-dom/client",
-    "@types/react": "npm:@types/react"
+    "@types/react": "npm:@types/react",
+    "@shared/": "../shared/"
   },
   "nodeModulesDir": "auto",
   "allowScripts": {
@@ -26,6 +27,9 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["npm:@types/react"]
+    "types": ["npm:@types/react"],
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { JsonResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
-import { TableInfo, TableRow } from "../../shared/table.ts";
+import { TableInfo, TableRow } from "@shared/table.ts";
 
 export async function get_database_schema(req: Request): Promise<Response> {
   const url = new URL(req.url);
