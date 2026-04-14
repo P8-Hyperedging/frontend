@@ -3,6 +3,7 @@ export enum InputType {
   Input = "input",
   Toggle = "toggle",
   Select = "select",
+  Text = "text",
 }
 
 interface BaseParameter {
@@ -35,8 +36,14 @@ export interface SelectParameter extends BaseParameter {
   options: string[];
 }
 
+export interface TextInputParameter extends BaseParameter {
+  type: InputType.Text;
+  placeholder: string;
+}
+
 export type Parameter =
   | RangeParameter
   | InputParameter
   | ToggleParameter
-  | SelectParameter;
+  | SelectParameter
+  | TextInputParameter;

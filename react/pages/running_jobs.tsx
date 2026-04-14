@@ -5,7 +5,7 @@ export function RunningJobPage() {
   useEffect(() => {
     const script = document.createElement("script");
 
-    script.src = "public/js/socket.js";
+    script.src = "js/socket.js";
     script.async = true;
 
     document.body.appendChild(script);

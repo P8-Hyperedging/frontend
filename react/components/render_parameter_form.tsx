@@ -161,6 +161,20 @@ function Fieldset({ parameter }: { parameter: Parameter }) {
         </>
       );
       break;
+    case InputType.Text:
+      content = (
+        <>
+          <label>{parameter.name}</label>
+          <input
+            type="text"
+            name={parameter.name}
+            className="input w-full"
+            placeholder={parameter.placeholder}
+            required
+          />
+        </>
+      );
+      break;
   }
 
   return <fieldset className="fieldset">{content}</fieldset>;
