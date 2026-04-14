@@ -1,18 +1,6 @@
-import { JsonResponse } from "../components/responses.tsx";
+import { JsonResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
-
-export interface TableRow {
-  column_name: string;
-  data_type: string;
-  is_nullable: string;
-  column_default: string | null;
-  character_maximum_length: number | null;
-  table_rows: number | null;
-}
-
-export interface TableInfo {
-  table_name: string;
-}
+import { TableInfo, TableRow } from "@shared/table.ts";
 
 export async function get_database_schema(req: Request): Promise<Response> {
   const url = new URL(req.url);

@@ -1,8 +1,10 @@
 import { defineConfig } from "vite";
+import path from "node:path";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
     proxy: {
       // forward requests starting with /api to backend
@@ -11,6 +13,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/api"),
       },
+    },
+  },
+  resolve: {
+    alias: {
+      "@shared": path.resolve(__dirname, "../shared"),
     },
   },
 });

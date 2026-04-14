@@ -1,0 +1,35 @@
+{
+  "tasks": {
+    "vite": "deno run -A npm:vite"
+  },
+  "lint": {
+    "include": ["templates/", "services/", "./"],
+    "exclude": [],
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["no-console", "no-commented-code"],
+      "exclude": [""]
+    }
+  },
+  "imports": {
+    "react": "npm:react",
+    "react/jsx-runtime": "npm:react/jsx-runtime",
+    "react-dom": "npm:react-dom",
+    "react-dom/client": "npm:react-dom/client",
+    "@types/react": "npm:@types/react",
+    "@shared/": "../shared/"
+  },
+  "nodeModulesDir": "auto",
+  "allowScripts": {
+    "allow": [],
+    "deny": ["npm:@parcel/watcher@2.5.6"]
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["npm:@types/react"],
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    }
+  }
+}

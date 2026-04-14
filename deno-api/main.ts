@@ -4,13 +4,13 @@ import { getValue, hasValue } from "./optional.ts";
 import { Router, UrlMethod } from "./router.ts";
 import { Logger } from "@deno-library/logger";
 import post_train from "./services/train_service.ts";
-import { NoPageResponse } from "./components/responses.tsx";
 import { get_database_schema } from "./services/schema_service.ts";
 import {
   get_model_names,
   get_model_outputs,
   get_parameters,
 } from "./services/model_output_service.ts";
+import { NotFound } from "./respons.ts";
 
 const router = new Router();
 const logger = new Logger();
@@ -38,5 +38,5 @@ Deno.serve(async (req) => {
     return await serveFile(req, fullPath);
   }
 
-  return NoPageResponse(pathname);
+  return NotFound(`Failed to find: ${pathname}`);
 });

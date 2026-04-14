@@ -1,0 +1,26 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --env-file=.env --allow-env --allow-read --allow-net main.ts"
+  },
+  "lint": {
+    "include": ["templates/", "services/", "./"],
+    "exclude": [],
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["no-console", "no-commented-code"],
+      "exclude": [""]
+    }
+  },
+  "imports": {
+    "@db/postgres": "jsr:@db/postgres@^0.19.5",
+    "@deno-library/logger": "jsr:@deno-library/logger@^1.2.0",
+    "@std/fs": "jsr:@std/fs@^1.0.23",
+    "@std/http": "jsr:@std/http@^1.0.25",
+    "@shared/": "../shared/"
+  },
+  "compilerOptions": {
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { RedirectResponse } from "../components/responses.tsx";
+import { RedirectResponse } from "../respons.ts";
 
 export default async function post_train(req: Request) {
   const form = await req.formData();

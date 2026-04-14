@@ -1,4 +1,4 @@
 .DS_Store
-node_modules/
+react/node_modules/
 /.idea
-public/css/output.css
+react/public/css/output.css
