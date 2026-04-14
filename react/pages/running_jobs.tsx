@@ -1,4 +1,3 @@
-import { document } from "react-dom";
 import { useEffect } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
 
@@ -10,7 +9,7 @@ export function RunningJobPage() {
     script.async = true;
 
     document.body.appendChild(script);
-  });
+  }, []);
   return (
     <DefaultPage
       title="Running Jobs"
