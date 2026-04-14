@@ -19,3 +19,8 @@ export interface Parameters {
   train_proportion: number;
   dropout: number;
 }
+
+export interface BoxPlotData {
+  model_name: string;
+  valid_acc: number;
+}

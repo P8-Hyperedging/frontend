@@ -2,7 +2,7 @@ import { JsonResponse, NoConnectionResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
 import { Parameter, SelectParameter } from "@shared/parameters.ts";
 import { Logger } from "@deno-library/logger";
-import { Model_output } from "@shared/model_output.ts";
+import { BoxPlotData, Model_output } from "@shared/model_output.ts";
 const logger = new Logger();
 
 export async function get_model_outputs(): Promise<Response> {
@@ -53,5 +53,24 @@ export async function get_model_names(): Promise<Response> {
   } catch (err) {
     logger.warn("Could not get model names", err);
     return NoConnectionResponse("Could not get model names");
+  }
+}
+
+export async function get_box_plot_data(): Promise<Response> {
+  try {
+    const client = await get_client();
+
+    const result = await client.queryObject<BoxPlotData>(
+      `
+      SELECT model_name, valid_acc FROM model_output ORDER BY model_name ASC;
+      `,
+    );
+
+    const box_plot_data = result.rows;
+
+    return JsonResponse(box_plot_data);
+  } catch (err) {
+    logger.warn("Could not get box plot data", err);
+    return NoConnectionResponse("Could not get box plot data");
   }
 }

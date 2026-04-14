@@ -1,22 +1,51 @@
-import { useEffect, useState } from "react";
-import { Model_output } from "@shared/model_output.ts";
+import { useEffect, useRef, useState } from "react";
+import { BoxPlotData, Model_output } from "@shared/model_output.ts";
 import { DefaultPage } from "./default_templates.tsx";
+import * as Plot from "@observablehq/plot";
 
 export default function ResultsPage() {
   const [model_outputs, setModelOutputs] = useState<Model_output[] | null>(
     null,
   );
+  const [box_plot_data, setBoxPlotData] = useState<BoxPlotData[] | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const url = "/api/get-model-outputs";
-      const res = await fetch(url);
-      const data = await res.json();
-      setModelOutputs(data);
+      const model_res = await fetch("/api/get-model-outputs");
+      const model_data = await model_res.json();
+      setModelOutputs(model_data);
+
+      const box_plot_res = await fetch("/api/get-box-plot-data");
+      const box_plot_data = await box_plot_res.json();
+      setBoxPlotData(box_plot_data);
     }
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    if (!box_plot_data) return;
+
+    const plot = Plot.plot({
+      x: { label: "Model Name" },
+      y: { grid: true, inset: 6, label: "Validation Accuracy" },
+      color: { scheme: "Observable10", legend: true },
+      marks: [
+        Plot.boxY(box_plot_data, {
+          x: "model_name",
+          y: "valid_acc",
+          fill: "model_name",
+        }),
+      ],
+    });
+
+    containerRef.current.append(plot);
+    return () => plot.remove();
+  }, [box_plot_data]);
 
   if (!model_outputs || model_outputs.length === 0) {
     return (
@@ -44,6 +73,9 @@ export default function ResultsPage() {
             <div className="w-auto flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4 shadow-xl">
               <h1 className="text-xl">This is results page xD</h1>
 
+              <div ref={containerRef} />
+
+              <h1></h1>
               {render_results_table(model_outputs)}
             </div>
           </div>
@@ -81,7 +113,7 @@ function render_results_table(model_outputs: Model_output[]) {
 
                   <td>
                     <div className="dropdown">
-                      <div role="button" className="btn m-1">
+                      <div tabIndex={0} role="button" className="btn m-1">
                         Parameters
                       </div>
                       <div className="dropdown-content bg-base-300 rounded-box p-2 shadow-2xl">

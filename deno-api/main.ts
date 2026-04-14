@@ -6,6 +6,7 @@ import { Logger } from "@deno-library/logger";
 import post_train from "./services/train_service.ts";
 import { get_database_schema } from "./services/schema_service.ts";
 import {
+  get_box_plot_data,
   get_model_names,
   get_model_outputs,
   get_parameters,
@@ -20,6 +21,7 @@ router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
 router.registerGetRoute("/api/get-parameters", get_parameters);
 router.registerGetRoute("/api/get-model-names", get_model_names);
 router.registerPostRoute("/api/train", post_train);
+router.registerGetRoute("/api/get-box-plot-data", get_box_plot_data);
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
