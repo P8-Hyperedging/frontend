@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { InputType, Parameter, SelectParameter } from "@shared/parameters.ts";
 
 export default function ParameterForm({
@@ -10,14 +10,21 @@ export default function ParameterForm({
 }) {
   const [selectedModel, setSelectedModel] = useState(model_names.options[0]);
   const [currentParams, setCurrentParams] = useState(parameters);
+  const cachedParameters = useRef<Record<string, Parameter[]>>({});
 
   useEffect(() => {
     async function fetchParams() {
-      const res = await fetch(
-        `/api/get-parameters?model_name=${encodeURIComponent(selectedModel)}`,
-      );
-      const data = await res.json();
-      setCurrentParams(data);
+      if (cachedParameters.current[selectedModel]) {
+        setCurrentParams(cachedParameters.current[selectedModel]);
+      } else {
+        const res = await fetch(
+          `/api/get-parameters?model_name=${encodeURIComponent(selectedModel)}`,
+        );
+        const data = await res.json();
+
+        cachedParameters.current[selectedModel] = data;
+        setCurrentParams(data);
+      }
     }
 
     fetchParams();
