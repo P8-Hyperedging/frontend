@@ -76,7 +76,7 @@ function ParameterFormContent({
       ))}
       <input
         type="text"
-        defaultValue={model_name}
+        value={model_name}
         className="hidden"
         name="model_name"
       />
