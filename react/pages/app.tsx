@@ -4,7 +4,7 @@ import { DefaultPage } from "../components/default_templates.tsx";
 import { TrainModel } from "./train.tsx";
 import { RenderSchema } from "./schema.tsx";
 import ResultsPage from "../components/results_templates.tsx";
-import { RunningJobPage } from "./running_jobs.tsx";
+import {RunningJobPage} from "./running_jobs";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>

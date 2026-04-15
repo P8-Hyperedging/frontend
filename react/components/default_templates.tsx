@@ -15,17 +15,25 @@ export function DefaultPage({
 }) {
   if (typeof document !== "undefined") document.title = title;
 
+  const buttons: PageButton[] = [
+    { href: "/", icon: "home", title: "Home" },
+    { href: "/train", icon: "smart_toy", title: "Train" },
+    { href: "/running-jobs", icon: "work_history", title: "Running Jobs" },
+    { href: "/schema", icon: "schema", title: "Schema" },
+    { href: "/results", icon: "analytics", title: "Results" },
+  ];
+
   return (
     <>
       <div className="flex flex-col w-full flex justify-center items-center">
-        <Toolbar />
+        <Toolbar pageButtons={buttons} />
       </div>
       {content}
     </>
   );
 }
 
-function Toolbar() {
+function Toolbar({ pageButtons }: { pageButtons: PageButton[] }) {
   return (
     <div className="navbar bg-base-200 shadow-sm">
       <div className="navbar-start">
@@ -36,27 +44,14 @@ function Toolbar() {
           <ul
             tabIndex={-1}
             className="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-auto p-2 shadow"
-          >
-            <li>
-              <a href="/">
-                <i className="material-icons">home</i>Home
-              </a>
-            </li>
-            <li>
-              <a href="/train">
-                <i className="material-icons">smart_toy</i>Train
-              </a>
-            </li>
-            <li>
-              <a href="/schema">
-                <i className="material-icons">schema</i>Schema
-              </a>
-            </li>
-            <li>
-              <a href="/results">
-                <i className="material-icons">analytics</i>Results
-              </a>
-            </li>
+          > {pageButtons.map((btn) => (
+              <li key={btn.href}>
+                <a href={btn.href}>
+                  <i className="material-icons">{btn.icon}</i>
+                  {btn.title}
+                </a>
+              </li>
+          ))}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl" href="/">
@@ -64,18 +59,12 @@ function Toolbar() {
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <a className="btn btn-ghost" href="/">
-          <i className="material-icons">home</i>Home
-        </a>
-        <a className="btn btn-ghost" href="/train">
-          <i className="material-icons">smart_toy</i>Train
-        </a>
-        <a className="btn btn-ghost" href="/schema">
-          <i className="material-icons">schema</i>Schema
-        </a>
-        <a className="btn btn-ghost" href="/results">
-          <i className="material-icons">analytics</i>Results
-        </a>
+        {pageButtons.map((btn) => (
+            <a key={btn.href} className="btn btn-ghost" href={btn.href}>
+              <i className="material-icons">{btn.icon}</i>
+              {btn.title}
+            </a>
+        ))}
       </div>
       <div className="navbar-end">
         <div className="dropdown">
@@ -123,4 +112,11 @@ function Theme_options() {
 
 export function render_heading(heading: string) {
   return <h1 className="text-xl text-base-content p-8">{heading}</h1>;
+}
+
+
+class PageButton {
+  href: string;
+  icon: string;
+  title: string;
 }

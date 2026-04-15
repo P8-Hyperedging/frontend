@@ -8,6 +8,7 @@ export default async function post_train(req: Request) {
     data[key] = value;
   }
 
+  console.log(data);
   const targetUrl = new URL(
     `${Deno.env.get("BASEMENT_PC_IP")}/train/${data.model_name}`,
   );
@@ -23,5 +24,5 @@ export default async function post_train(req: Request) {
   const json = await response.json();
   const job_id = json.job_id;
 
-  return RedirectResponse(`/running-jobs?job_id=${job_id}`);
+  return RedirectResponse(`/running-jobs`);
 }

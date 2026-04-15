@@ -74,12 +74,11 @@ function ParameterFormContent({
       {parameters.map((parameter) => (
         <Fieldset key={parameter.name} parameter={parameter} />
       ))}
-      <input
-        type="text"
-        defaultValue={model_name}
-        className="hidden"
-        name="model_name"
-      />
+        <input
+            type="hidden"
+            name="model_name"
+            value={model_name}
+        />
       <button className="btn btn-neutral mt-4" type="submit">
         <i className="material-icons">send</i>Submit
       </button>

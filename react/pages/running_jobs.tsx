@@ -1,32 +1,33 @@
-import { useEffect } from "react";
-import { DefaultPage } from "../components/default_templates.tsx";
+// @ts-ignore
+import React, {useEffect, useRef, useState} from "react";
+import {DefaultPage} from "../components/default_templates";
+import {ServerTerminal} from "../components/server_terminal";
 
 export function RunningJobPage() {
-  useEffect(() => {
-    const script = document.createElement("script");
-
-    script.src = "public/js/socket.js";
-    script.async = true;
-
-    document.body.appendChild(script);
-  }, []);
-  return (
-    <DefaultPage
-      title="Running Jobs"
-      content={
-        <>
-          <div className="flex flex-col w-full items-center gap-4">
-            <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
-              <h1>running jobs</h1>
-              <div className="mockup-code w-full h-96">
-                <pre data-prefix="$" className="text-primary">
-                  <code>Waiting for training to begin...</code>
-                </pre>
-              </div>
-            </div>
-          </div>
-        </>
-      }
-    />
-  );
+    return (
+        <DefaultPage
+            title="Running Jobs"
+            content={
+                <>
+                    <div class="flex flex-col px-5">
+                        <div className="flex h-20 justify-center items-center">
+                            <h1 className="flex items-center gap-2 text-2xl">
+                                <i className="material-icons">work_history</i>
+                                <span>Running Jobs</span>
+                            </h1>
+                        </div>
+                        <div class="flex flex-row w-full gap-10">
+                            <div class="flex-1" p-5>
+                                <h1 class="flex-1 items-center text-center gap-2 text-2xl">Queue</h1>
+                            </div>
+                            <div className="flex-1">
+                                <h1 class="flex-1 items-center text-center gap-2 text-2xl">Server terminal</h1>
+                                <ServerTerminal/>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            }
+        />
+    );
 }
