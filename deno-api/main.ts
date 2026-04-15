@@ -10,8 +10,9 @@ import {
   get_model_outputs,
   get_parameters,
 } from "./services/model_output_service.ts";
-import { NotFound } from "./respons.ts";
+import { NotFound } from "./responses.ts";
 import { WebSocketBridge } from "./services/websocket_bridge.ts";
+import {get_all_jobs} from "./services/job_service.ts";
 
 const router = new Router();
 const logger = new Logger();
@@ -19,6 +20,7 @@ const wsBridge = new WebSocketBridge(logger);
 
 router.registerGetRoute("/api/get-database-schema", get_database_schema);
 router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
+router.registerGetRoute("/api/get-all-jobs", get_all_jobs);
 router.registerGetRoute("/api/get-parameters", get_parameters);
 router.registerGetRoute("/api/get-model-names", get_model_names);
 router.registerPostRoute("/api/train", post_train);
