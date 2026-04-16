@@ -1,3 +1,5 @@
+import * as z from "zod";
+
 export interface Model_output {
   job_id: string;
   training_time: number;
@@ -20,7 +22,31 @@ export interface Parameters {
   dropout: number;
 }
 
-export interface BoxPlotData {
-  model_name: string;
-  valid_acc: number;
-}
+export const BoxPlotData = z.object({
+  model_name: z.string(),
+  valid_acc: z.coerce.number(),
+});
+
+export type BoxPlotData = z.infer<typeof BoxPlotData>;
+
+export const HyperParameterRow = z.object({
+  parameter: z.string(),
+  value: z.coerce.number(),
+  avg_valid_acc: z.coerce.number(),
+});
+
+export type HyperParameterRow = z.infer<typeof HyperParameterRow>;
+
+export const HyperParameterPoint = z.object({
+  value: z.coerce.number(),
+  avg_valid_acc: z.coerce.number(),
+});
+
+export type HyperParameterPoint = z.infer<typeof HyperParameterPoint>;
+
+export const HyperParameterSeries = z.object({
+  parameter_name: z.string,
+  data: HyperParameterPoint.array(),
+});
+
+export type HyperParameterSeries = z.infer<typeof HyperParameterSeries>;

@@ -20,7 +20,8 @@
     "jsr:@std/net@^1.0.6": "1.0.6",
     "jsr:@std/path@^1.0.8": "1.1.4",
     "jsr:@std/path@^1.1.4": "1.1.4",
-    "jsr:@std/streams@^1.0.17": "1.0.17"
+    "jsr:@std/streams@^1.0.17": "1.0.17",
+    "npm:zod@^4.3.6": "4.3.6"
   },
   "jsr": {
     "@db/postgres@0.19.5": {
@@ -101,12 +102,18 @@
       "integrity": "7859f3d9deed83cf4b41f19223d4a67661b3d3819e9fc117698f493bf5992140"
     }
   },
+  "npm": {
+    "zod@4.3.6": {
+      "integrity": "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg=="
+    }
+  },
   "workspace": {
     "dependencies": [
       "jsr:@db/postgres@~0.19.5",
       "jsr:@deno-library/logger@^1.2.0",
       "jsr:@std/fs@^1.0.23",
-      "jsr:@std/http@^1.0.25"
+      "jsr:@std/http@^1.0.25",
+      "npm:zod@^4.3.6"
     ]
   }
 }

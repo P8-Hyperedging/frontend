@@ -16,7 +16,8 @@
     "@deno-library/logger": "jsr:@deno-library/logger@^1.2.0",
     "@std/fs": "jsr:@std/fs@^1.0.23",
     "@std/http": "jsr:@std/http@^1.0.25",
-    "@shared/": "../shared/"
+    "@shared/": "../shared/",
+    "zod": "npm:zod@^4.3.6"
   },
   "compilerOptions": {
     "paths": {

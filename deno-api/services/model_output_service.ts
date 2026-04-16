@@ -2,7 +2,13 @@ import { JsonResponse, NoConnectionResponse } from "../respons.ts";
 import { get_client } from "./database_service.ts";
 import { Parameter, SelectParameter } from "@shared/parameters.ts";
 import { Logger } from "@deno-library/logger";
-import { BoxPlotData, Model_output } from "@shared/model_output.ts";
+import {
+  BoxPlotData,
+  HyperParameterPoint,
+  HyperParameterRow,
+  HyperParameterSeries,
+  Model_output,
+} from "@shared/model_output.ts";
 const logger = new Logger();
 
 export async function get_model_outputs(): Promise<Response> {
@@ -66,11 +72,66 @@ export async function get_box_plot_data(): Promise<Response> {
       `,
     );
 
-    const box_plot_data = result.rows;
+    const box_plot_data = result.rows.map((row) => BoxPlotData.parse(row));
+    console.log(box_plot_data);
 
     return JsonResponse(box_plot_data);
   } catch (err) {
     logger.warn("Could not get box plot data", err);
     return NoConnectionResponse("Could not get box plot data");
+  }
+}
+
+export async function get_hyperparameter_tuning_data(): Promise<Response> {
+  try {
+    const client = await get_client();
+
+    const result = await client.queryObject<HyperParameterRow>(
+      `
+      SELECT 'Hidden Layer Size' AS parameter, parameters ->> 'Hidden Layer Size' AS value, AVG(valid_acc) AS avg_valid_acc
+      FROM model_output WHERE model_name = 'QHGNN'
+      GROUP BY parameters ->> 'Hidden Layer Size'
+
+      UNION ALL
+
+      SELECT 'Learning Rate', parameters ->> 'Learning Rate', AVG(valid_acc)
+      FROM model_output WHERE model_name = 'QHGNN'
+      GROUP BY parameters ->> 'Learning Rate'
+
+      UNION ALL
+
+      SELECT 'Weight Decay', parameters ->> 'Weight Decay', AVG(valid_acc)
+      FROM model_output WHERE model_name = 'QHGNN'
+      GROUP BY parameters ->> 'Weight Decay'
+
+      UNION ALL
+
+      SELECT 'Epochs', parameters ->> 'Epochs', AVG(valid_acc)
+      FROM model_output WHERE model_name = 'QHGNN'
+      GROUP BY parameters ->> 'Epochs';
+      `,
+    );
+
+    const seriesMap = new Map<string, HyperParameterPoint[]>();
+
+    for (const row of result.rows.map((row) => HyperParameterRow.parse(row))) {
+      if (!seriesMap.has(row.parameter)) seriesMap.set(row.parameter, []);
+      seriesMap.get(row.parameter)!.push({
+        value: row.value,
+        avg_valid_acc: row.avg_valid_acc,
+      });
+    }
+
+    const series: HyperParameterSeries[] = Array.from(seriesMap.entries()).map(
+      ([parameter_name, data]) => ({
+        parameter_name,
+        data: data.sort((a, b) => a.value - b.value),
+      }),
+    );
+
+    return JsonResponse(series);
+  } catch (err) {
+    logger.warn("Could not get hyperparameter tuning data", err);
+    return NoConnectionResponse("Could not get hyperparameter tuning data");
   }
 }
