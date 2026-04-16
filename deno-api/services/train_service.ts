@@ -24,7 +24,6 @@ export default async function post_train(req: Request) {
     data[key] = converter ? converter(String(value)) : String(value);
   }
 
-  console.log(data);
   const jobId = crypto.randomUUID();
 
   const client = await get_client();
@@ -64,7 +63,7 @@ export default async function post_train(req: Request) {
       data.train_proportion,
       data.dropout,
       33,
-      data.model_name
+      data.model_name,
     ],
   );
 
@@ -86,4 +85,3 @@ export default async function post_train(req: Request) {
 
   return RedirectResponse(`/running-jobs`);
 }
-
