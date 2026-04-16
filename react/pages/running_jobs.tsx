@@ -12,6 +12,7 @@ export function RunningJobPage() {
             try {
                 const res = await fetch("/api/jobs"); // change if your endpoint differs
                 const data = await res.json();
+                console.log(data);
                 setJobs(data.rows ?? data); // depends on backend shape
             } catch (err) {
                 console.error("Failed to fetch jobs:", err);

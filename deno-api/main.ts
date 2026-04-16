@@ -20,7 +20,7 @@ const wsBridge = new WebSocketBridge(logger);
 
 router.registerGetRoute("/api/get-database-schema", get_database_schema);
 router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
-router.registerGetRoute("/api/get-all-jobs", get_all_jobs);
+router.registerGetRoute("/api/jobs", get_all_jobs);
 router.registerGetRoute("/api/get-parameters", get_parameters);
 router.registerGetRoute("/api/get-model-names", get_model_names);
 router.registerPostRoute("/api/train", post_train);

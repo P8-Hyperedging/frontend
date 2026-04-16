@@ -107,7 +107,13 @@ export function TrainModel() {
                 </fieldset>
 
                 <form className="fieldset w-full" method="post" action="/api/train">
-                  <Fieldset key={job.title} parameter={job.title} />
+                  <fieldset className="fieldset">
+                    <label>{parameter.name}</label>
+                    <input
+                        type="text"
+                        className="text w-full"
+                    />
+                  </fieldset>
                   <div>
                     <h3 className="text-center text-xl">Parameters:</h3>
                     {currentParams.map((parameter) => (
