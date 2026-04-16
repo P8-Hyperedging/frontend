@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
-import { SelectParameter, Parameter, InputType } from "@shared/input_types.ts";
-import { ErrorPage } from "./errorpage";
-import { Job } from "../../shared/job";
+import { InputType, Parameter, SelectParameter } from "@shared/input_types.ts";
+import { ErrorPage } from "./errorpage.tsx";
+import { Job } from "@shared/job.ts";
 
 export function TrainModel() {
   const [job, setJob] = useState<Job | null>(() => new Job());
@@ -16,9 +16,7 @@ export function TrainModel() {
 
   useEffect(() => {
     async function fetchData() {
-      const params_res = await fetch(
-          "/api/get-parameters?model_name=allset",
-      );
+      const params_res = await fetch("/api/get-parameters?model_name=allset");
 
       if (!params_res.ok) {
         setErrorCode(params_res.status);
@@ -27,7 +25,7 @@ export function TrainModel() {
         return;
       }
 
-      job.parameters = await params_res.json();;
+      job.parameters = await params_res.json();
       setJob(job);
 
       const model_names_res = await fetch("/api/get-model-names");
@@ -59,7 +57,7 @@ export function TrainModel() {
       }
 
       const res = await fetch(
-          `/api/get-parameters?model_name=${encodeURIComponent(selectedModel)}`,
+        `/api/get-parameters?model_name=${encodeURIComponent(selectedModel)}`,
       );
 
       const data = await res.json();
@@ -76,132 +74,143 @@ export function TrainModel() {
 
   if (!job || !modelNames || !selectedModel) {
     return (
-        <ErrorPage
-            errorCode={503}
-            errorMessage="No connection to the Python server!"
-        />
+      <ErrorPage
+        errorCode={503}
+        errorMessage="No connection to the Python server!"
+      />
     );
   }
 
   return (
-      <DefaultPage
-          title="Train"
-          content={
-            <div className="flex flex-col w-full items-center gap-4">
-              <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
+    <DefaultPage
+      title="Train"
+      content={
+        <div className="flex flex-col w-full items-center gap-4">
+          <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
+            <fieldset className="fieldset w-1/2 flex flex-col items-center">
+              <legend className="fieldset-legend">Select a model</legend>
+              <select
+                className="select select-primary select-xl w-full"
+                name="model"
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value)}
+              >
+                {modelNames.options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </fieldset>
 
-                <fieldset className="fieldset w-1/2 flex flex-col items-center">
-                  <legend className="fieldset-legend">Select a model</legend>
-                  <select
-                      className="select select-primary select-xl w-full"
-                      name="model"
-                      value={selectedModel}
-                      onChange={(e) => setSelectedModel(e.target.value)}
-                  >
-                    {modelNames.options.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                    ))}
-                  </select>
+            <form className="fieldset w-full" method="post" action="/api/train">
+              <div className="flex flex-col w-full items-center">
+                <h1 className="text-xl">Job Parameters</h1>
+                <fieldset className="fieldset w-full">
+                  <label>Title</label>
+                  <input type="text" name="title" className="input w-full" />
                 </fieldset>
-
-                <form className="fieldset w-full" method="post" action="/api/train">
-                  <fieldset className="fieldset">
-                    <label>{parameter.name}</label>
-                    <input
-                        type="text"
-                        className="text w-full"
-                    />
-                  </fieldset>
-                  <div>
-                    <h3 className="text-center text-xl">Parameters:</h3>
-                    {currentParams.map((parameter) => (
-                        <Fieldset key={parameter.name} parameter={parameter} />
-                    ))}
-
-                    <input type="hidden" name="model_name" value={selectedModel} />
-                  </div>
-
-                  <button className="btn btn-neutral mt-4" type="submit">
-                    <i className="material-icons">send</i>Submit
-                  </button>
-
-                  <button className="btn btn-ghost mt-1" type="reset">
-                    <i className="material-icons">restart_alt</i>Reset
-                  </button>
-                </form>
-
+                <fieldset className="fieldset w-full">
+                  <label>Description</label>
+                  <input
+                    type="text"
+                    name="description"
+                    className="textarea h-24 w-full"
+                  />
+                </fieldset>
+                <div className="divider"></div>
               </div>
-            </div>
-          }
-      />
+
+              <div>
+                <h3 className="text-center text-xl">Parameters:</h3>
+                {currentParams.map((parameter) => (
+                  <Fieldset key={parameter.name} parameter={parameter} />
+                ))}
+
+                <input type="hidden" name="model_name" value={selectedModel} />
+              </div>
+
+              <button className="btn btn-neutral mt-4" type="submit">
+                <i className="material-icons">send</i>Submit
+              </button>
+
+              <button className="btn btn-ghost mt-1" type="reset">
+                <i className="material-icons">restart_alt</i>Reset
+              </button>
+            </form>
+          </div>
+        </div>
+      }
+    />
   );
 }
 
 function Fieldset({ parameter }: { parameter: Parameter }) {
-  const name = parameter.name != undefined ? parameter.name.replaceAll(" ", "_") : " ";
+  const name = parameter.name != undefined
+    ? parameter.name.replaceAll(" ", "_")
+    : " ";
 
   switch (parameter.type) {
     case InputType.Range:
       return (
-          <fieldset className="fieldset">
-            <label>{parameter.name}</label>
-            <input
-                type="range"
-                name={name}
-                className="range range-primary w-full"
-                min={parameter.min}
-                max={parameter.max}
-                step={parameter.step}
-                defaultValue={parameter.default}
-            />
-          </fieldset>
+        <fieldset className="fieldset">
+          <label>{parameter.name}</label>
+          <input
+            type="range"
+            name={name}
+            className="range range-primary w-full"
+            min={parameter.min}
+            max={parameter.max}
+            step={parameter.step}
+            defaultValue={parameter.default}
+          />
+        </fieldset>
       );
 
     case InputType.Input:
       return (
-          <fieldset className="fieldset">
-            <label>{parameter.name}</label>
-            <input
-                type="number"
-                name={name}
-                className="input w-full"
-                min={parameter.min}
-                max={parameter.max}
-                step="0.0001"
-                defaultValue={parameter.default}
-            />
-          </fieldset>
+        <fieldset className="fieldset">
+          <label>{parameter.name}</label>
+          <input
+            type="number"
+            name={name}
+            className="input w-full"
+            min={parameter.min}
+            max={parameter.max}
+            step="0.0001"
+            defaultValue={parameter.default}
+          />
+        </fieldset>
       );
 
     case InputType.Toggle:
       return (
-          <fieldset className="fieldset">
-            <label>{parameter.name}</label>
-            <input
-                type="checkbox"
-                name={name}
-                className="toggle"
-                defaultChecked={parameter.default}
-            />
-          </fieldset>
+        <fieldset className="fieldset">
+          <label>{parameter.name}</label>
+          <input
+            type="checkbox"
+            name={name}
+            className="toggle"
+            defaultChecked={parameter.default}
+          />
+        </fieldset>
       );
 
     case InputType.Select:
       return (
-          <fieldset className="fieldset">
-            <select className="select select-success" name={name}>
-              <option disabled value="">
-                {parameter.name}
+        <fieldset className="fieldset">
+          <select className="select select-success" name={name}>
+            <option disabled value="">
+              {parameter.name}
+            </option>
+            {parameter.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
               </option>
-              {parameter.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-              ))}
-            </select>
-          </fieldset>
+            ))}
+          </select>
+        </fieldset>
       );
   }
 }
+

@@ -1,21 +1,36 @@
 import { RedirectResponse } from "../responses.ts";
-import {get_client} from "./database_service.ts";
+import { get_client } from "./database_service.ts";
 
 export default async function post_train(req: Request) {
-  const form = await req.formData();
+  const schema: Record<string, (v: string) => string | number | null> = {
+    title: String,
+    description: String,
+    model_name: String,
+    num_epochs: Number,
+    lr: Number,
+    hidden_layer_size: Number,
+    train_proportion: Number,
+    valid_proportion: Number,
+    dropout: Number,
+    weight_decay: Number,
+    seed: (v) => (v === "" ? null : Number(v)),
+  };
 
-  const data: Record<string, string> = {};
+  const form = await req.formData();
+  const data: Record<string, string | number | null> = {};
+
   for (const [key, value] of form.entries()) {
-    data[key] = String(value);
+    const converter = schema[key];
+    data[key] = converter ? converter(String(value)) : String(value);
   }
 
-  console.log(data)
+  console.log(data);
   const jobId = crypto.randomUUID();
 
   const client = await get_client();
 
   await client.queryObject(
-      `
+    `
     INSERT INTO jobs (
         id,
         title,
@@ -37,23 +52,23 @@ export default async function post_train(req: Request) {
         $10
     );
     `,
-      [
-        jobId,
-        data.model_name ?? "Unnamed job",
-        data.description ?? "",
-        Number(data.hidden_layer_size),
-        Number(data.learning_rate),
-        Number(data.weight_decay),
-        Number(data.epochs),
-        Number(data.train_proportion),
-        Number(data.dropout),
-        0, // state = queued
-      ],
+    [
+      jobId,
+      data.title ?? data.model_name,
+      data.description ?? "",
+      data.hidden_layer_size,
+      data.lr,
+      data.weight_decay,
+      data.num_epochs,
+      data.train_proportion,
+      data.dropout,
+      0, // state = queued
+    ],
   );
 
   // optionally trigger external training AFTER inserting job
   const targetUrl = new URL(
-      `${Deno.env.get("BASEMENT_PC_IP")}/train/${data.model_name}`,
+    `${Deno.env.get("BASEMENT_PC_IP")}/train/${data.model_name}`,
   );
 
   await fetch(targetUrl.toString(), {
@@ -69,3 +84,4 @@ export default async function post_train(req: Request) {
 
   return RedirectResponse(`/running-jobs`);
 }
+
