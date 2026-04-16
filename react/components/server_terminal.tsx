@@ -1,77 +1,71 @@
-// @ts-ignore
-import React, {useEffect, useRef, useState} from "react";
+import { useEffect, useRef } from "react";
 
 export function ServerTerminal() {
-    const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-    function appendLine(text: string, type?: "success") {
-        if (!containerRef.current) return;
+  function appendLine(text: string, type?: "success") {
+    if (!containerRef.current) return;
 
-        const pre = document.createElement("pre");
-        pre.setAttribute("data-prefix", ">");
+    const pre = document.createElement("pre");
+    pre.setAttribute("data-prefix", ">");
 
-        if (type === "success") {
-            pre.classList.add("text-success");
-        }
-
-        const code = document.createElement("code");
-        code.textContent = text;
-
-        pre.appendChild(code);
-        containerRef.current.appendChild(pre);
-
-        containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    if (type === "success") {
+      pre.classList.add("text-success");
     }
 
-    let currentJob;
+    const code = document.createElement("code");
+    code.textContent = text;
 
-    useEffect(() => {
-        const backendOrigin = "http://127.0.0.1:8000";
-        const wsUrl = `${backendOrigin.replace(/^http/, "ws")}/ws`;
+    pre.appendChild(code);
+    containerRef.current.appendChild(pre);
 
-        const socket = new WebSocket(wsUrl);
+    containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  }
 
-        socket.onmessage = (event) => {
-            let data;
+  let currentJob;
 
-            try {
-                data = JSON.parse(event.data);
-            } catch {
-                data = {message: event.data};
-            }
+  useEffect(() => {
+    const backendOrigin = "http://127.0.0.1:8000";
+    const wsUrl = `${backendOrigin.replace(/^http/, "ws")}/ws`;
 
-            currentJob = data.job_id;
+    const socket = new WebSocket(wsUrl);
 
-            if (data.message === "TRAINING_COMPLETE") {
-                appendLine("✅ Training finished!", "success");
-                return;
-            }
+    socket.onmessage = (event) => {
+      let data;
 
-            appendLine(data.message);
-        };
+      try {
+        data = JSON.parse(event.data);
+      } catch {
+        data = { message: event.data };
+      }
 
-        socket.onerror = (err) => {
-            console.error("WebSocket error:", err);
-        };
+      currentJob = data.job_id;
 
-        socket.onclose = () => {
-            appendLine("Connection closed.");
-        };
+      if (data.message === "TRAINING_COMPLETE") {
+        appendLine("✅ Training finished!", "success");
+        return;
+      }
 
-        return () => {
-            socket.close();
-        };
-    }, []);
+      appendLine(data.message);
+    };
 
+    socket.onclose = () => {
+      appendLine("Connection closed.");
+    };
 
-    return (
-        <>
-            <h3>{currentJob}</h3>
-            <div className="mockup-code w-full h-160" ref={containerRef}>
-                <pre data-prefix="$" className="text-primary">
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+  return (
+    <>
+      <h3>{currentJob}</h3>
+      <div className="mockup-code w-full h-160" ref={containerRef}>
+        <pre data-prefix="$" className="text-primary">
                   <code>Waiting for training to begin...</code>
-                </pre>
-            </div>
-        </>
-    );
+        </pre>
+      </div>
+    </>
+  );
 }

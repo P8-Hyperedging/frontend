@@ -44,14 +44,15 @@ function Toolbar({ pageButtons }: { pageButtons: PageButton[] }) {
           <ul
             tabIndex={-1}
             className="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-auto p-2 shadow"
-          > {pageButtons.map((btn) => (
+          >
+            {pageButtons.map((btn) => (
               <li key={btn.href}>
                 <a href={btn.href}>
                   <i className="material-icons">{btn.icon}</i>
                   {btn.title}
                 </a>
               </li>
-          ))}
+            ))}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl" href="/">
@@ -60,10 +61,10 @@ function Toolbar({ pageButtons }: { pageButtons: PageButton[] }) {
       </div>
       <div className="navbar-center hidden lg:flex">
         {pageButtons.map((btn) => (
-            <a key={btn.href} className="btn btn-ghost" href={btn.href}>
-              <i className="material-icons">{btn.icon}</i>
-              {btn.title}
-            </a>
+          <a key={btn.href} className="btn btn-ghost" href={btn.href}>
+            <i className="material-icons">{btn.icon}</i>
+            {btn.title}
+          </a>
         ))}
       </div>
       <div className="navbar-end">
@@ -114,8 +115,7 @@ export function render_heading(heading: string) {
   return <h1 className="text-xl text-base-content p-8">{heading}</h1>;
 }
 
-
-class PageButton {
+export class PageButton {
   href: string;
   icon: string;
   title: string;
