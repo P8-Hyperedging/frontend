@@ -74,11 +74,12 @@ function ParameterFormContent({
       {parameters.map((parameter) => (
         <Fieldset key={parameter.name} parameter={parameter} />
       ))}
-        <input
-            type="hidden"
-            name="model_name"
-            value={model_name}
-        />
+      <input
+        type="text"
+        value={model_name}
+        className="hidden"
+        name="model_name"
+      />
       <button className="btn btn-neutral mt-4" type="submit">
         <i className="material-icons">send</i>Submit
       </button>
@@ -157,6 +158,20 @@ function Fieldset({ parameter }: { parameter: Parameter }) {
               </option>
             ))}
           </select>
+        </>
+      );
+      break;
+    case InputType.Text:
+      content = (
+        <>
+          <label>{parameter.name}</label>
+          <input
+            type="text"
+            name={parameter.name}
+            className="input w-full"
+            placeholder={parameter.placeholder}
+            required
+          />
         </>
       );
       break;
