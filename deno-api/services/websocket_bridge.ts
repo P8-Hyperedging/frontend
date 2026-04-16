@@ -1,5 +1,5 @@
 import { Logger } from "@deno-library/logger";
-import { io, Socket } from "@socket.io/socket.io";
+import { io, Socket } from "@socket.io";
 
 type FrontendClient = {
   socket: WebSocket;

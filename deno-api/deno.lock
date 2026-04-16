@@ -156,7 +156,8 @@
       "jsr:@db/postgres@~0.19.5",
       "jsr:@deno-library/logger@^1.2.0",
       "jsr:@std/fs@^1.0.23",
-      "jsr:@std/http@^1.0.25"
+      "jsr:@std/http@^1.0.25",
+      "npm:socket.io-client@*"
     ]
   }
 }
