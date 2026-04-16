@@ -1,4 +1,4 @@
-import {Parameter} from "./input_types.ts";
+import { Parameter } from "./input_types.ts";
 
 export interface ModelOutput {
   job_id: string;
@@ -12,4 +12,3 @@ export interface ModelOutput {
   model_name: string;
   id: number;
 }
-
