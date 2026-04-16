@@ -73,7 +73,6 @@ export async function get_box_plot_data(): Promise<Response> {
     );
 
     const box_plot_data = result.rows.map((row) => BoxPlotData.parse(row));
-    console.log(box_plot_data);
 
     return JsonResponse(box_plot_data);
   } catch (err) {
