@@ -55,3 +55,29 @@ export async function get_model_names(): Promise<Response> {
     return NoConnectionResponse("Could not get model names");
   }
 }
+
+export async function outputMetricsToDb(
+  output: ModelOutput,
+) {
+  const client = await get_client();
+
+  await client.queryObject(
+    `
+    INSERT INTO model_output
+    (job_id, training_time, total_runtime, seed,
+     train_acc, valid_acc, test_acc, parameters, model_name)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+  `,
+    [
+      output.job_id,
+      output.training_time,
+      output.total_runtime,
+      output.seed,
+      output.train_acc,
+      output.valid_acc,
+      output.test_acc,
+      JSON.stringify(output.parameters), // important if array/object
+      output.model_name,
+    ],
+  );
+}
