@@ -44,12 +44,13 @@ export default async function post_train(req: Request) {
         started,
         finished,
         duration,
-        state
+        state,
+        model_name
     ) VALUES (
         $1, $2, $3,
         $4, $5, $6, $7, $8, $9,
         NULL, NULL, NULL,
-        $10
+        $10, $11
     );
     `,
     [
@@ -62,7 +63,8 @@ export default async function post_train(req: Request) {
       data.num_epochs,
       data.train_proportion,
       data.dropout,
-      0, // state = queued
+      33,
+      data.model_name
     ],
   );
 

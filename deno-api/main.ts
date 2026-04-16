@@ -13,6 +13,7 @@ import {
 import { NotFound } from "./responses.ts";
 import { WebSocketBridge } from "./services/websocket_bridge.ts";
 import {get_jobs} from "./controllers/job_controller.ts";
+import {runJobsAsync} from "./workers/job_worker.ts";
 
 const router = new Router();
 const logger = new Logger();
@@ -27,6 +28,7 @@ router.registerPostRoute("/api/train", post_train);
 
 wsBridge.start();
 
+runJobsAsync();
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);

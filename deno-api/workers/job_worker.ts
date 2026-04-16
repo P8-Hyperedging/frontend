@@ -1,5 +1,4 @@
-import {get_all_jobs, get_first_pending_job} from "../services/job_service.ts";
-import {State} from "../../shared/job.ts";
+import {get_first_pending_job, run_job} from "../services/job_service.ts";
 
 export async function runJobsAsync(): Promise<void> {
     while (true) {
@@ -10,16 +9,7 @@ export async function runJobsAsync(): Promise<void> {
             continue;
         }
 
-        try {
-            await markJobAsRunning(job.id);
-
-            // This should resolve when the job is finished
-            await processJob(job);
-
-            await markJobAsCompleted(job.id);
-        } catch (err) {
-            await markJobAsFailed(job.id, err);
-        }
+        await run_job(job);
     }
 }
 
