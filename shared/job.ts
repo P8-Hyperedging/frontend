@@ -18,7 +18,7 @@ export class Job {
         this.started = init?.started ?? null;
         this.finished = init?.finished ?? null;
         this.duration = init?.duration ?? null;
-        this.state = init?.state ?? State.RUNNING_PENDING;
+        this.state = init?.state ?? State.PENDING;
     }
 
     clone(): Job {
@@ -38,6 +38,21 @@ export class Job {
 export enum State {
     DONE = 10,
     RUNNING = 14,
-    RUNNING_FAILED = 22,
-    RUNNING_PENDING = 33,
+    FAILED = 22,
+    PENDING = 33,
+}
+
+
+export function jobStateToText(state) {
+    switch (state) {        case State.DONE:
+            return "Done";
+        case State.RUNNING:
+            return "Running";
+        case State.FAILED:
+            return "Running Failed";
+        case State.PENDING:
+            return "Pending";
+        default:
+            return "Unknown";
+    }
 }

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { DefaultPage } from "../components/default_templates";
 import { ServerTerminal } from "../components/server_terminal";
+import {jobStateToText, State} from "../../shared/job";
+
 
 export function RunningJobPage() {
     const [jobs, setJobs] = useState<any[]>([]);
@@ -38,7 +40,6 @@ export function RunningJobPage() {
                         </div>
 
                         <div className="flex flex-row w-full gap-10">
-                            {/* Queue */}
                             <div className="flex-1 p-5">
                                 <h1 className="text-center text-2xl mb-4">Queue</h1>
 
@@ -49,13 +50,13 @@ export function RunningJobPage() {
                                         {jobs.map((job) => (
                                             <li
                                                 key={job.id}
-                                                className="p-3 border rounded"
+                                                className={(job.state === State.RUNNING ? "bg-green-100" : "bg-yellow-100") + " p-3 border rounded"}
                                             >
                                                 <div className="font-bold">
                                                     {job.title}
                                                 </div>
                                                 <div className="text-sm text-gray-500">
-                                                    State: {job.state}
+                                                    State: {jobStateToText(job.state)}
                                                 </div>
                                             </li>
                                         ))}
@@ -63,7 +64,6 @@ export function RunningJobPage() {
                                 )}
                             </div>
 
-                            {/* Terminal */}
                             <div className="flex-1">
                                 <h1 className="text-center text-2xl mb-4">
                                     Server terminal

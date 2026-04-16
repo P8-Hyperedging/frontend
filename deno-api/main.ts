@@ -12,7 +12,7 @@ import {
 } from "./services/model_output_service.ts";
 import { NotFound } from "./responses.ts";
 import { WebSocketBridge } from "./services/websocket_bridge.ts";
-import {get_all_jobs} from "./services/job_service.ts";
+import {get_jobs} from "./controllers/job_controller.ts";
 
 const router = new Router();
 const logger = new Logger();
@@ -20,12 +20,13 @@ const wsBridge = new WebSocketBridge(logger);
 
 router.registerGetRoute("/api/get-database-schema", get_database_schema);
 router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
-router.registerGetRoute("/api/jobs", get_all_jobs);
+router.registerGetRoute("/api/jobs", get_jobs);
 router.registerGetRoute("/api/get-parameters", get_parameters);
 router.registerGetRoute("/api/get-model-names", get_model_names);
 router.registerPostRoute("/api/train", post_train);
 
 wsBridge.start();
+
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
