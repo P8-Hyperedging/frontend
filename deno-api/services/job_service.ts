@@ -93,9 +93,7 @@ export async function run_job(job: Job): Promise<void> {
 
     console.log(job);
 
-    const modelParamIndex = job.parameters.findIndex(
-      (p) => p.name === "model",
-    );
+    const modelParamIndex = job.parameters.findIndex((p) => p.name === "model");
 
     if (modelParamIndex === -1) {
       throw new Error("Missing model parameter");

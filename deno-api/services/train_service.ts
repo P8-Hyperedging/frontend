@@ -23,6 +23,7 @@ export default async function post_train(req: Request) {
     const converter = schema[key];
     data[key] = converter ? converter(String(value)) : String(value);
   }
+  if (!data.num_epochs) return;
 
   const jobId = crypto.randomUUID();
 
@@ -61,7 +62,7 @@ export default async function post_train(req: Request) {
       data.hidden_layer_size,
       data.lr,
       data.weight_decay,
-      Math.round(data.num_epochs),
+      Math.round(Number(data.num_epochs)),
       data.train_proportion,
       data.dropout,
       33,
