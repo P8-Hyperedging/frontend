@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { DefaultPage } from "../components/default_templates.tsx";
 import { InputType, Parameter, SelectParameter } from "@shared/input_types.ts";
 import { ErrorPage } from "./errorpage.tsx";
-import { Job } from "@shared/job.ts";
+import { Job } from "@shared/train.ts";
 
 export function TrainModel() {
-  const [job, setJob] = useState<Job | null>(() => new Job());
+  const [job, setJob] = useState<Job>({});
   const [modelNames, setModelNames] = useState<SelectParameter | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [currentParams, setCurrentParams] = useState<Parameter[]>([]);
@@ -25,8 +25,7 @@ export function TrainModel() {
         return;
       }
 
-      job.parameters = await params_res.json();
-      setJob(job);
+      const parameters = await params_res.json(); // ← don't touch job here
 
       const model_names_res = await fetch("/api/get-model-names");
       if (!model_names_res.ok) {
@@ -41,6 +40,8 @@ export function TrainModel() {
 
       const firstModel = model_names_data.options[0];
       setSelectedModel(firstModel);
+
+      setJob({ parameters }); // ← construct the job object here
     }
 
     fetchData();
@@ -95,7 +96,7 @@ export function TrainModel() {
                 value={selectedModel}
                 onChange={(e) => setSelectedModel(e.target.value)}
               >
-                {modelNames.options.map((option) => (
+                {modelNames.options.map((option: string) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
@@ -203,7 +204,7 @@ function Fieldset({ parameter }: { parameter: Parameter }) {
             <option disabled value="">
               {parameter.name}
             </option>
-            {parameter.options.map((option) => (
+            {parameter.options.map((option: string) => (
               <option key={option} value={option}>
                 {option}
               </option>

@@ -2,27 +2,29 @@ import * as z from "zod";
 
 import { Parameter } from "./input_types.ts";
 
-export interface ModelOutput {
-  job_id: string;
-  training_time: number;
-  total_runtime: number;
-  seed: number;
-  train_acc: number;
-  valid_acc: number;
-  test_acc: string;
-  parameters: Parameter[];
-  model_name: string;
-  id: number;
-}
+export const ModelOutput = z.object({
+  job_id: z.string,
+  training_time: z.coerce.number(),
+  total_runtime: z.coerce.number(),
+  seed: z.coerce.number(),
+  train_acc: z.coerce.number(),
+  valid_acc: z.coerce.number(),
+  test_acc: z.string(),
+  parameters: Parameter.array(),
+  model_name: z.string(),
+  id: z.coerce.number(),
+});
 
-export interface Parameters {
-  hidden_layer_size: number;
-  learning_rate: number;
-  weight_decay: number;
-  epochs: number;
-  train_proportion: number;
-  dropout: number;
-}
+export const Parameters = z.object({
+  hidden_layer_size: z.coerce.number(),
+  learning_rate: z.coerce.number(),
+  weight_decay: z.coerce.number(),
+  epochs: z.coerce.number(),
+  train_proportion: z.coerce.number(),
+  dropout: z.coerce.number(),
+});
+
+export type Parameters = z.infer<typeof Parameters>;
 
 export const BoxPlotData = z.object({
   model_name: z.string(),

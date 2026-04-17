@@ -19,7 +19,8 @@
     "npm:react@^19.2.4": "19.2.5",
     "npm:tailwindcss@^4.2.1": "4.2.2",
     "npm:vite@*": "8.0.8",
-    "npm:vite@^8.0.5": "8.0.8"
+    "npm:vite@^8.0.5": "8.0.8",
+    "npm:zod@^4.3.6": "4.3.6"
   },
   "npm": {
     "@emnapi/core@1.9.2": {
@@ -892,6 +893,9 @@
         "fsevents"
       ],
       "bin": true
+    },
+    "zod@4.3.6": {
+      "integrity": "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg=="
     }
   },
   "workspace": {
@@ -916,7 +920,8 @@
         "npm:react-router-dom@^7.14.0",
         "npm:react@^19.2.4",
         "npm:tailwindcss@^4.2.1",
-        "npm:vite@^8.0.5"
+        "npm:vite@^8.0.5",
+        "npm:zod@^4.3.6"
       ]
     }
   }

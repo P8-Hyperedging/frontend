@@ -18,6 +18,11 @@ export default defineConfig({
   resolve: {
     alias: {
       "@shared": path.resolve(__dirname, "../shared"),
+      "npm:zod": "zod",
+      zod: path.resolve(
+        __dirname,
+        "node_modules/.deno/zod@4.3.6/node_modules/zod",
+      ),
     },
   },
 });

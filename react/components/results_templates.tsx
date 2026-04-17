@@ -2,15 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import {
   BoxPlotData,
   HyperParameterSeries,
-  Model_output,
+  ModelOutput,
 } from "@shared/model_output.ts";
 import { DefaultPage } from "./default_templates.tsx";
 import * as Plot from "@observablehq/plot";
 
 export default function ResultsPage() {
-  const [model_outputs, setModelOutputs] = useState<Model_output[] | null>(
-    null,
-  );
+  const [model_outputs, setModelOutputs] = useState<ModelOutput[] | null>(null);
   const [box_plot_data, setBoxPlotData] = useState<BoxPlotData[] | null>(null);
   const [hyperparameter_data, setHyperparameterData] = useState<
     HyperParameterSeries[] | null

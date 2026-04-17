@@ -1,11 +1,26 @@
 import { useEffect, useState } from "react";
-import { DefaultPage } from "../components/default_templates";
-import { ServerTerminal } from "../components/server_terminal";
-import { jobStateToText, State } from "../../shared/job";
+import { DefaultPage } from "../components/default_templates.tsx";
+import { ServerTerminal } from "../components/server_terminal.tsx";
+import { Job, JobStateEnum, State } from "@shared/train.ts";
+
+function jobStateToText(state: JobStateEnum) {
+  switch (state) {
+    case State.DONE:
+      return "Done";
+    case State.RUNNING:
+      return "Running";
+    case State.FAILED:
+      return "Running Failed";
+    case State.PENDING:
+      return "Pending";
+    default:
+      return "Unknown";
+  }
+}
 
 export function RunningJobPage() {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [jobs, setJobs] = useState<Job>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchJobs() {
@@ -40,16 +55,14 @@ export function RunningJobPage() {
 
                 {loading ? <p>Loading...</p> : (
                   <ul className="space-y-2">
-                    {jobs.map((job) => (
+                    {jobs.map((job: Job) => (
                       <li
                         key={job.id}
                         className={(job.state === State.RUNNING
                           ? "bg-green-100"
                           : "bg-yellow-100") + " p-3 border rounded"}
                       >
-                        <div className="font-bold">
-                          {job.title}
-                        </div>
+                        <div className="font-bold">{job.title}</div>
                         <div className="text-sm text-gray-500">
                           State: {jobStateToText(job.state)}
                         </div>
@@ -60,9 +73,7 @@ export function RunningJobPage() {
               </div>
 
               <div className="flex-1">
-                <h1 className="text-center text-2xl mb-4">
-                  Server terminal
-                </h1>
+                <h1 className="text-center text-2xl mb-4">Server terminal</h1>
                 <ServerTerminal />
               </div>
             </div>
