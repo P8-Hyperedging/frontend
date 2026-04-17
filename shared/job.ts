@@ -11,6 +11,8 @@ export class Job {
   state: State;
   created_at: Date;
 
+
+
   constructor(init?: Partial<Job>) {
     this.id = init?.id ?? crypto.randomUUID();
     this.title = init?.title ?? "";
@@ -22,9 +24,6 @@ export class Job {
     this.state = init?.state ?? State.PENDING;
     this.created_at = init?.created_at ?? null;
   }
-
-
-  
 
   clone(): Job {
     return new Job({
