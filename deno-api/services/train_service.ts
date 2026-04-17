@@ -45,12 +45,13 @@ export default async function post_train(req: Request) {
         duration,
         state,
         model_name,
-        created_at
+        created_at,
+        seed
     ) VALUES (
         $1, $2, $3,
         $4, $5, $6, $7, $8, $9,
         NULL, NULL, NULL,
-        $10, $11, NOW()
+        $10, $11, NOW(), $12
     );
     `,
     [
@@ -60,11 +61,12 @@ export default async function post_train(req: Request) {
       data.hidden_layer_size,
       data.lr,
       data.weight_decay,
-      data.num_epochs,
+      Math.round(data.num_epochs),
       data.train_proportion,
       data.dropout,
       33,
       data.model_name,
+      data.seed
     ],
   );
 
