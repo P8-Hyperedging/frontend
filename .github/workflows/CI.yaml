@@ -21,4 +21,4 @@ jobs:
         run: deno lint
 
       - name: Run Deno fmt
-        run: deno fmt --check
+        run: deno fmt . --check

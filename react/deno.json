@@ -26,6 +26,7 @@
     "deny": ["npm:@parcel/watcher@2.5.6"]
   },
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": ["npm:@types/react"],

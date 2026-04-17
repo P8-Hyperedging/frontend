@@ -1,4 +1,4 @@
-import { JsonResponse } from "../respons.ts";
+import { JsonResponse } from "../responses.ts";
 import { get_client } from "./database_service.ts";
 import { TableInfo, TableRow } from "@shared/table.ts";
 

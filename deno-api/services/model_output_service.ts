@@ -1,20 +1,21 @@
-import { JsonResponse, NoConnectionResponse } from "../respons.ts";
+import { JsonResponse, NoConnectionResponse } from "../responses.ts";
 import { get_client } from "./database_service.ts";
-import { Parameter, SelectParameter } from "@shared/parameters.ts";
+import { Parameter, SelectParameter } from "@shared/input_types.ts";
 import { Logger } from "@deno-library/logger";
 import {
   BoxPlotData,
   HyperParameterPoint,
   HyperParameterRow,
   HyperParameterSeries,
-  Model_output,
+  ModelOutput,
 } from "@shared/model_output.ts";
+
 const logger = new Logger();
 
 export async function get_model_outputs(): Promise<Response> {
   const client = await get_client();
 
-  const result = await client.queryObject<Model_output>(
+  const result = await client.queryObject<ModelOutput>(
     `
       SELECT * FROM model_output;
     `,
@@ -133,4 +134,25 @@ export async function get_hyperparameter_tuning_data(): Promise<Response> {
     logger.warn("Could not get hyperparameter tuning data", err);
     return NoConnectionResponse("Could not get hyperparameter tuning data");
   }
+}
+
+export async function outputMetricsToDb(output: ModelOutput) {
+  const client = await get_client();
+  await client.queryObject(
+    `
+    INSERT INTO model_output
+    (job_id, seed,
+     train_acc, valid_acc, test_acc, parameters, model_name)
+    VALUES ($1,$2,$3,$4,$5,$6,$7)
+  `,
+    [
+      output.job_id,
+      output.seed,
+      output.train_acc,
+      output.valid_acc,
+      output.test_acc,
+      output.parameters,
+      output.model_name,
+    ],
+  );
 }

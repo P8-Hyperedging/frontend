@@ -1,28 +1,69 @@
-import { document } from "react-dom";
-import { useEffect } from "react";
-import { DefaultPage } from "../components/default_templates.tsx";
+import { useEffect, useState } from "react";
+import { DefaultPage } from "../components/default_templates";
+import { ServerTerminal } from "../components/server_terminal";
+import { jobStateToText, State } from "../../shared/job";
 
 export function RunningJobPage() {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const script = document.createElement("script");
+    async function fetchJobs() {
+      try {
+        const res = await fetch("/api/jobs"); // change if your endpoint differs
+        const data = await res.json();
+        setJobs(data.rows ?? data); // depends on backend shape
+      } finally {
+        setLoading(false);
+      }
+    }
 
-    script.src = "public/js/socket.js";
-    script.async = true;
+    fetchJobs();
+  }, []);
 
-    document.body.appendChild(script);
-  });
   return (
     <DefaultPage
       title="Running Jobs"
       content={
         <>
-          <div className="flex flex-col w-full items-center gap-4">
-            <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
-              <h1>running jobs</h1>
-              <div className="mockup-code w-full h-96">
-                <pre data-prefix="$" className="text-primary">
-                  <code>Waiting for training to begin...</code>
-                </pre>
+          <div className="flex flex-col px-5">
+            <div className="flex h-20 justify-center items-center">
+              <h1 className="flex items-center gap-2 text-2xl">
+                <i className="material-icons">work_history</i>
+                <span>Running Jobs</span>
+              </h1>
+            </div>
+
+            <div className="flex flex-row w-full gap-10">
+              <div className="flex-1 p-5">
+                <h1 className="text-center text-2xl mb-4">Queue</h1>
+
+                {loading ? <p>Loading...</p> : (
+                  <ul className="space-y-2">
+                    {jobs.map((job) => (
+                      <li
+                        key={job.id}
+                        className={(job.state === State.RUNNING
+                          ? "bg-green-100"
+                          : "bg-yellow-100") + " p-3 border rounded"}
+                      >
+                        <div className="font-bold">
+                          {job.title}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          State: {jobStateToText(job.state)}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div className="flex-1">
+                <h1 className="text-center text-2xl mb-4">
+                  Server terminal
+                </h1>
+                <ServerTerminal />
               </div>
             </div>
           </div>

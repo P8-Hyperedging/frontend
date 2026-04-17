@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { InputType, Parameter, SelectParameter } from "@shared/parameters.ts";
+import { InputType, Parameter, SelectParameter } from "@shared/input_types.ts";
 
 export default function ParameterForm({
   parameters,
@@ -76,7 +76,7 @@ function ParameterFormContent({
       ))}
       <input
         type="text"
-        defaultValue={model_name}
+        value={model_name}
         className="hidden"
         name="model_name"
       />
@@ -158,6 +158,20 @@ function Fieldset({ parameter }: { parameter: Parameter }) {
               </option>
             ))}
           </select>
+        </>
+      );
+      break;
+    case InputType.Text:
+      content = (
+        <>
+          <label>{parameter.name}</label>
+          <input
+            type="text"
+            name={parameter.name}
+            className="input w-full"
+            placeholder={parameter.placeholder}
+            required
+          />
         </>
       );
       break;

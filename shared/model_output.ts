@@ -1,6 +1,8 @@
 import * as z from "zod";
 
-export interface Model_output {
+import { Parameter } from "./input_types.ts";
+
+export interface ModelOutput {
   job_id: string;
   training_time: number;
   total_runtime: number;
@@ -8,7 +10,7 @@ export interface Model_output {
   train_acc: number;
   valid_acc: number;
   test_acc: string;
-  parameters: Parameters;
+  parameters: Parameter[];
   model_name: string;
   id: number;
 }
