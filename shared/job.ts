@@ -9,6 +9,7 @@ export class Job {
   finished: Date | null;
   duration: number | null;
   state: State;
+  created_at: Date;
 
   constructor(init?: Partial<Job>) {
     this.id = init?.id ?? crypto.randomUUID();
@@ -19,6 +20,7 @@ export class Job {
     this.finished = init?.finished ?? null;
     this.duration = init?.duration ?? null;
     this.state = init?.state ?? State.PENDING;
+    this.created_at = init?.created_at ?? null;
   }
 
   clone(): Job {
@@ -31,6 +33,7 @@ export class Job {
       finished: this.finished,
       duration: this.duration,
       state: this.state,
+      created_at: this.created_at,
     });
   }
 }

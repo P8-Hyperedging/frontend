@@ -1,0 +1,6 @@
+deno fmt
+echo "Running Deno format check..."
+deno fmt --check || exit 1
+
+echo "Running Deno lint..."
+deno lint || exit 1

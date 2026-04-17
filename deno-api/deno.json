@@ -3,7 +3,7 @@
     "dev": "deno run --watch --env-file=.env --allow-env --allow-read --allow-net main.ts"
   },
   "lint": {
-    "include": ["templates/", "services/", "./"],
+    "include": ["templates/", "services/", "./", "../shared/"],
     "exclude": [],
     "rules": {
       "tags": ["recommended"],
@@ -17,7 +17,7 @@
     "@std/fs": "jsr:@std/fs@^1.0.23",
     "@std/http": "jsr:@std/http@^1.0.25",
     "@shared/": "../shared/",
-    "@socket.io/socket.io": "npm:socket.io"
+    "@socket.io": "npm:socket.io-client"
   },
   "compilerOptions": {
     "paths": {
