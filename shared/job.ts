@@ -11,8 +11,6 @@ export class Job {
   state: State;
   created_at: Date;
 
-
-
   constructor(init?: Partial<Job>) {
     this.id = init?.id ?? crypto.randomUUID();
     this.title = init?.title ?? "";
