@@ -9,7 +9,7 @@ export class Job {
   finished: Date | null;
   duration: number | null;
   state: State;
-  created_at: Date;
+  created_at: Date | null;
 
   constructor(init?: Partial<Job>) {
     this.id = init?.id ?? crypto.randomUUID();

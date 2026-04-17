@@ -1,29 +1,12 @@
 import { RedirectResponse } from "../responses.ts";
 import { get_client } from "./database_service.ts";
+import { TrainFormData } from "@shared/train.ts";
 
 export default async function post_train(req: Request) {
-  const schema: Record<string, (v: string) => string | number | null> = {
-    title: String,
-    description: String,
-    model_name: String,
-    num_epochs: Number,
-    lr: Number,
-    hidden_layer_size: Number,
-    train_proportion: Number,
-    valid_proportion: Number,
-    dropout: Number,
-    weight_decay: Number,
-    seed: (v) => (v === "" ? null : Number(v)),
-  };
-
   const form = await req.formData();
-  const data: Record<string, string | number | null> = {};
-
-  for (const [key, value] of form.entries()) {
-    const converter = schema[key];
-    data[key] = converter ? converter(String(value)) : String(value);
-  }
-  if (!data.num_epochs) return;
+  const data: TrainFormData = TrainFormData.parse(
+    Object.fromEntries(form.entries()),
+  );
 
   const jobId = crypto.randomUUID();
 
@@ -62,7 +45,7 @@ export default async function post_train(req: Request) {
       data.hidden_layer_size,
       data.lr,
       data.weight_decay,
-      Math.round(Number(data.num_epochs)),
+      Math.round(data.num_epochs),
       data.train_proportion,
       data.dropout,
       33,
