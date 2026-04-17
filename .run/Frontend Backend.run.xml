@@ -1,5 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Frontend Backend" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/deno-api/main.ts" programParameters="task dev" workingDirectory="$PROJECT_DIR$/deno-api">
+  <configuration
+    default="false"
+    name="Frontend Backend"
+    type="DenoConfigurationType"
+    inputPath="$PROJECT_DIR$/deno-api/main.ts"
+    programParameters="task dev"
+    workingDirectory="$PROJECT_DIR$/deno-api"
+  >
     <option name="applicationArguments" value="--inspect" />
     <method v="2" />
   </configuration>

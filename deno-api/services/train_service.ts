@@ -66,7 +66,7 @@ export default async function post_train(req: Request) {
       data.dropout,
       33,
       data.model_name,
-      data.seed
+      data.seed,
     ],
   );
 

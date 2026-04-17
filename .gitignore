@@ -2,3 +2,6 @@
 react/node_modules/
 /.idea
 react/public/css/output.css
+/react/.idea
+/deno-api/.idea
+/react/.idea

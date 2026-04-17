@@ -3,7 +3,7 @@
     "dev": "deno run --watch --env-file=.env --allow-env --allow-read --allow-net main.ts"
   },
   "lint": {
-    "include": ["templates/", "services/", "./"],
+    "include": ["templates/", "services/", "./", "../shared/"],
     "exclude": [],
     "rules": {
       "tags": ["recommended"],
