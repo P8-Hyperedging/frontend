@@ -23,6 +23,9 @@ export class Job {
     this.created_at = init?.created_at ?? null;
   }
 
+
+  
+
   clone(): Job {
     return new Job({
       id: this.id,
