@@ -6,6 +6,7 @@ import {
 } from "@shared/model_output.ts";
 import { DefaultPage } from "./default_templates.tsx";
 import * as Plot from "@observablehq/plot";
+import { Parameter } from "@shared/input_types.ts";
 
 export default function ResultsPage() {
   const [model_outputs, setModelOutputs] = useState<ModelOutput[] | null>(null);
@@ -24,7 +25,10 @@ export default function ResultsPage() {
     async function fetchData() {
       const model_res = await fetch("/api/get-model-outputs");
       const model_data = await model_res.json();
-      setModelOutputs(model_data);
+      const model_parsed = model_data.map((data: ModelOutput) => {
+        return ModelOutput.parse(data);
+      });
+      setModelOutputs(model_parsed);
 
       const box_plot_res = await fetch("/api/get-box-plot-data");
       const box_plot_data = await box_plot_res.json();
@@ -195,7 +199,7 @@ export default function ResultsPage() {
               </div>
 
               <h1></h1>
-              {render_results_table(model_outputs)}
+              <RenderResultsTable model_outputs={model_outputs} />
             </div>
           </div>
         </>
@@ -204,7 +208,13 @@ export default function ResultsPage() {
   );
 }
 
-function render_results_table(model_outputs: Model_output[]) {
+function RenderResultsTable({
+  model_outputs,
+}: {
+  model_outputs: ModelOutput[];
+}) {
+  if (!model_outputs) return;
+
   return (
     <>
       <table className="table">
@@ -217,51 +227,51 @@ function render_results_table(model_outputs: Model_output[]) {
         </thead>
 
         <tbody>
-          {model_outputs.map((row, index) => {
-            return (
-              <>
-                <tr>
-                  <th>{index + 1}</th>
-                  <td>{row.job_id}</td>
-                  <td>{row.training_time}</td>
-                  <td>{row.total_runtime}</td>
-                  <td>{row.seed}</td>
-                  <td>{row.train_acc}</td>
-                  <td>{row.valid_acc}</td>
-                  <td>{row.test_acc}</td>
+          {model_outputs.map((row: ModelOutput, index) => (
+            <tr key={row.id}>
+              <th>{index + 1}</th>
+              <td>{row.job_id ?? "-"}</td>
+              <td>{row.training_time ?? "-"}</td>
+              <td>{row.total_runtime ?? "-"}</td>
+              <td>{row.seed ?? "-"}</td>
+              <td>{row.train_acc ?? "-"}</td>
+              <td>{row.valid_acc ?? "-"}</td>
+              <td>{row.test_acc ?? "-"}</td>
 
-                  <td>
-                    <div className="dropdown">
-                      <div tabIndex={0} role="button" className="btn m-1">
-                        Parameters
-                      </div>
-                      <div className="dropdown-content bg-base-300 rounded-box p-2 shadow-2xl">
-                        <table className="table table-xs">
-                          <tbody>
-                            {Object.entries(row.parameters).map(
-                              ([key, value]) => (
-                                <tr>
-                                  <td className="font-semibold">{key}</td>
-                                  <td>{value}</td>
-                                </tr>
-                              ),
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </td>
+              <td>
+                <div className="dropdown">
+                  <div tabIndex={0} role="button" className="btn m-1">
+                    Parameters
+                  </div>
+                  <div className="dropdown-content bg-base-300 rounded-box p-2 shadow-2xl">
+                    <table className="table table-xs">
+                      <tbody>
+                        <ParameterTable parameters={row.parameters} />
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </td>
 
-                  <td>{row.model_name}</td>
-                  <td>{row.id}</td>
-                </tr>
-              </>
-            );
-          })}
+              <td>{row.model_name}</td>
+              <td>{row.id}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <div id="myPlot" className="w-1/2"></div>
       <script src="js/plots.js"></script>
     </>
   );
+}
+
+function ParameterTable({ parameters }: { parameters: Parameter }) {
+  if (!parameters) return;
+
+  return Object.entries(parameters).map(([key, value]) => (
+    <tr key={key}>
+      <td className="font-semibold">{key}</td>
+      <td>{(value as number) ?? "-"}</td>
+    </tr>
+  ));
 }
