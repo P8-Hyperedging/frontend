@@ -2,30 +2,9 @@ import { get_client } from "./database_service.ts";
 import { Job, JobStateEnum, State } from "@shared/train.ts";
 import { ModelOutput } from "@shared/model_output.ts";
 import { outputMetricsToDb } from "./model_output_service.ts";
+import { Logger } from "@deno-library/logger";
 
-/*
-function row_to_job(row): Job {
-  return new Job({
-    id: row.id,
-    title: row.title,
-    description: row.description,
-    started: row.started,
-    finished: row.finished,
-    duration: row.duration,
-    state: row.state,
-
-    parameters: [
-      { name: "model", value: row.model_name },
-      { name: "num_epochs", value: row.epochs },
-      { name: "lr", value: row.learning_rate },
-      { name: "hidden_layer_size", value: row.hidden_layer_size },
-      { name: "train_proportion", value: row.train_proportion },
-      { name: "dropout", value: row.dropout },
-      { name: "weight_decay", value: row.weight_decay },
-    ],
-  });
-}
-*/
+const logger = new Logger();
 
 export async function get_all_jobs(): Promise<Job[]> {
   const client = await get_client();
@@ -111,6 +90,8 @@ export async function run_job(job: Job): Promise<void> {
       milestones_input: "50,100",
       seed: job.seed,
     };
+    
+    logger.log("Started JOB: " + job.id)
 
     const response = await fetch(
       `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
@@ -122,7 +103,7 @@ export async function run_job(job: Job): Promise<void> {
         body: JSON.stringify(paramsObject),
       },
     );
-
+    
     const res = await response.json();
     console.log(res as ModelOutput);
     await outputMetricsToDb(res.result as ModelOutput);

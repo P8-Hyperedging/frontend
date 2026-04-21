@@ -54,21 +54,5 @@ export default async function post_train(req: Request) {
     ],
   );
 
-  // optionally trigger external training AFTER inserting job
-  const targetUrl = new URL(
-    `${Deno.env.get("BASEMENT_PC_IP")}/train/${data.model_name}/${jobId}`,
-  );
-
-  await fetch(targetUrl.toString(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      job_id: jobId,
-      ...data,
-    }),
-  });
-
   return RedirectResponse(`/running-jobs`);
 }
