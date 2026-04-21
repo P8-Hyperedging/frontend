@@ -90,8 +90,8 @@ export async function run_job(job: Job): Promise<void> {
       milestones_input: "50,100",
       seed: job.seed,
     };
-    
-    logger.log("Started JOB: " + job.id)
+
+    logger.log("Started JOB: " + job.id);
 
     const response = await fetch(
       `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
@@ -103,7 +103,7 @@ export async function run_job(job: Job): Promise<void> {
         body: JSON.stringify(paramsObject),
       },
     );
-    
+
     const res = await response.json();
     console.log(res as ModelOutput);
     await outputMetricsToDb(res.result as ModelOutput);
