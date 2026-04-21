@@ -66,7 +66,7 @@ export async function mark_job(job: Job, state: JobStateEnum): Promise<void> {
   }
 
   query += ` WHERE "id" = $2`;
-  params.push(job.state);
+  params.push(job.id);
 
   await client.queryObject(query, params);
 }
@@ -106,10 +106,30 @@ export async function run_job(job: Job): Promise<void> {
 
     const res = await response.json();
     console.log(res as ModelOutput);
-    await outputMetricsToDb(res.result as ModelOutput);
+    
+    if (!response.ok || !res.result) {
+      console.log(`Training failed: ${JSON.stringify(res)}`);
+      await mark_job(job, State.FAILED);
+      return;
+    }
+    
+    try {
+      await outputMetricsToDb(res.result as ModelOutput);
+    } catch (dbError) {
+      console.error(`Database error for job ${job.id}:`, dbError);
+      await mark_job(job, State.FAILED);
+      throw dbError;
+    }
+    
     await mark_job(job, State.DONE);
+    console.log(`Job ${job.id} marked as DONE`);
   } catch (error) {
-    await mark_job(job, State.FAILED);
+    console.error(`Error in run_job for ${job.id}:`, error);
+    try {
+      await mark_job(job, State.FAILED);
+    } catch (markError) {
+      console.error(`Failed to mark job ${job.id} as FAILED:`, markError);
+    }
     throw error;
   }
 }
