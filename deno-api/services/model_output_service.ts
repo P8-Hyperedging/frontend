@@ -142,7 +142,7 @@ export async function outputMetricsToDb(output: ModelOutput) {
     console.log(`Training failed: ${output?.error || "Unknown error"}`);
     return;
   }
-  
+
   console.log(`Inserting model output for job ${output.job_id}`);
   const client = await get_client();
   await client.queryObject(
