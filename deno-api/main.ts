@@ -35,7 +35,9 @@ router.registerGetRoute(
 
 wsBridge.start();
 
-runJobsAsync();
+if(Deno.env.get("RUN_JOBS")) {
+  runJobsAsync();
+}
 
 Deno.serve(async (req) => {
   const url = new URL(req.url);
