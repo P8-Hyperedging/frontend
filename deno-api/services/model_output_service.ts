@@ -137,6 +137,13 @@ export async function get_hyperparameter_tuning_data(): Promise<Response> {
 }
 
 export async function outputMetricsToDb(output: ModelOutput) {
+  // Check if output exists and is an error response
+  if (!output || (typeof output === "object" && "error" in output)) {
+    console.log(`Training failed: ${output?.error || "Unknown error"}`);
+    return;
+  }
+
+  console.log(`Inserting model output for job ${output.job_id}`);
   const client = await get_client();
   await client.queryObject(
     `
@@ -151,8 +158,9 @@ export async function outputMetricsToDb(output: ModelOutput) {
       output.train_acc,
       output.valid_acc,
       output.test_acc,
-      output.parameters,
+      output.parameters_json,
       output.model_name,
     ],
   );
+  console.log(`Successfully inserted model output for job ${output.job_id}`);
 }

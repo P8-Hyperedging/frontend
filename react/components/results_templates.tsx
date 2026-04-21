@@ -26,6 +26,7 @@ export default function ResultsPage() {
       const model_res = await fetch("/api/get-model-outputs");
       const model_data = await model_res.json();
       const model_parsed = model_data.map((data: ModelOutput) => {
+        console.log(data);
         return ModelOutput.parse(data);
       });
       setModelOutputs(model_parsed);
