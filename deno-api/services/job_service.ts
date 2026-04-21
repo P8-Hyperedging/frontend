@@ -1,29 +1,10 @@
 import { get_client } from "./database_service.ts";
-import { Job, State } from "../../shared/job.ts";
-import { ModelOutput } from "../../shared/model_output.ts";
+import { Job, JobStateEnum, State } from "@shared/train.ts";
+import { ModelOutput } from "@shared/model_output.ts";
 import { outputMetricsToDb } from "./model_output_service.ts";
+import { Logger } from "@deno-library/logger";
 
-function row_to_job(row): Job {
-  return new Job({
-    id: row.id,
-    title: row.title,
-    description: row.description,
-    started: row.started,
-    finished: row.finished,
-    duration: row.duration,
-    state: row.state,
-
-    parameters: [
-      { name: "model", value: row.model_name },
-      { name: "num_epochs", value: row.epochs },
-      { name: "lr", value: row.learning_rate },
-      { name: "hidden_layer_size", value: row.hidden_layer_size },
-      { name: "train_proportion", value: row.train_proportion },
-      { name: "dropout", value: row.dropout },
-      { name: "weight_decay", value: row.weight_decay },
-    ],
-  });
-}
+const logger = new Logger();
 
 export async function get_all_jobs(): Promise<Job[]> {
   const client = await get_client();
@@ -34,7 +15,7 @@ export async function get_all_jobs(): Promise<Job[]> {
         FROM "jobs";
     `);
 
-  return result.rows.map(row_to_job);
+  return result.rows.map((row) => Job.parse(row));
 }
 
 export async function get_first_pending_job() {
@@ -59,10 +40,14 @@ export async function get_first_pending_job() {
     [State.PENDING, State.RUNNING],
   );
 
-  return result.rows[0] ? row_to_job(result.rows[0]) : null;
+  if (result.rows[0]) {
+    return Job.parse(result.rows[0]);
+  } else {
+    return null;
+  }
 }
 
-export async function mark_job(job: Job, state: State): Promise<void> {
+export async function mark_job(job: Job, state: JobStateEnum): Promise<void> {
   const client = await get_client();
 
   let query = `
@@ -81,8 +66,7 @@ export async function mark_job(job: Job, state: State): Promise<void> {
   }
 
   query += ` WHERE "id" = $2`;
-  console.log(job);
-  params.push(job.id);
+  params.push(job.state);
 
   await client.queryObject(query, params);
 }
@@ -91,25 +75,26 @@ export async function run_job(job: Job): Promise<void> {
   try {
     await mark_job(job, State.RUNNING);
 
-    console.log(job);
+    //
+    // I am not sure that the jobs table has all the data needed
+    //
+    const paramsObject = {
+      num_epochs: job.epochs,
+      lr: job.learning_rate,
+      hidden_layer_size: job.hidden_layer_size,
+      train_proportion: job.train_proportion,
+      valid_proportion: 1 - job.train_proportion,
+      dropout: job.dropout,
+      weight_decay: job.weight_decay,
+      gamma: 0,
+      milestones_input: "50,100",
+      seed: job.seed,
+    };
 
-    const modelParamIndex = job.parameters.findIndex(
-      (p) => p.name === "model",
-    );
+    logger.log("Started JOB: " + job.id);
 
-    if (modelParamIndex === -1) {
-      throw new Error("Missing model parameter");
-    }
-
-    const model = job.parameters[modelParamIndex].value;
-
-    const paramsObject = Object.fromEntries(
-      job.parameters.map((p) => [p.name, p.value]),
-    );
-
-    job.parameters.splice(modelParamIndex, 1);
     const response = await fetch(
-      `http://127.0.0.1:5002/train/${model}/${job.id}`,
+      `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
       {
         method: "POST",
         headers: {

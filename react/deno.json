@@ -17,6 +17,7 @@
     "react-dom": "npm:react-dom",
     "react-dom/client": "npm:react-dom/client",
     "@types/react": "npm:@types/react",
+    "@obersvablehq/plot": "npm:@observablehq/plot",
     "@shared/": "../shared/"
   },
   "nodeModulesDir": "auto",
@@ -29,6 +30,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": ["npm:@types/react"],
+    "lib": ["dom"],
     "paths": {
       "@shared/*": ["../shared/*"]
     }

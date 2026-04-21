@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@observablehq/plot": "^0.6.17",
     "@tailwindcss/cli": "^4.2.1",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.2.14",
@@ -10,7 +11,8 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "daisyui": "^5.5.19",
