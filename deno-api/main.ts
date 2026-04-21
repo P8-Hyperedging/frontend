@@ -35,7 +35,7 @@ router.registerGetRoute(
 
 wsBridge.start();
 
-if (Deno.env.get("RUN_JOBS")) {
+if (Deno.env.get("RUN_JOBS") === '1') {
   runJobsAsync();
 }
 
