@@ -158,7 +158,7 @@ export async function outputMetricsToDb(output: ModelOutput) {
       output.train_acc,
       output.valid_acc,
       output.test_acc,
-      output.parameters,
+      output.parameters_json,
       output.model_name,
     ],
   );

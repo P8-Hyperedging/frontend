@@ -22,7 +22,7 @@ export const JobStateEnum = z.enum(State);
 export type JobStateEnum = z.infer<typeof JobStateEnum>;
 
 export const Job = z.object({
-  id: z.uuidv4(),
+  id: z.bigint().nullable(),
   title: z.string(),
   description: z.string(),
   model_name: z.string(),

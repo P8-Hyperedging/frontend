@@ -3,7 +3,6 @@ import { exists } from "@std/fs";
 import { getValue, hasValue } from "./optional.ts";
 import { Router, UrlMethod } from "./router.ts";
 import { Logger } from "@deno-library/logger";
-import post_train from "./services/train_service.ts";
 import { get_database_schema } from "./services/schema_service.ts";
 import {
   get_box_plot_data,
@@ -16,6 +15,7 @@ import { NotFound } from "./responses.ts";
 import { WebSocketBridge } from "./services/websocket_bridge.ts";
 import { get_jobs } from "./controllers/job_controller.ts";
 import { runJobsAsync } from "./workers/job_worker.ts";
+import post_train from "./controllers/train_controller.ts";
 
 const router = new Router();
 const logger = new Logger();
