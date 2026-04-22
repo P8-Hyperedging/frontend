@@ -37,6 +37,7 @@ export const Job = z.object({
   started: z.date().nullable(),
   finished: z.date().nullable(),
   duration: z.coerce.number(),
+  patience: z.coerce.number(),
   created_at: z.date(),
 });
 

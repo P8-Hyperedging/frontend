@@ -11,7 +11,7 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
   const client = await get_client();
 
   try {
-    const result = await client.queryObject(
+    const result = await client?.queryObject(
       `
           INSERT INTO jobs (title,
                             description,
@@ -27,11 +27,12 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
                             state,
                             model_name,
                             created_at,
+                            patience,
                             seed)
           VALUES ($1, $2,
                   $3, $4, $5, $6, $7, $8,
                   NULL, NULL, NULL,
-                  $9, $10, NOW(), $11
+                  $9, $10, NOW(), $11, $12
                  )
           RETURNING id;
         `,
@@ -46,6 +47,7 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
         job.dropout,
         33,
         job.model_name,
+        job.patience,
         job.seed,
       ],
     );
@@ -61,41 +63,49 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
 export async function get_all_jobs(): Promise<Job[]> {
   const client = await get_client();
 
-  const result = await client.queryObject(`
-        SELECT
-            *
-        FROM "jobs";
-    `);
+  try {
+    const result = await client?.queryObject(`
+          SELECT *
+          FROM "jobs";
+      `);
 
-  return result.rows.map((row) => Job.parse(row));
+    return result.rows.map((row) => Job.parse(row));
+  } catch (e) {
+    logger.error(e);
+    return [];
+  }
 }
 
-export async function get_first_pending_job() {
+export async function get_first_pending_job(): Promise<Optional<Job>> {
   const client = await get_client();
 
-  const result = await client.queryObject(
-    `
-    WITH next_job AS (
-      SELECT *
-      FROM jobs
-      WHERE state = $1
-      ORDER BY created_at
-      LIMIT 1
-      FOR UPDATE SKIP LOCKED
+  try {
+    const result = await client?.queryObject(
+      `
+          WITH next_job AS (SELECT *
+                            FROM jobs
+                            WHERE state = $1
+                            ORDER BY created_at
+            LIMIT 1
+            FOR
+          UPDATE SKIP LOCKED
             )
-    UPDATE jobs
-    SET state = $2
-      FROM next_job
-    WHERE jobs.id = next_job.id
-      RETURNING jobs.*;
-  `,
-    [State.PENDING, State.RUNNING],
-  );
+          UPDATE jobs
+          SET state = $2 FROM next_job
+          WHERE jobs.id = next_job.id
+            RETURNING jobs.*;
+        `,
+      [State.PENDING, State.RUNNING],
+    );
 
-  if (result.rows[0]) {
-    return Job.parse(result.rows[0]);
-  } else {
-    return null;
+    if (result.rows[0]) {
+      return [Job.parse(result.rows[0]), true];
+    } else {
+      return [null, false];
+    }
+  } catch (e) {
+    logger.error(e);
+    return [null, false];
   }
 }
 
@@ -120,7 +130,7 @@ export async function mark_job(job: Job, state: JobStateEnum): Promise<void> {
   query += ` WHERE "id" = $2`;
   params.push(job.id);
 
-  await client.queryObject(query, params);
+  await client?.queryObject(query, params);
 }
 
 export async function run_job(job: Job): Promise<void> {
@@ -138,6 +148,7 @@ export async function run_job(job: Job): Promise<void> {
       valid_proportion: 1 - job.train_proportion,
       dropout: job.dropout,
       weight_decay: job.weight_decay,
+      patience: job.patience,
       gamma: 0,
       milestones_input: "50,100",
       seed: job.seed,

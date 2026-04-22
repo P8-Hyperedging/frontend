@@ -15,7 +15,7 @@ const logger = new Logger();
 export async function get_model_outputs(): Promise<Response> {
   const client = await get_client();
 
-  const result = await client.queryObject<ModelOutput>(
+  const result = await client?.queryObject<ModelOutput>(
     `
       SELECT * FROM model_output;
     `,
@@ -158,7 +158,7 @@ export async function outputMetricsToDb(output: ModelOutput) {
       output.train_acc,
       output.valid_acc,
       output.test_acc,
-      output.parameters_json,
+      output.parameters,
       output.model_name,
     ],
   );

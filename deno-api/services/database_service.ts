@@ -1,8 +1,10 @@
 import { Client } from "@db/postgres";
+import { Logger } from "@deno-library/logger";
 
+const logger = new Logger();
 let client: Client | null = null;
 
-export async function get_client() {
+export async function get_client(): Promise<Client | null> {
   if (!client) {
     client = new Client({
       user: Deno.env.get("DATABASE_USER"),
@@ -14,11 +16,9 @@ export async function get_client() {
 
     try {
       await client.connect();
-      // Database connected successfully
     } catch (error) {
-      //Database connection failed
-      client = null; // Reset so we can try again
-      throw error;
+      logger.error(error);
+      client = null;
     }
   }
   return client;
