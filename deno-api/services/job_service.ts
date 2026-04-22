@@ -11,7 +11,7 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
   const client = await get_client();
 
   try {
-    const result = await client.queryObject(
+    const result = await client?.queryObject(
       `
           INSERT INTO jobs (title,
                             description,
@@ -27,11 +27,12 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
                             state,
                             model_name,
                             created_at,
+                            patience,
                             seed)
           VALUES ($1, $2,
                   $3, $4, $5, $6, $7, $8,
                   NULL, NULL, NULL,
-                  $9, $10, NOW(), $11
+                  $9, $10, NOW(), $11, $12
                  )
           RETURNING id;
         `,
@@ -46,6 +47,7 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
         job.dropout,
         33,
         job.model_name,
+        job.patience,
         job.seed,
       ],
     );
@@ -146,6 +148,7 @@ export async function run_job(job: Job): Promise<void> {
       valid_proportion: 1 - job.train_proportion,
       dropout: job.dropout,
       weight_decay: job.weight_decay,
+      patience: job.patience,
       gamma: 0,
       milestones_input: "50,100",
       seed: job.seed,

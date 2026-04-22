@@ -9,7 +9,7 @@ export async function get_database_schema(req: Request): Promise<Response> {
 
   if (tableName) {
     // Get column info plus table row count
-    const result = await client.queryObject<TableRow>(
+    const result = await client?.queryObject<TableRow>(
       `
         SELECT
             c.column_name,

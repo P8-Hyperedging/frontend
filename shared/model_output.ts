@@ -18,7 +18,7 @@ export const ModelOutput = z.object({
   train_acc: z.coerce.number().nullable(),
   valid_acc: z.coerce.number(),
   test_acc: z.coerce.number().nullable(),
-  parameters_json: z.preprocess((val: string) => {
+  parameters: z.preprocess((val: string) => {
     if (!val || typeof val !== "object") return val;
     const p = val as Record<string, number>;
     return {

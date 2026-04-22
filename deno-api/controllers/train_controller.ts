@@ -12,24 +12,22 @@ export default async function post_train(req: Request) {
   );
 
   const now = new Date();
-
   const job: Job = {
-    id: "",
+    id: null,
     title: data.title,
     description: data.description,
     model_name: data.model_name,
 
-    // defaults or pulled from catchall
-    hidden_layer_size: data.hidden_layer_size ?? 128,
-    learning_rate: data.learning_rate ?? 0.001,
-    weight_decay: data.weight_decay ?? 0,
-    epochs: data.epochs ?? 10,
-    train_proportion: data.train_proportion ?? 0.8,
-    dropout: data.dropout ?? 0.1,
-    seed: data.seed ?? 42,
+    hidden_layer_size: data.hidden_layer_size,
+    learning_rate: data.lr,
+    weight_decay: data.weight_decay,
+    epochs: Math.round(data.num_epochs),
+    train_proportion: data.train_proportion,
+    dropout: data.dropout,
+    seed: Math.round(data.seed),
 
     state: State.PENDING,
-
+    patience: Math.round(data.patience),
     started: null,
     finished: null,
     duration: 0,

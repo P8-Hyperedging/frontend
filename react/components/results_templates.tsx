@@ -76,7 +76,10 @@ export default function ResultsPage() {
       return;
     }
 
-    if (!hyperparameter_data) return;
+    if (
+      !hyperparameter_data || !hyperparameter_data[0] ||
+      !hyperparameter_data[0]?.data
+    ) return;
 
     const hiddenLayerPlot = Plot.plot({
       x: { label: "Hidden Layer Size" },
@@ -97,7 +100,7 @@ export default function ResultsPage() {
       y: { grid: true, inset: 6, label: "Validation Accuracy" },
       color: { scheme: "Observable10", legend: true },
       marks: [
-        Plot.lineY(hyperparameter_data[1].data, {
+        Plot.lineY(hyperparameter_data[1]?.data, {
           x: "value",
           y: "avg_valid_acc",
           marker: true,
@@ -111,7 +114,7 @@ export default function ResultsPage() {
       y: { grid: true, inset: 6, label: "Validation Accuracy" },
       color: { scheme: "Observable10", legend: true },
       marks: [
-        Plot.lineY(hyperparameter_data[2].data, {
+        Plot.lineY(hyperparameter_data[2]?.data, {
           x: "value",
           y: "avg_valid_acc",
           marker: true,
@@ -221,19 +224,19 @@ function RenderResultsTable({
       <table className="table">
         <thead>
           <tr>
-            <th>#</th>
-            {Object.keys(model_outputs[0]).map((key) => <th key={key}>{key}
-            </th>)}
+            <th>id</th>
+            {Object.keys(model_outputs[0]).slice(
+              0,
+              Object.keys(model_outputs[0]).length - 1,
+            ).map((key) => <th key={key}>{key}</th>)}
           </tr>
         </thead>
 
         <tbody>
-          {model_outputs.map((row: ModelOutput, index) => (
+          {model_outputs.map((row: ModelOutput, _index) => (
             <tr key={row.id}>
-              <th>{index + 1}</th>
+              <td>{row.id}</td>
               <td>{row.job_id ?? "-"}</td>
-              <td>{row.training_time ?? "-"}</td>
-              <td>{row.total_runtime ?? "-"}</td>
               <td>{row.seed ?? "-"}</td>
               <td>{row.train_acc ?? "-"}</td>
               <td>{row.valid_acc ?? "-"}</td>
@@ -255,7 +258,6 @@ function RenderResultsTable({
               </td>
 
               <td>{row.model_name}</td>
-              <td>{row.id}</td>
             </tr>
           ))}
         </tbody>
