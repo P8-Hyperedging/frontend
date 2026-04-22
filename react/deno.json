@@ -30,7 +30,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": ["npm:@types/react"],
-    "lib": ["dom"],
     "paths": {
       "@shared/*": ["../shared/*"]
     }
