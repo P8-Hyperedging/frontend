@@ -27,7 +27,9 @@ export default async function post_train(req: Request) {
     seed: Math.round(data.seed),
 
     state: State.PENDING,
-    patience: (data.patience && !Number.isNaN(data.patience)) ? Math.round(data.patience) : null,
+    patience: (data.patience && !Number.isNaN(data.patience))
+      ? Math.round(data.patience)
+      : null,
     started: null,
     finished: null,
     duration: 0,
