@@ -159,43 +159,48 @@ export async function run_job(job: Job): Promise<void> {
 
     logger.log("Started JOB: " + job.id);
 
-    const response = await fetch(
-      `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(paramsObject),
-      },
-    );
+    let response = null;
+    let res = null;
+    try {
+      response = await fetch(
+          `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(paramsObject),
+          },
+      );
 
-    const res = await response.json();
-    console.log(res as ModelOutput);
-
-    if (!response.ok || !res.result) {
-      console.log(`Training failed: ${JSON.stringify(res)}`);
+      res = await response.json();
+      console.log(res as ModelOutput);
+    }catch(e) {
+      logger.error(e);
+    }
+    
+    if (!response || !res || !response?.ok || !res?.result) {
+      logger.log(`Training failed: ${JSON.stringify(res)}`);
       await mark_job(job, State.FAILED);
       return;
     }
-
+    
     try {
       await outputMetricsToDb(res.result as ModelOutput);
     } catch (dbError) {
-      console.error(`Database error for job ${job.id}:`, dbError);
+      logger.error(`Database error for job ${job.id}:`, dbError);
       await mark_job(job, State.FAILED);
-      throw dbError;
+      return;
     }
 
     await mark_job(job, State.DONE);
     console.log(`Job ${job.id} marked as DONE`);
   } catch (error) {
-    console.error(`Error in run_job for ${job.id}:`, error);
+    logger.error(`Error in run_job for ${job.id}:`, error);
     try {
       await mark_job(job, State.FAILED);
     } catch (markError) {
-      console.error(`Failed to mark job ${job.id} as FAILED:`, markError);
+      logger.error(`Failed to mark job ${job.id} as FAILED:`, markError);
     }
-    throw error;
   }
 }
