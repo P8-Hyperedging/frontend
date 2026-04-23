@@ -8,7 +8,7 @@ export async function runJobsAsync(wsBridge: WebSocketBridge): Promise<void> {
       await sleep(1000);
       continue;
     }
-    
+
     const job = await get_first_pending_job();
 
     if (!hasValue(job)) {
