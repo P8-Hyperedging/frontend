@@ -39,6 +39,7 @@ export const Job = z.object({
   duration: z.coerce.number(),
   patience: z.coerce.number(),
   created_at: z.date(),
+  quality_weight: z.coerce.number()
 });
 
 export type Job = z.infer<typeof Job>;

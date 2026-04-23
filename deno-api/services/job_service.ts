@@ -28,11 +28,12 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
                             model_name,
                             created_at,
                             patience,
-                            seed)
+                            seed,
+                            quality_weight)
           VALUES ($1, $2,
                   $3, $4, $5, $6, $7, $8,
                   NULL, NULL, NULL,
-                  $9, $10, NOW(), $11, $12
+                  $9, $10, NOW(), $11, $12, $13
                  )
           RETURNING id;
         `,
@@ -49,6 +50,7 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
         job.model_name,
         job.patience,
         job.seed,
+        job.quality_weight,
       ],
     );
     const id = result.rows[0].id;
@@ -148,6 +150,7 @@ export async function run_job(job: Job): Promise<void> {
       valid_proportion: 1 - job.train_proportion,
       dropout: job.dropout,
       weight_decay: job.weight_decay,
+      quality_weight: job.quality_weight,
       patience: job.patience,
       gamma: 0,
       milestones_input: "50,100",
