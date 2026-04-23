@@ -4,12 +4,12 @@ import { WebSocketBridge } from "../services/websocket_bridge.ts";
 
 export async function runJobsAsync(wsBridge: WebSocketBridge): Promise<void> {
   while (true) {
-    const job = await get_first_pending_job();
-
     if (!wsBridge.isPythonAlive()) {
       await sleep(1000);
       continue;
     }
+    
+    const job = await get_first_pending_job();
 
     if (!hasValue(job)) {
       await sleep(1000);
