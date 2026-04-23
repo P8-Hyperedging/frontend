@@ -163,28 +163,28 @@ export async function run_job(job: Job): Promise<void> {
     let res = null;
     try {
       response = await fetch(
-          `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(paramsObject),
+        `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify(paramsObject),
+        },
       );
 
       res = await response.json();
       console.log(res as ModelOutput);
-    }catch(e) {
+    } catch (e) {
       logger.error(e);
     }
-    
+
     if (!response || !res || !response?.ok || !res?.result) {
       logger.log(`Training failed: ${JSON.stringify(res)}`);
       await mark_job(job, State.FAILED);
       return;
     }
-    
+
     try {
       await outputMetricsToDb(res.result as ModelOutput);
     } catch (dbError) {
