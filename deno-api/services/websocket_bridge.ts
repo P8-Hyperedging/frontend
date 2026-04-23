@@ -10,7 +10,7 @@ export class WebSocketBridge {
   private readonly clients = new Set<FrontendClient>();
   private upstreamSocket: Socket | null = null;
   private pythonConnected = false;
-  
+
   constructor(
     private readonly logger: Logger,
     private readonly upstreamUrl: string = "http://127.0.0.1:5002",
