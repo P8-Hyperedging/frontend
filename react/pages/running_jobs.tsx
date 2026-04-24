@@ -21,20 +21,25 @@ function jobStateToText(state: JobStateEnum) {
 export function RunningJobPage() {
   const [jobs, setJobs] = useState<Job>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const hasActiveJobs = jobs.some(
+    (j: Job) => j.state === State.RUNNING || j.state === State.PENDING,
+  );
 
   useEffect(() => {
     async function fetchJobs() {
       try {
-        const res = await fetch("/api/jobs"); // change if your endpoint differs
+        const res = await fetch("/api/jobs");
         const data = await res.json();
-        setJobs(data.rows ?? data); // depends on backend shape
+        setJobs(data.rows ?? data);
       } finally {
         setLoading(false);
       }
     }
 
     fetchJobs();
-  }, []);
+    const id = setInterval(fetchJobs, hasActiveJobs ? 5000 : 60000);
+    return () => clearInterval(id);
+  }, [hasActiveJobs]); // re-evaluates when active state changes
 
   return (
     <DefaultPage
@@ -50,24 +55,12 @@ export function RunningJobPage() {
             </div>
 
             <div className="flex flex-row w-full gap-10">
-              <div className="basis-1/3 p-5">
+              <div className="basis-1/3">
                 <h1 className="text-center text-2xl mb-4">Queue</h1>
 
                 {loading ? <p>Loading...</p> : (
                   <ul className="space-y-2">
-                    {jobs.map((job: Job) => (
-                      <li
-                        key={job.id}
-                        className={(job.state === State.RUNNING
-                          ? "bg-green-100"
-                          : "bg-yellow-100") + " p-3 border rounded"}
-                      >
-                        <div className="font-bold">{job.title}</div>
-                        <div className="text-sm text-gray-500">
-                          State: {jobStateToText(job.state)}
-                        </div>
-                      </li>
-                    ))}
+                    {jobs.map((job: Job) => <JobItem key={job.id} job={job} />)}
                   </ul>
                 )}
               </div>
@@ -81,5 +74,48 @@ export function RunningJobPage() {
         </>
       }
     />
+  );
+}
+
+const statusConfig: Record<
+  JobStateEnum,
+  { bg: string; badge: string; icon: string; iconColor: string }
+> = {
+  [State.RUNNING]: {
+    bg: "bg-success/10 border-success/30",
+    badge: "badge-success",
+    icon: "play_circle",
+    iconColor: "text-success",
+  },
+  [State.PENDING]: {
+    bg: "bg-warning/10 border-warning/30",
+    badge: "badge-warning",
+    icon: "schedule",
+    iconColor: "text-warning",
+  },
+};
+
+function JobItem({ job }: Job) {
+  const config = statusConfig[job.state] ?? {
+    bg: "bg-base-200 border-base-300",
+    badge: "badge-ghost",
+    dot: "bg-base-content/30",
+  };
+
+  return (
+    <li className={`${config.bg} p-3 border rounded flex items-center gap-3`}>
+      <span className={`material-icons text-xl shrink-0 ${config.iconColor}`}>
+        {config.icon}
+      </span>
+      <div className="flex-1 min-w-0">
+        <div className="font-bold text-base-content truncate">{job.title}</div>
+        <div className="text-sm text-base-content/60">
+          {jobStateToText(job.state)}
+        </div>
+      </div>
+      <span className={`badge badge-sm ${config.badge}`}>
+        {jobStateToText(job.state)}
+      </span>
+    </li>
   );
 }
