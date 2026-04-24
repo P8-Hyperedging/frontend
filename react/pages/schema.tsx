@@ -30,7 +30,7 @@ export function RenderSchema() {
         setContent(
           <>
             {render_heading("Available Tables")}
-            <ul className="list w-1/2">
+            <ul className="list w-full">
               {data.map((t: TableInfo) => (
                 <li key={t.table_name} className="list-row">
                   <a

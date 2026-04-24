@@ -28,7 +28,7 @@ export default function ResultsTable() {
     }
 
     fetchData();
-  }, [tableData]);
+  }, []);
 
   if (tableData.length === 0) return;
 

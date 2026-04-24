@@ -41,7 +41,7 @@ export function RunningJobPage() {
       title="Running Jobs"
       content={
         <>
-          <div className="flex flex-col px-5">
+          <div className="flex flex-col w-full">
             <div className="flex h-20 justify-center items-center">
               <h1 className="flex items-center gap-2 text-2xl">
                 <i className="material-icons">work_history</i>
@@ -50,7 +50,7 @@ export function RunningJobPage() {
             </div>
 
             <div className="flex flex-row w-full gap-10">
-              <div className="flex-1 p-5">
+              <div className="basis-1/3 p-5">
                 <h1 className="text-center text-2xl mb-4">Queue</h1>
 
                 {loading ? <p>Loading...</p> : (
@@ -72,7 +72,7 @@ export function RunningJobPage() {
                 )}
               </div>
 
-              <div className="flex-1">
+              <div className="basis-2/3">
                 <h1 className="text-center text-2xl mb-4">Server terminal</h1>
                 <ServerTerminal />
               </div>

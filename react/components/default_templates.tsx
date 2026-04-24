@@ -9,9 +9,11 @@ import { ReactElement } from "react";
 export function DefaultPage({
   title,
   content,
+  width = "w-1/2",
 }: {
   title: string;
   content: ReactElement;
+  width?: string;
 }) {
   if (typeof document !== "undefined") document.title = title;
 
@@ -28,7 +30,13 @@ export function DefaultPage({
       <div className="flex flex-col w-full flex justify-center items-center">
         <Toolbar pageButtons={buttons} />
       </div>
-      {content}
+      <div className="flex flex-col w-full items-center gap-4">
+        <div
+          className={`${width} flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4 shadow-xl`}
+        >
+          {content}
+        </div>
+      </div>
     </>
   );
 }
