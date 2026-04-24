@@ -16,6 +16,7 @@ import { WebSocketBridge } from "./services/websocket_bridge.ts";
 import { get_jobs } from "./controllers/job_controller.ts";
 import { runJobsAsync } from "./workers/job_worker.ts";
 import post_train from "./controllers/train_controller.ts";
+import { get_model_results } from "./services/results.ts";
 
 const router = new Router();
 const logger = new Logger();
@@ -23,6 +24,7 @@ const wsBridge = new WebSocketBridge(logger);
 
 router.registerGetRoute("/api/get-database-schema", get_database_schema);
 router.registerGetRoute("/api/get-model-outputs", get_model_outputs);
+router.registerGetRoute("/api/model-results", get_model_results);
 router.registerGetRoute("/api/jobs", get_jobs);
 router.registerGetRoute("/api/get-parameters", get_parameters);
 router.registerGetRoute("/api/get-model-names", get_model_names);

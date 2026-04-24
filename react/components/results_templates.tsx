@@ -26,7 +26,6 @@ export default function ResultsPage() {
       const model_res = await fetch("/api/get-model-outputs");
       const model_data = await model_res.json();
       const model_parsed = model_data.map((data: ModelOutput) => {
-        console.log(data);
         return ModelOutput.parse(data);
       });
       setModelOutputs(model_parsed);
@@ -77,9 +76,12 @@ export default function ResultsPage() {
     }
 
     if (
-      !hyperparameter_data || !hyperparameter_data[0] ||
+      !hyperparameter_data ||
+      !hyperparameter_data[0] ||
       !hyperparameter_data[0]?.data
-    ) return;
+    ) {
+      return;
+    }
 
     const hiddenLayerPlot = Plot.plot({
       x: { label: "Hidden Layer Size" },
@@ -225,10 +227,9 @@ function RenderResultsTable({
         <thead>
           <tr>
             <th>id</th>
-            {Object.keys(model_outputs[0]).slice(
-              0,
-              Object.keys(model_outputs[0]).length - 1,
-            ).map((key) => <th key={key}>{key}</th>)}
+            {Object.keys(model_outputs[0])
+              .slice(0, Object.keys(model_outputs[0]).length - 1)
+              .map((key) => <th key={key}>{key}</th>)}
           </tr>
         </thead>
 
