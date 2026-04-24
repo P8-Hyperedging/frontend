@@ -69,7 +69,7 @@ export async function get_all_jobs(): Promise<Job[]> {
         FROM jobs 
         WHERE state IS DISTINCT FROM 10
         AND state IS DISTINCT FROM 22
-        ORDER BY state ASC;
+        ORDER BY state ASC, started ASC;
       `);
 
     return result.rows.map((row) => Job.parse(row));
