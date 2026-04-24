@@ -10,6 +10,7 @@ export default function Results() {
       content={
         <>
           <ResultsPlots />
+          <div className="divider">Data</div>
           <ResultsTable />
         </>
       }

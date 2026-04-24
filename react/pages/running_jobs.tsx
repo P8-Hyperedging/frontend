@@ -44,6 +44,7 @@ export function RunningJobPage() {
   return (
     <DefaultPage
       title="Running Jobs"
+      width="w-3/4"
       content={
         <>
           <div className="flex flex-col w-full">
