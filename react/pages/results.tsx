@@ -1,4 +1,5 @@
 import { DefaultPage } from "../components/default_templates.tsx";
+import ResultsPlots from "../components/results_plots.tsx";
 import ResultsTable from "../components/results_table.tsx";
 
 export default function Results() {
@@ -8,6 +9,7 @@ export default function Results() {
       width="w-3/4"
       content={
         <>
+          <ResultsPlots />
           <ResultsTable />
         </>
       }

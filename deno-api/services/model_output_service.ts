@@ -66,6 +66,7 @@ export async function get_model_names(): Promise<Response> {
 export async function get_box_plot_data(): Promise<Response> {
   try {
     const client = await get_client();
+    if (!client) return NoConnectionResponse("Failed to connect to postgress");
 
     const result = await client.queryObject<BoxPlotData>(
       `
@@ -74,6 +75,8 @@ export async function get_box_plot_data(): Promise<Response> {
     );
 
     const box_plot_data = result.rows.map((row) => BoxPlotData.parse(row));
+
+    console.log("row", box_plot_data);
 
     return JsonResponse(box_plot_data);
   } catch (err) {
@@ -89,25 +92,25 @@ export async function get_hyperparameter_tuning_data(): Promise<Response> {
     const result = await client.queryObject<HyperParameterRow>(
       `
       SELECT 'Hidden Layer Size' AS parameter, parameters ->> 'Hidden Layer Size' AS value, AVG(valid_acc) AS avg_valid_acc
-      FROM model_output WHERE model_name = 'QHGNN'
+      FROM model_output WHERE model_name = 'QHGNN_v2'
       GROUP BY parameters ->> 'Hidden Layer Size'
 
       UNION ALL
 
       SELECT 'Learning Rate', parameters ->> 'Learning Rate', AVG(valid_acc)
-      FROM model_output WHERE model_name = 'QHGNN'
+      FROM model_output WHERE model_name = 'QHGNN_v2'
       GROUP BY parameters ->> 'Learning Rate'
 
       UNION ALL
 
       SELECT 'Weight Decay', parameters ->> 'Weight Decay', AVG(valid_acc)
-      FROM model_output WHERE model_name = 'QHGNN'
+      FROM model_output WHERE model_name = 'QHGNN_v2'
       GROUP BY parameters ->> 'Weight Decay'
 
       UNION ALL
 
       SELECT 'Epochs', parameters ->> 'Epochs', AVG(valid_acc)
-      FROM model_output WHERE model_name = 'QHGNN'
+      FROM model_output WHERE model_name = 'QHGNN_v2'
       GROUP BY parameters ->> 'Epochs';
       `,
     );
