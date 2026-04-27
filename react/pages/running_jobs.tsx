@@ -135,7 +135,10 @@ function JobItem({ job }: Job) {
       <dialog id={modalId} className="modal">
         <div className="modal-box w-11/12 max-w-2xl">
           <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            <button
+              type="submit"
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
               ✕
             </button>
           </form>
@@ -200,7 +203,7 @@ function JobItem({ job }: Job) {
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button>close</button>
+          <button type="submit">close</button>
         </form>
       </dialog>
     </>
