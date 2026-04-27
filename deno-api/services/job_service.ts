@@ -28,11 +28,12 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
                             model_name,
                             created_at,
                             patience,
-                            seed)
+                            seed,
+                            quality_weight)
           VALUES ($1, $2,
                   $3, $4, $5, $6, $7, $8,
                   NULL, NULL, NULL,
-                  $9, $10, NOW(), $11, $12
+                  $9, $10, NOW(), $11, $12, $13
                  )
           RETURNING id;
         `,
@@ -49,6 +50,7 @@ export async function insert_job(job: Job): Promise<Optional<Job>> {
         job.model_name,
         job.patience,
         job.seed,
+        job.quality_weight,
       ],
     );
     const id = result.rows[0].id;
@@ -148,6 +150,7 @@ export async function run_job(job: Job): Promise<void> {
       valid_proportion: 1 - job.train_proportion,
       dropout: job.dropout,
       weight_decay: job.weight_decay,
+      quality_weight: job.quality_weight,
       patience: job.patience,
       gamma: 0,
       milestones_input: "50,100",
@@ -156,22 +159,28 @@ export async function run_job(job: Job): Promise<void> {
 
     logger.log("Started JOB: " + job.id);
 
-    const response = await fetch(
-      `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    let response = null;
+    let res = null;
+    try {
+      response = await fetch(
+        `http://127.0.0.1:5002/train/${job.model_name}/${job.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(paramsObject),
         },
-        body: JSON.stringify(paramsObject),
-      },
-    );
+      );
 
-    const res = await response.json();
-    console.log(res as ModelOutput);
+      res = await response.json();
+      console.log(res as ModelOutput);
+    } catch (e) {
+      logger.error(e);
+    }
 
-    if (!response.ok || !res.result) {
-      console.log(`Training failed: ${JSON.stringify(res)}`);
+    if (!response || !res || !response?.ok || !res?.result) {
+      logger.log(`Training failed: ${JSON.stringify(res)}`);
       await mark_job(job, State.FAILED);
       return;
     }
@@ -179,20 +188,19 @@ export async function run_job(job: Job): Promise<void> {
     try {
       await outputMetricsToDb(res.result as ModelOutput);
     } catch (dbError) {
-      console.error(`Database error for job ${job.id}:`, dbError);
+      logger.error(`Database error for job ${job.id}:`, dbError);
       await mark_job(job, State.FAILED);
-      throw dbError;
+      return;
     }
 
     await mark_job(job, State.DONE);
     console.log(`Job ${job.id} marked as DONE`);
   } catch (error) {
-    console.error(`Error in run_job for ${job.id}:`, error);
+    logger.error(`Error in run_job for ${job.id}:`, error);
     try {
       await mark_job(job, State.FAILED);
     } catch (markError) {
-      console.error(`Failed to mark job ${job.id} as FAILED:`, markError);
+      logger.error(`Failed to mark job ${job.id} as FAILED:`, markError);
     }
-    throw error;
   }
 }
