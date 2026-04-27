@@ -9,6 +9,7 @@ export function TrainModel() {
   const [modelNames, setModelNames] = useState<SelectParameter | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [currentParams, setCurrentParams] = useState<Parameter[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const cachedParameters = useRef<Record<string, Parameter[]>>({});
 
   const [errorCode, setErrorCode] = useState<number | null>(null);
@@ -16,32 +17,36 @@ export function TrainModel() {
 
   useEffect(() => {
     async function fetchData() {
-      const params_res = await fetch("/api/get-parameters?model_name=allset");
+      try {
+        const params_res = await fetch("/api/get-parameters?model_name=allset");
 
-      if (!params_res.ok) {
-        setErrorCode(params_res.status);
-        const error_message = await params_res.json();
-        setErrorMessage(error_message.error);
-        return;
+        if (!params_res.ok) {
+          setErrorCode(params_res.status);
+          const error_message = await params_res.json();
+          setErrorMessage(error_message.error);
+          return;
+        }
+
+        const parameters = await params_res.json(); // ← don't touch job here
+
+        const model_names_res = await fetch("/api/get-model-names");
+        if (!model_names_res.ok) {
+          setErrorCode(model_names_res.status);
+          const error_message = await model_names_res.json();
+          setErrorMessage(error_message.error);
+          return;
+        }
+
+        const model_names_data = await model_names_res.json();
+        setModelNames(model_names_data);
+
+        const firstModel = model_names_data.options[0];
+        setSelectedModel(firstModel);
+
+        setJob({ parameters }); // ← construct the job object here
+      } finally {
+        setIsLoading(false);
       }
-
-      const parameters = await params_res.json(); // ← don't touch job here
-
-      const model_names_res = await fetch("/api/get-model-names");
-      if (!model_names_res.ok) {
-        setErrorCode(model_names_res.status);
-        const error_message = await model_names_res.json();
-        setErrorMessage(error_message.error);
-        return;
-      }
-
-      const model_names_data = await model_names_res.json();
-      setModelNames(model_names_data);
-
-      const firstModel = model_names_data.options[0];
-      setSelectedModel(firstModel);
-
-      setJob({ parameters }); // ← construct the job object here
     }
 
     fetchData();
@@ -71,6 +76,10 @@ export function TrainModel() {
 
   if (errorCode !== null && errorMessage !== null) {
     return <ErrorPage errorMessage={errorMessage} errorCode={errorCode} />;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   if (!job || !modelNames || !selectedModel) {
