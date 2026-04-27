@@ -9,6 +9,7 @@ type FrontendClient = {
 export class WebSocketBridge {
   private readonly clients = new Set<FrontendClient>();
   private upstreamSocket: Socket | null = null;
+  private pythonConnected = false;
 
   constructor(
     private readonly logger: Logger,
@@ -68,14 +69,17 @@ export class WebSocketBridge {
 
     socket.on("connect", () => {
       this.logger.debug(`Connected to Python Socket.IO`);
+      this.pythonConnected = true;
     });
 
     socket.on("disconnect", (reason) => {
       this.logger.debug(`Python Socket.IO disconnected: ${reason}`);
+      this.pythonConnected = false;
     });
 
     socket.on("connect_error", (error: Error) => {
       this.logger.debug(`Python Socket.IO connection error: ${error.message}`); //
+      this.pythonConnected = false;
     });
 
     socket.io.on("reconnect_attempt", (attempt: number) => {
@@ -97,6 +101,10 @@ export class WebSocketBridge {
     }
 
     this.forwardToFrontend(JSON.stringify(payload ?? {}));
+  }
+
+  public isPythonAlive(): boolean {
+    return this.upstreamSocket?.connected === true && this.pythonConnected;
   }
 
   private forwardToFrontend(raw: string): void {

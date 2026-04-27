@@ -25,7 +25,7 @@ export default async function post_train(req: Request) {
     train_proportion: data.train_proportion,
     dropout: data.dropout,
     seed: Math.round(data.seed),
-
+    quality_weight: data.Quality_weight,
     state: State.PENDING,
     patience: (data.patience && !Number.isNaN(data.patience))
       ? Math.round(data.patience)
