@@ -19,7 +19,7 @@ function jobStateToText(state: JobStateEnum) {
 }
 
 export function RunningJobPage() {
-  const [jobs, setJobs] = useState<Job>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const hasActiveJobs = jobs.some(
     (j: Job) => j.state === State.RUNNING || j.state === State.PENDING,
@@ -58,6 +58,7 @@ export function RunningJobPage() {
             <div className="flex flex-row w-full gap-10">
               <div className="basis-1/3">
                 <h1 className="text-center text-2xl mb-4">Queue</h1>
+                <h2>Queued jobs: {jobs.length}</h2>
 
                 {loading ? <p>Loading...</p> : (
                   <ul className="space-y-2">
