@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { JobStateEnum } from "./train.ts";
 
 export const Parameters = z.object({
   hidden_layer_size: z.coerce.number().nullable(),
@@ -65,3 +66,30 @@ export const HyperParameterSeries = z.object({
 });
 
 export type HyperParameterSeries = z.infer<typeof HyperParameterSeries>;
+
+export const ModelResult = z.object({
+  job_id: z.coerce.number(),
+  valid_acc: z.coerce.number(),
+  train_acc: z.coerce.number(),
+  test_acc: z.coerce.number(),
+  title: z.string(),
+  description: z.string(),
+  hidden_layer_size: z.coerce.number(),
+  learning_rate: z.coerce.number(),
+  weight_decay: z.coerce.number(),
+  epochs: z.coerce.number(),
+  train_proportion: z.coerce.number(),
+  dropout: z.coerce.number(),
+  started: z.coerce.date(),
+  finished: z.coerce.date(),
+  duration: z.coerce.number(),
+  state: JobStateEnum,
+  model_name: z.string(),
+  created_at: z.coerce.date(),
+  seed: z.coerce.number(),
+  id: z.coerce.number(),
+  patience: z.coerce.number(),
+  quality_weight: z.coerce.number(),
+});
+
+export type ModelResult = z.infer<typeof ModelResult>;

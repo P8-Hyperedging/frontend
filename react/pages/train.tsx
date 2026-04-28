@@ -9,6 +9,7 @@ export function TrainModel() {
   const [modelNames, setModelNames] = useState<SelectParameter | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [currentParams, setCurrentParams] = useState<Parameter[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const cachedParameters = useRef<Record<string, Parameter[]>>({});
 
   const [errorCode, setErrorCode] = useState<number | null>(null);
@@ -16,32 +17,36 @@ export function TrainModel() {
 
   useEffect(() => {
     async function fetchData() {
-      const params_res = await fetch("/api/get-parameters?model_name=allset");
+      try {
+        const params_res = await fetch("/api/get-parameters?model_name=allset");
 
-      if (!params_res.ok) {
-        setErrorCode(params_res.status);
-        const error_message = await params_res.json();
-        setErrorMessage(error_message.error);
-        return;
+        if (!params_res.ok) {
+          setErrorCode(params_res.status);
+          const error_message = await params_res.json();
+          setErrorMessage(error_message.error);
+          return;
+        }
+
+        const parameters = await params_res.json(); // ← don't touch job here
+
+        const model_names_res = await fetch("/api/get-model-names");
+        if (!model_names_res.ok) {
+          setErrorCode(model_names_res.status);
+          const error_message = await model_names_res.json();
+          setErrorMessage(error_message.error);
+          return;
+        }
+
+        const model_names_data = await model_names_res.json();
+        setModelNames(model_names_data);
+
+        const firstModel = model_names_data.options[0];
+        setSelectedModel(firstModel);
+
+        setJob({ parameters }); // ← construct the job object here
+      } finally {
+        setIsLoading(false);
       }
-
-      const parameters = await params_res.json(); // ← don't touch job here
-
-      const model_names_res = await fetch("/api/get-model-names");
-      if (!model_names_res.ok) {
-        setErrorCode(model_names_res.status);
-        const error_message = await model_names_res.json();
-        setErrorMessage(error_message.error);
-        return;
-      }
-
-      const model_names_data = await model_names_res.json();
-      setModelNames(model_names_data);
-
-      const firstModel = model_names_data.options[0];
-      setSelectedModel(firstModel);
-
-      setJob({ parameters }); // ← construct the job object here
     }
 
     fetchData();
@@ -73,6 +78,10 @@ export function TrainModel() {
     return <ErrorPage errorMessage={errorMessage} errorCode={errorCode} />;
   }
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   if (!job || !modelNames || !selectedModel) {
     return (
       <ErrorPage
@@ -86,61 +95,59 @@ export function TrainModel() {
     <DefaultPage
       title="Train"
       content={
-        <div className="flex flex-col w-full items-center gap-4">
-          <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
-            <fieldset className="fieldset w-1/2 flex flex-col items-center">
-              <legend className="fieldset-legend">Select a model</legend>
-              <select
-                className="select select-primary select-xl w-full"
-                name="model"
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
-              >
-                {modelNames.options.map((option: string) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </fieldset>
+        <>
+          <fieldset className="fieldset w-1/2 flex flex-col items-center">
+            <legend className="fieldset-legend">Select a model</legend>
+            <select
+              className="select select-primary select-xl w-full"
+              name="model"
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+            >
+              {modelNames.options.map((option: string) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </fieldset>
 
-            <form className="fieldset w-full" method="post" action="/api/train">
-              <div className="flex flex-col w-full items-center">
-                <h1 className="text-xl">Job Parameters</h1>
-                <fieldset className="fieldset w-full">
-                  <label>Title</label>
-                  <input type="text" name="title" className="input w-full" />
-                </fieldset>
-                <fieldset className="fieldset w-full">
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    className="textarea h-24 w-full"
-                  />
-                </fieldset>
-                <div className="divider"></div>
-              </div>
+          <form className="fieldset w-full" method="post" action="/api/train">
+            <div className="flex flex-col w-full items-center">
+              <h1 className="text-xl">Job Parameters</h1>
+              <fieldset className="fieldset w-full">
+                <label>Title</label>
+                <input type="text" name="title" className="input w-full" />
+              </fieldset>
+              <fieldset className="fieldset w-full">
+                <label>Description</label>
+                <input
+                  type="text"
+                  name="description"
+                  className="textarea h-24 w-full"
+                />
+              </fieldset>
+              <div className="divider"></div>
+            </div>
 
-              <div>
-                <h3 className="text-center text-xl">Parameters:</h3>
-                {currentParams.map((parameter) => (
-                  <Fieldset key={parameter.name} parameter={parameter} />
-                ))}
+            <div>
+              <h3 className="text-center text-xl">Parameters:</h3>
+              {currentParams.map((parameter) => (
+                <Fieldset key={parameter.name} parameter={parameter} />
+              ))}
 
-                <input type="hidden" name="model_name" value={selectedModel} />
-              </div>
+              <input type="hidden" name="model_name" value={selectedModel} />
+            </div>
 
-              <button className="btn btn-neutral mt-4" type="submit">
-                <i className="material-icons">send</i>Submit
-              </button>
+            <button className="btn btn-neutral mt-4" type="submit">
+              <i className="material-icons">send</i>Submit
+            </button>
 
-              <button className="btn btn-ghost mt-1" type="reset">
-                <i className="material-icons">restart_alt</i>Reset
-              </button>
-            </form>
-          </div>
-        </div>
+            <button className="btn btn-ghost mt-1" type="reset">
+              <i className="material-icons">restart_alt</i>Reset
+            </button>
+          </form>
+        </>
       }
     />
   );

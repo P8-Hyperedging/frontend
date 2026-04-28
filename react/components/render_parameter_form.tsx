@@ -31,34 +31,32 @@ export default function ParameterForm({
   }, [selectedModel]);
 
   return (
-    <div className="flex flex-col w-full items-center gap-4">
-      <div className="w-1/2 flex flex-col items-center bg-base-200 border-base-300 rounded-box border p-4">
-        <fieldset className="fieldset w-1/2 flex flex-col items-center">
-          <legend className="fieldset-legend">Select a model</legend>
-          <select
-            className="select select-primary select-xl w-full"
-            name="model"
-            value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
-          >
-            {model_names.options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </fieldset>
+    <>
+      <fieldset className="fieldset w-1/2 flex flex-col items-center">
+        <legend className="fieldset-legend">Select a model</legend>
+        <select
+          className="select select-primary select-xl w-full"
+          name="model"
+          value={selectedModel}
+          onChange={(e) => setSelectedModel(e.target.value)}
+        >
+          {model_names.options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </fieldset>
 
-        <form className="fieldset w-full" method="post" action="/api/train">
-          <div id="parameter-form-content">
-            <ParameterFormContent
-              parameters={currentParams}
-              model_name={selectedModel}
-            />
-          </div>
-        </form>
-      </div>
-    </div>
+      <form className="fieldset w-full" method="post" action="/api/train">
+        <div id="parameter-form-content">
+          <ParameterFormContent
+            parameters={currentParams}
+            model_name={selectedModel}
+          />
+        </div>
+      </form>
+    </>
   );
 }
 

@@ -67,8 +67,11 @@ export async function get_all_jobs(): Promise<Job[]> {
 
   try {
     const result = await client?.queryObject(`
-          SELECT *
-          FROM "jobs";
+        SELECT * 
+        FROM jobs 
+        WHERE state IS DISTINCT FROM 10
+        AND state IS DISTINCT FROM 22
+        ORDER BY state ASC, started ASC;
       `);
 
     return result.rows.map((row) => Job.parse(row));
